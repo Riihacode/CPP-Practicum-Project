@@ -57,37 +57,41 @@ Penumpang penumpang;
 
 //####################################
 // Deklarasi function
-void tampilkanMenu();
-void tampilkanKursi();
+void lihatStatusKursi();
 void inputDataKereta();
 void inputDataPenumpang();
 void tampilkanJenisKereta();
 void tampilkanDataKotaAsal();
 void tampilkanDataKotaTujuan();
 void resetData();
+void pesanTiket();
 
 //####################################
 // Function main (dieksekusi paling utama)
 int main() {
     int pilihan;
     do {
-        tampilkanMenu();
+        cout << "\n=== Menu Utama ===" << endl;
+        cout << "1. Pesan Tiket" << endl;
+        cout << "2. Lihat Status Kursi" << endl;
+        cout << "3. Keluar" << endl;
+        cout << "Pilihan: ";
         cin >> pilihan;
         cin.ignore();
 
         switch (pilihan) {
             case 1 :
-                inputDataKereta();
-                inputDataPenumpang();
+                pesanTiket();
                 break;
             
             case 2 :
-                tampilkanKursi();
+                lihatStatusKursi();
                 break;
             
             case 3 :
                 cout << "Terima kasih telah menggunakan layanan kami!" << endl;
                 break;
+
             default:
                 cout << "Pilihan tidak valid. Silahkan coba lagi." << endl;
                 break;
@@ -99,16 +103,13 @@ int main() {
 }
 
 //####################################
-// Function untuk User Interface
-void tampilkanMenu(){
-    cout << "\n=== Menu Utama ===" << endl;
-    cout << "1. Pesan Tiket" << endl;
-    cout << "2. Lihat Status Kursi" << endl;
-    cout << "3. Keluar" << endl;
-    cout << "Pilihan: ";
+// Function logic utama
+void pesanTiket() {
+    inputDataKereta();
+    inputDataPenumpang();
 }
 
-void tampilkanKursi() {
+void lihatStatusKursi() {
     cout << "\n=== Status Kursi ===" << endl;
     for (int i = 0; i < 3; i++) {
         cout << "Gerbong " << i + 1 << ":" << endl;
@@ -126,8 +127,10 @@ void tampilkanKursi() {
     cout << "====================" << endl;
 }
 
+
 void inputDataKereta() {
     int pilih;
+    
     cout << "\nPilih jenis kereta: " << endl;
     tampilkanJenisKereta();
     cout << "Pilihan    : ";
