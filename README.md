@@ -11,5 +11,5 @@ Asisten Praktikum =
 2. Farhannivta Ramadhana / 123230139
 
 # Note :
-1. CPP Android Version    = Kombinasi Kotlin & CPP dalam bentuk aplikasi android (Android Studio IDE)
-2. CPP Terminal Version   = File CPP biasa dalam bentuk terminal (VS Code / Geany)
+1. CPP Android Version    = Kombinasi Kotlin & C++ dalam bentuk aplikasi android (Android Studio IDE)
+2. CPP Terminal Version   = File C++ biasa dalam bentuk terminal (VS Code / Geany)
