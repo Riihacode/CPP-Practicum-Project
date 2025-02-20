@@ -1,6 +1,6 @@
 # Praktikum Algoritma & Pemrograman Lanjut IF-M
 
-TEMA = Tiket Kereta
+Tema = Tiket Kereta (Continuous Final Project)
 
 Anggota Kelompok =
 1. Ribhan Aulia Zulmi / 123210038
