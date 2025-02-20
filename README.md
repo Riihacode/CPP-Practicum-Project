@@ -1,5 +1,7 @@
 # Praktikum Algoritma & Pemrograman Lanjut IF-M
 
+TEMA = Tiket Kereta
+
 Anggota Kelompok =
 1. Ribhan Aulia Zulmi / 123210038
 2. Sri Arwati / 123240255
