@@ -67,7 +67,7 @@ void resetData();
 void pesanTiket();
 
 //####################################
-// Function main (dieksekusi paling utama)
+// Function main (dieksekusi paling utama) dan untuk User Interface utama
 int main() {
     int pilihan;
     do {
@@ -103,7 +103,7 @@ int main() {
 }
 
 //####################################
-// Function logic utama
+// Function untuk logic inti program
 void pesanTiket() {
     inputDataKereta();
     inputDataPenumpang();
