@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">My Train Ticket</string>
+    <string name="books_ticket">Books Ticket</string>
+    <string name="train_menu">Train Menu</string>
+    <string name="choose_train_type">Choose Train Type</string>
+    <string name="choose_your_hometown">Choose Your Hometown</string>
 </resources>
