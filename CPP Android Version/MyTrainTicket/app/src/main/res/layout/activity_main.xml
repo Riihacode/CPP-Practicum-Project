@@ -1,86 +1,156 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="16dp"
     tools:context=".MainActivity">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        >
+        android:orientation="vertical"
+        android:padding="16dp">
 
+        <!-- Input Data Penumpang -->
         <TextView
-            android:id="@+id/tvBookTickets"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/books_ticket"
-            android:layout_margin="4dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:text="Data Penumpang"
+            android:textSize="18sp"
+            android:textStyle="bold"/>
+
+        <EditText
+            android:id="@+id/etNama"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Nama Penumpang"
+            android:inputType="textPersonName"/>
+
+        <EditText
+            android:id="@+id/etNIK"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="NIK"
+            android:inputType="number"/>
+
+        <EditText
+            android:id="@+id/etAlamat"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Alamat"
+            android:inputType="textPostalAddress"/>
+
+        <!-- Pilihan Kereta -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Detail Perjalanan"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginTop="16dp"/>
+
+        <Spinner
+            android:id="@+id/spinJenisKereta"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:prompt="@string/pilih_jenis_kereta"/>
+
+        <Spinner
+            android:id="@+id/spinKotaAsal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:prompt="@string/pilih_kota_asal"/>
+
+        <Spinner
+            android:id="@+id/spinKotaTujuan"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:prompt="@string/pilih_kota_tujuan"/>
+
+        <!-- Pemilihan Kursi -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Pemilihan Kursi"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginTop="16dp"/>
+
+        <RadioGroup
+            android:id="@+id/rgPilihKursi"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/rbManual"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Pilih Manual"
+                android:checked="true"/>
+
+            <RadioButton
+                android:id="@+id/rbOtomatis"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sistem Pilih"/>
+        </RadioGroup>
 
         <LinearLayout
-            android:id="@+id/linear_line_books_ticket"
+            android:id="@+id/inputKursiManual"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@+id/tvBookTickets"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" >
+            android:orientation="horizontal"
+            android:visibility="visible">
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp" />
+            <EditText
+                android:id="@+id/etGerbong"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="Gerbong (1-3)"
+                android:inputType="number"/>
 
+            <EditText
+                android:id="@+id/etNomorKursi"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="Nomor Kursi (1-10)"
+                android:inputType="number"/>
         </LinearLayout>
 
+        <!-- Tombol Aksi -->
+        <Button
+            android:id="@+id/btnPesan"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Pesan Tiket"
+            android:layout_marginTop="16dp"/>
+
+        <Button
+            android:id="@+id/btnCekKursi"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Cek Status Kursi"
+            android:layout_marginTop="8dp"/>
+
+        <!-- Hasil Pemesanan -->
         <TextView
-            android:id="@+id/tv_train_menu"
+            android:id="@+id/tvStatusPemesanan"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="4dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linear_line_books_ticket"
-            android:text="@string/train_menu"
-            />
+            android:text="Status: -"
+            android:textSize="16sp"
+            android:layout_marginTop="16dp"/>
 
-        <EditText
-            android:id="@+id/edt_choose_train_type"
+        <TextView
+            android:id="@+id/tvDetailKursi"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="4dp"
-            android:autofillHints=""
-            android:inputType="numberSigned"
-            app:layout_constraintTop_toBottomOf="@+id/tv_train_menu"
-            android:hint="@string/choose_train_type"
-            />
+            android:text="Detail Kursi: -"
+            android:textSize="16sp"/>
 
-        <EditText
-            android:id="@+id/edt_choose_your_hometown"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="4dp"
-            android:autofillHints=""
-            android:inputType="numberSigned"
-            app:layout_constraintTop_toBottomOf="@+id/edt_choose_train_type"
-            android:hint="@string/choose_your_hometown"
-            />
-
-        <EditText
-            android:id="@+id/edt_choose_"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="4dp"
-            android:autofillHints=""
-            android:inputType="numberSigned"
-            app:layout_constraintTop_toBottomOf="@+id/edt_choose_train_type"
-            android:hint="@string/choose_your_hometown"
-            />
-
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
+    </LinearLayout>
 </ScrollView>

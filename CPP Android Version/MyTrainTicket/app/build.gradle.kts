@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace = "com.development.mytrainticket"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.development.mytrainticket"

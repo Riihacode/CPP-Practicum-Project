@@ -4,4 +4,8 @@
     <string name="train_menu">Train Menu</string>
     <string name="choose_train_type">Choose Train Type</string>
     <string name="choose_your_hometown">Choose Your Hometown</string>
+    <string name="choose_your_destination">Choose Your Destination</string>
+    <string name="pilih_jenis_kereta">Pilih jenis kereta</string>
+    <string name="pilih_kota_asal">Pilih kota asal</string>
+    <string name="pilih_kota_tujuan">Pilih kota tujuan</string>
 </resources>
