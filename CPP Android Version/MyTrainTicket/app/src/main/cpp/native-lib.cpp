@@ -6,7 +6,9 @@ using namespace std;
 
 extern "C" {
     JNIEXPORT jlong JNICALL
-    Java_com_development_mytrainticket_TrainTicketManager_initSystem(JNIEnv *env, jobject thiz) {
+    Java_com_development_mytrainticket_TrainTicketManager_initSystem(
+            JNIEnv *env,
+            jobject thiz) {
         return reinterpret_cast<jlong>(new TrainTicketSystem());
     }
 
@@ -67,6 +69,7 @@ extern "C" {
         delete reinterpret_cast<TrainTicketSystem*>(handle);
     }
 
+
     JNIEXPORT jobjectArray JNICALL
     Java_com_development_mytrainticket_TrainTicketManager_getDaftarJenisKereta(
             JNIEnv *env,
@@ -77,11 +80,48 @@ extern "C" {
 
         // 1. Dapatkan ukuran array
         int size;
-        system->getDaftarJenisKereta(nullptr, size); // Hanya ambil ukuran
+        system->getDaftarJenisKereta(nullptr, size);
 
         // 2. Alokasi array dinamis
         std::string* data = new std::string[size];
-        system->getDaftarJenisKereta(data, size); // Ambil data
+        system->getDaftarJenisKereta(data, size);
+
+        // 3. Konversi ke Java array
+        jobjectArray result = env->NewObjectArray(
+                size,
+                env->FindClass("java/lang/String"),
+                env->NewStringUTF("")
+        );
+
+        for(int i=0; i<size; i++) {
+            env->SetObjectArrayElement(
+                    result,
+                    i,
+                    env->NewStringUTF(data[i].c_str())
+            );
+        }
+
+        // 4. Hapus memori
+        delete[] data;
+
+        return result;
+    }
+
+    JNIEXPORT jobjectArray JNICALL
+    Java_com_development_mytrainticket_TrainTicketManager_getDaftarKotaTujuan(
+            JNIEnv *env,
+            jobject thiz,
+            jlong handle
+    ) {
+        auto* system = reinterpret_cast<TrainTicketSystem*>(handle);
+
+        // 1. Dapatkan ukuran array
+        int size;
+        system->getDaftarKotaTujuan(nullptr, size);
+
+        // 2. Alokasi array dinamis
+        std::string* data = new std::string[size];
+        system->getDaftarKotaTujuan(data, size);
 
         // 3. Konversi ke Java array
         jobjectArray result = env->NewObjectArray(
@@ -112,13 +152,13 @@ extern "C" {
     ) {
         auto* system = reinterpret_cast<TrainTicketSystem*>(handle);
 
-        // 1. Dapatkan ukuran array dari C++
+        // 1. Dapatkan ukuran array
         int size;
-        system->getDaftarKotaAsal(nullptr, size); // Hanya untuk mendapatkan size
+        system->getDaftarKotaAsal(nullptr, size); // Hanya ambil ukuran
 
         // 2. Alokasi array dinamis
-        string* data = new string[size];
-        system->getDaftarKotaAsal(data, size);
+        std::string* data = new std::string[size];
+        system->getDaftarKotaAsal(data, size); // Ambil data
 
         // 3. Konversi ke Java array
         jobjectArray result = env->NewObjectArray(
@@ -139,46 +179,5 @@ extern "C" {
         delete[] data;
 
         return result;
-    }
-
-    JNIEXPORT jobjectArray JNICALL
-            Java_com_development_mytrainticket_TrainTicketManager_getDaftarKotaTujuan(
-            JNIEnv *env,
-            jobject thiz,
-    jlong handle
-    ) {
-    // 1. Ambil objek C++ dari handle
-    auto* system = reinterpret_cast<TrainTicketSystem*>(handle);
-
-    // 2. Dapatkan data dari C++ (semua logika ada di TrainTicketSystem)
-    int size;
-    system->getDaftarKotaTujuan(nullptr, size); // Hanya untuk mendapatkan size
-
-    /*
-    string jenisKereta[size];
-    system->getDaftarKotaTujuan(jenisKereta, size); // Pastikan fungsi ini sudah diimplementasi di TrainTicketSystem
-    */
-
-    string* data = new string[size];
-    system->getDaftarKotaTujuan(data, size);
-
-    // 3. Konversi ke Java String Array
-    jobjectArray result = env->NewObjectArray(
-            size,
-            env->FindClass("java/lang/String"),
-            env->NewStringUTF("")
-    );
-
-    for(int i=0; i<size; i++) {
-    env->SetObjectArrayElement(
-            result,
-            i,
-            env->NewStringUTF(data[i].c_str())
-    );
-    }
-        // 4. Hapus memori
-        delete[] data;
-
-    return result;
     }
 }

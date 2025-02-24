@@ -5,20 +5,19 @@
 
 using namespace std;
 
-
 struct Penumpang {
     string
-            nama,
-            nik,
-            alamat;
+        nama,
+        nik,
+        alamat;
 };
 
 struct Kereta {
     string
-            jenisKereta,
-            kotaAsal,
-            kotaTujuan,
-            metodePembayaran;
+        jenisKereta,
+        kotaAsal,
+        kotaTujuan,
+        metodePembayaran;
 };
 
 class TrainTicketSystem {
@@ -32,9 +31,16 @@ private:
 
 public:
     TrainTicketSystem();
-    void pesanTiket(int jenisKereta, int kotaAsal, int kotaTujuan,
-                    const string& nama, const string& nik, const string& alamat,
-                    int metodePemilihanKursi, int gerbong, int nomorKursi);
+    void pesanTiket(
+            int jenisKereta,
+            int kotaAsal,
+            int kotaTujuan,
+            const string& nama,
+            const string& nik,
+            const string& alamat,
+            int metodePemilihanKursi,
+            int gerbong,
+            int nomorKursi);
     string lihatStatusKursi();
     void resetData();
 

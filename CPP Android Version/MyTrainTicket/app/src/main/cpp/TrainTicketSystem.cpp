@@ -1,6 +1,3 @@
-//
-// Created by ACER on 21/02/2025.
-//
 #include "TrainTicketSystem.h"
 #include <iostream>
 using namespace std;
@@ -32,9 +29,16 @@ TrainTicketSystem::TrainTicketSystem() {
             kursi[i][j] = "";
 }
 
-void TrainTicketSystem::pesanTiket(int jenisKeretaIdx, int kotaAsalIdx, int kotaTujuanIdx,
-                              const string& nama, const string& nik, const string& alamat,
-                              int metodePemilihanKursi, int gerbong, int nomorKursi) {
+void TrainTicketSystem::pesanTiket(
+        int jenisKeretaIdx,
+        int kotaAsalIdx,
+        int kotaTujuanIdx,
+        const string& nama,
+        const string& nik,
+        const string& alamat,
+        int metodePemilihanKursi,
+        int gerbong,
+        int nomorKursi) {
     resetData();
 
     kereta.jenisKereta = arrayJenisKereta[jenisKeretaIdx];
@@ -81,7 +85,7 @@ void TrainTicketSystem::resetData() {
 
 void TrainTicketSystem::getDaftarJenisKereta(std::string* output, int& size) {
     size = 3;
-    if (output != nullptr) { // <-- TAMBAHKAN PENGAWAL INI
+    if (output != nullptr) {
         for(int i=0; i<size; i++) {
             output[i] = arrayJenisKereta[i];
         }
@@ -90,14 +94,18 @@ void TrainTicketSystem::getDaftarJenisKereta(std::string* output, int& size) {
 
 void TrainTicketSystem::getDaftarKotaAsal(std::string* output, int& size) {
     size = 5;
-    for(int i=0; i<size; i++) {
-        output[i] = arrayKotaAsal[i];
+    if (output != nullptr) {
+        for(int i=0; i<size; i++) {
+            output[i] = arrayKotaAsal[i];
+        }
     }
 }
 
-void TrainTicketSystem::getDaftarKotaTujuan(string* output, int& size) {
+void TrainTicketSystem::getDaftarKotaTujuan(std::string* output, int& size) {
     size = 10;
-    for(int i=0; i<size; i++) {
-        output[i] = arrayKotaTujuan[i];
+    if (output != nullptr) {
+        for(int i=0; i<size; i++) {
+            output[i] = arrayKotaTujuan[i];
+        }
     }
 }

@@ -41,6 +41,12 @@ class MainActivity : AppCompatActivity() {
         val kotaAsal = ticketManager.getKotaAsal().toList()
         val kotaTujuan = ticketManager.getKotaTujuan().toList()
 
+        // Debug: Pastikan data tidak kosong
+        if (jenisKereta.isEmpty() || kotaAsal.isEmpty() || kotaTujuan.isEmpty()) {
+            Log.e("SpinnerData", "Data spinner kosong!")
+            return
+        }
+
         // Log data untuk debugging
         Log.d("SpinnerData", "Jenis Kereta: $jenisKereta")
         Log.d("SpinnerData", "Kota Asal: $kotaAsal")

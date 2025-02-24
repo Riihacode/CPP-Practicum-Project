@@ -21,12 +21,7 @@ class TrainTicketManager {
     private external fun getDaftarKotaAsal(handle: Long): Array<String>
     private external fun getDaftarKotaTujuan(handle: Long): Array<String>
 
-    // Native instance handle
     private var nativeHandle: Long = initSystem()
-
-    /**
-     * Public API untuk UI
-     */
 
     fun pesanTiket(
         jenisKereta: Int,
