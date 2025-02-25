@@ -27,7 +27,9 @@ TrainTicketSystem::TrainTicketSystem() {
     for(int i=0; i<3; i++)
         for(int j=0; j<10; j++)
             kursi[i][j] = "";
+
 }
+
 
 void TrainTicketSystem::pesanTiket(
         int jenisKeretaIdx,
@@ -58,6 +60,8 @@ void TrainTicketSystem::pesanTiket(
             for(int j=0; j<10; j++) {
                 if(kursi[i][j].empty()) {
                     kursi[i][j] = penumpang.nama;
+                    kursi[i][j] = penumpang.nik;
+                    kursi[i][j] = penumpang.alamat;
                     return;
                 }
             }

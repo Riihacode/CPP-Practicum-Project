@@ -57,6 +57,7 @@ Penumpang penumpang;
 
 //####################################
 // Deklarasi function
+void pesanTiket();
 void lihatStatusKursi();
 void inputDataKereta();
 void inputDataPenumpang();
@@ -64,7 +65,7 @@ void tampilkanJenisKereta();
 void tampilkanDataKotaAsal();
 void tampilkanDataKotaTujuan();
 void resetData();
-void pesanTiket();
+
 
 //####################################
 // Function main (dieksekusi paling utama) dan untuk User Interface utama

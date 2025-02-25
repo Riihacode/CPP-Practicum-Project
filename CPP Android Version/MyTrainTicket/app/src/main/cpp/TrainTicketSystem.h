@@ -23,9 +23,38 @@ struct Kereta {
 class TrainTicketSystem {
 private:
     string kursi[3][10];
+
     string arrayJenisKereta[3];
     string arrayKotaAsal[5];
     string arrayKotaTujuan[10];
+    /*
+    string arrayJenisKereta[3] = {
+            "Ekonomi",
+            "Bisnis",
+            "Eksekutif"
+    };
+
+    string arrayKotaAsal[5] = {
+            "Kota Yogyakarta",
+            "Kabupaten Sleman",
+            "Kabupaten Gunung Kidul",
+            "Kabupaten Bantul",
+            "Kabupaten Kulon Progo"
+    };
+
+    string arrayKotaTujuan[10] = {
+            "Kota Magelang",
+            "Kabupaten Magelang",
+            "Kabupaten Banjarnegara",
+            "Kabupaten Boyolali",
+            "Kabupaten Cilacap",
+            "Kabupaten Brebes",
+            "Kabupaten Demak",
+            "Kabupaten Jepara",
+            "Kota Semarang",
+            "Kota Salatiga"
+    };
+     */
     Kereta kereta;
     Penumpang penumpang;
 

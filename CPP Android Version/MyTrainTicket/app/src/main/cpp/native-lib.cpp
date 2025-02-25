@@ -46,8 +46,8 @@ extern "C" {
         );
 
         env->ReleaseStringUTFChars(nama, c_nama);
-        env->ReleaseStringUTFChars(nik, c_nik);
-        env->ReleaseStringUTFChars(alamat, c_alamat);
+        //env->ReleaseStringUTFChars(nik, c_nik);
+        //env->ReleaseStringUTFChars(alamat, c_alamat);
     }
 
     JNIEXPORT jstring JNICALL
@@ -83,7 +83,7 @@ extern "C" {
         system->getDaftarJenisKereta(nullptr, size);
 
         // 2. Alokasi array dinamis
-        std::string* data = new std::string[size];
+        string* data = new string[size];
         system->getDaftarJenisKereta(data, size);
 
         // 3. Konversi ke Java array
@@ -120,7 +120,7 @@ extern "C" {
         system->getDaftarKotaTujuan(nullptr, size);
 
         // 2. Alokasi array dinamis
-        std::string* data = new std::string[size];
+        string* data = new string[size];
         system->getDaftarKotaTujuan(data, size);
 
         // 3. Konversi ke Java array
@@ -157,7 +157,7 @@ extern "C" {
         system->getDaftarKotaAsal(nullptr, size); // Hanya ambil ukuran
 
         // 2. Alokasi array dinamis
-        std::string* data = new std::string[size];
+        string* data = new string[size];
         system->getDaftarKotaAsal(data, size); // Ambil data
 
         // 3. Konversi ke Java array
