@@ -1,20 +1,25 @@
 #include <iostream>
 #include <string>
+
 using namespace std;
 
 //####################################
 // Array 2 Dimensi
 string kursi[3][10];
+struct Chair {
+    bool isFilled;
+
+};
 
 //####################################
 // Array 1 Dimensi untuk menampilkan menu
-string arrayJenisKereta[3] = {
+string arrayKindOfTrain[3] = {
     "Ekonomi",
     "Bisnis",
     "Eksekutif"
 };
 
-string arrayKotaAsal[5] = {
+string arrayHometown[5] = {
     "Kota Yogyakarta",
     "Kabupaten Sleman",
     "Kabupaten Gunung Kidul",
@@ -22,7 +27,7 @@ string arrayKotaAsal[5] = {
     "Kabupaten Kulon Progo"
 };
 
-string arrayKotaTujuan[10] = {
+string arrayCityDestination[10] = {
     "Kota Magelang",
     "Kabupaten Magelang",
     "Kabupaten Banjarnegara",
@@ -37,23 +42,23 @@ string arrayKotaTujuan[10] = {
 
 //####################################
 // Struct atau Record
-struct Penumpang {
+struct Passenger {
     string 
-        nama, 
+        name, 
         nik, 
-        alamat;
+        address;
 };
 
-struct Kereta {
+struct Train {
     string 
-        jenisKereta, 
-        kotaAsal, 
-        kotaTujuan, 
-        metodePembayaran;
+        kindOfTrain, 
+        hometown, 
+        cityDestination, 
+        paymentMethod;
 };
 
-Kereta kereta;
-Penumpang penumpang;
+Train train;
+Passenger passenger;
 
 //####################################
 // Deklarasi function
@@ -141,13 +146,13 @@ void inputDataKereta() {
 
     switch (pilih) {
         case 1:
-            kereta.jenisKereta = arrayJenisKereta[0];
+            train.kindOfTrain = arrayKindOfTrain[0];
             break;
         case 2:
-            kereta.jenisKereta = arrayJenisKereta[1];
+            train.kindOfTrain = arrayKindOfTrain[1];
             break;
         case 3:
-            kereta.jenisKereta = arrayJenisKereta[2];
+            train.kindOfTrain = arrayKindOfTrain[2];
             break;
         default:
             cout << "Pilihan tidak valid!" << endl;
@@ -162,7 +167,7 @@ void inputDataKereta() {
     cout << endl;
 
     if (pilih >= 1 && pilih <= 5) {
-        kereta.kotaAsal = arrayKotaAsal[pilih - 1];     // `- 1` karena array itu dimulai dari 0
+        train.hometown = arrayHometown[pilih - 1];     // `- 1` karena array itu dimulai dari 0
     } else {
         cout << "Pilihan tidak valid!" << endl;
         return;
@@ -174,7 +179,7 @@ void inputDataKereta() {
     cin >> pilih;
     cin.ignore(); // Membersihkan buffer
     if (pilih >= 1 && pilih <= 10) {
-        kereta.kotaTujuan = arrayKotaTujuan[pilih - 1]; // `- 1` karena array itu dimulai dari 0
+        train.cityDestination = arrayCityDestination[pilih - 1]; // `- 1` karena array itu dimulai dari 0
     } else {
         cout << "Pilihan tidak valid!" << endl;
         return;
@@ -186,11 +191,11 @@ void inputDataPenumpang() {
 
     cout << "\nInputkan data diri Anda: " << endl;
     cout << "Nama   : ";
-    getline(cin, penumpang.nama);
+    getline(cin, passenger.name);
     cout << "NIK    : ";
-    getline(cin, penumpang.nik);
+    getline(cin, passenger.nik);
     cout << "Alamat : ";
-    getline(cin, penumpang.alamat);
+    getline(cin, passenger.address);
 
     int pilihan;
     bool kursiDitemukan = false;
@@ -221,7 +226,7 @@ void inputDataPenumpang() {
 
             
             if (kursi[gerbong - 1][nomorKursi - 1].empty()) {
-                kursi[gerbong - 1][nomorKursi - 1] = penumpang.nama;
+                kursi[gerbong - 1][nomorKursi - 1] = passenger.name;
                 cout << "Kursi berhasil dipesan!" << endl;
             } else {
                 cout << "Maaf, kursi sudah dipesan." << endl;
@@ -236,7 +241,7 @@ void inputDataPenumpang() {
             for (int i = 0; i < 3; i++) {
                 for (int j = 0; j < 10; j++) {
                     if (kursi[i][j].empty()) {
-                        kursi[i][j] = penumpang.nama;
+                        kursi[i][j] = passenger.name;
                         cout    << "Kursi dipilihkan oleh sistem: Gerbong" << i + 1 
                                 << ", Kursi " << j +1 <<endl;
                         
@@ -275,24 +280,24 @@ void inputDataPenumpang() {
 //####################################
 // Function pendukung untuk mengurangi redundansi (penggunaan berulang-ulang)
 void resetData(){
-    penumpang = Penumpang();    // Reset data penumpang
-    kereta = Kereta();          // Reset data kereta
+    passenger = Passenger();    // Reset data penumpang
+    train = Train();          // Reset data kereta
 }
 
 void tampilkanJenisKereta() {
     for (int i = 0; i < 3; i++) {
-        cout << i + 1 << ". " << arrayJenisKereta[i] << endl;
+        cout << i + 1 << ". " << arrayKindOfTrain[i] << endl;
     }
 }
 
 void tampilkanDataKotaAsal() {
     for (int i = 0; i < 5; i++) {
-        cout << i + 1 << ". " << arrayKotaAsal[i] << endl;
+        cout << i + 1 << ". " << arrayHometown[i] << endl;
     }
 }
 
 void tampilkanDataKotaTujuan() {
     for (int i = 0; i < 10; i++) {
-        cout << i + 1 << ". " << arrayKotaTujuan[i] << endl;
+        cout << i + 1 << ". " << arrayCityDestination[i] << endl;
     }
 }
