@@ -70,27 +70,28 @@ int indexDeparture = 0;
 void autoBookTicket();
 void manualInput();
 void searchByNIK();
-void seqNonSentinelNotYetSorted();
-void seqSentinelNotYetSorted();
-void bubbleSort();
-void straightInsertionSort();
-void selectionSort();
-void shellSort();
-void quickSort(Booking bookingsQuick[], int first, int last);
+void seqNonSentinelNotYetSorted(string *nikPointer);
+void seqSentinelNotYetSorted(string *nikPointer);
+void binarySearch(Booking *copyBinary, string *nikPointer);
+void bubbleSortByNik(Booking *copyBubleNik);
+void bubbleSort(Booking *copyBubble);
+void straightInsertionSort(Booking *copyInsertion);
+void selectionSort(Booking *copySelection);
+void shellSort(Booking *copyShell);
+void quickSort(Booking *copyQuick, int first, int last);
 void sortingOutputShow(Booking *sortingShow);
 
 int main() {
     int chooseMenu;
 
     do {   
-        cout << "=================== MAIN MENU ================"<< endl;
-        cout << "1. Book your ticket"                           << endl;
-        cout << "2. Show your ticket information (Searching)"   << endl;
-        cout << "3. Show all ticket information (Sorting)"      << endl;
-        cout << "4. Recursive"                                  << endl;
-        cout << "5. Exit"                                       << endl;
-        cout << "=============================================="<< endl;
-        cout << "Choose your option : ";
+        cout << "[MAIN MENU]"<< endl;
+        cout << "   1. Book your ticket"                           << endl;
+        cout << "   2. Show your ticket information (Searching)"   << endl;
+        cout << "   3. Show all ticket information (Sorting)"      << endl;
+        cout << "   4. Recursive"                                  << endl;
+        cout << "   5. Exit"                                       << endl;
+        cout << "   Choose your option : ";
         cin >> chooseMenu;
         cout << endl;
 
@@ -99,21 +100,30 @@ int main() {
                 int chooseMenuInMenu1;
 
                 do {
-                    cout << "=================== MAIN MENU ================"<< endl;
-                    cout << "1. Generate Data Customer"                     << endl;
-                    cout << "2. Manual Input Data Customer"                 << endl;
-                    cout << "3. Back to main menu"                          << endl;
-                    cout << "=============================================="<< endl;
-                    cout << "Choose Your Option: ";
+                    cout << "[BOOK YOUR TICKET]"<< endl;
+                    cout << "   1. Generate Data Customer"                     << endl;
+                    cout << "   2. Manual Input Data Customer"                 << endl;
+                    cout << "   3. Back to main menu"                          << endl;
+                    cout << "   Choose Your Option: ";
                     cin >> chooseMenuInMenu1;
+                    cout << endl;
 
                     switch (chooseMenuInMenu1){
-                        case 1: {   autoBookTicket()    ;break; }
-                        case 2: {   manualInput()       ;break; }
-                        case 3: {   cout << "Exit..."   ;break; }
-                        default:{   cout << "Invalid"   ;break; }
+                        case 1: {   
+                            autoBookTicket();
+                            cout << endl << endl;
+                            break; 
+                        }
+                        case 2: {   
+                            manualInput();
+                            cout<< endl << endl; 
+                            break; 
+                        }
+                        case 3: {   cout << "   Exit..."<< endl << endl; break; }
+                        default:{   cout << "   Invalid"<< endl << endl; break; }
                     }
                 } while (chooseMenuInMenu1 != 3);
+                cout << endl;
 
                 break;
             }
@@ -121,78 +131,183 @@ int main() {
             case 2: {
                 int chooseMenuInMenu2;
                 do {
-                    cout << "=================== MAIN MENU ================"    << endl;
-                    cout << "1. Sequential Non Sentinel Search Not Yet Sorted"  << endl;
-                    cout << "2. Sequential Sentinel Search Not Yet Sorted"      << endl;
-                    cout << "3. Manual Input Data Customer"                     << endl;
-                    cout << "4. Back to main menu"                              << endl;
-                    cout << "=============================================="    << endl;
-                    cout << "Choose your option: ";
+                    cout << "\n[YOUR TICKET INFORMATION]"<< endl;
+                    cout << "   1. Sequential Non Sentinel Search Not Yet Sorted"  << endl;
+                    cout << "   2. Sequential Sentinel Search Not Yet Sorted"      << endl;
+                    cout << "   3. Binary Search"                                  << endl;
+                    cout << "   4. Back to main menu"                              << endl;
+                    cout << "   Choose your option: ";
                     cin >> chooseMenuInMenu2;
                     cout << endl;
 
                     switch(chooseMenuInMenu2) {
-                        case 1: {   seqNonSentinelNotYetSorted();   break;  }
-                        case 2: {   seqSentinelNotYetSorted();      break;  }
-                        case 3: {   break;                                  }
-                        case 4: {   cout << "Exit...";              break;  }
-                        default:{   break;                                  }
+                        case 1: {   
+                            string searchNIK;
+                            cout << "   Input NIK you wanna search: ";
+                            cin >> searchNIK;
+                            
+                            seqNonSentinelNotYetSorted(&searchNIK); 
+                            cout << endl << endl; 
+
+                            break;  
+                        }
+                        case 2: {
+                            string searchNIK;
+
+                            cout << "Input NIK you wanna search: ";
+                            cin >> searchNIK; 
+
+                            seqSentinelNotYetSorted(&searchNIK);      
+                            cout << endl << endl;
+                            break;  
+                        }
+                        case 3: {   
+                            Booking copy[30];
+                            for (int i = 0; i < indexDeparture; i++) {
+                                copy[i] = bookings[i];
+                            }
+
+                            string searchNIK;
+
+                            cout << "Input NIK you wanna search: ";
+                            cin >> searchNIK; 
+
+                            binarySearch(copy, &searchNIK);
+                            cout << endl << endl;
+
+                            break;                                  
+                        }
+                        case 4: {  
+                            cout << "   Exit...";             
+                            cout << endl << endl;
+                            
+                            break;  }
+                        default:{   
+                            cout << endl << endl;
+                            break;                                  
+                        }
                     }
                 } while (chooseMenuInMenu2 != 4);
+                cout << endl;
+
                 break;
             }
 
             case 3: {
                 int chooseMenuInMenu3;
                 do {
-                    cout << "=================== MAIN MENU ================"    << endl;
-                    cout << "1. Bubble Sort"                                    << endl;
-                    cout << "2. Straight Insertion Sort"                        << endl;
-                    cout << "3. Straight Selection Sort"                        << endl;
-                    cout << "4. Shell Sort"                                     << endl;
-                    cout << "5. Quick Sort"                                     << endl;
-                    cout << "6. Back to main menu"                              << endl;
-                    cout << "=============================================="    << endl;
-                    cout << "Choose your option: ";
+                    cout << "[ALL TICKET INFORMATION]"    << endl;
+                    cout << "   1. Bubble Sort"                                    << endl;
+                    cout << "   2. Straight Insertion Sort"                        << endl;
+                    cout << "   3. Straight Selection Sort"                        << endl;
+                    cout << "   4. Shell Sort"                                     << endl;
+                    cout << "   5. Quick Sort"                                     << endl;
+                    cout << "   6. Back to main menu"                              << endl;
+                    cout << "   Choose your option: ";
                     cin >> chooseMenuInMenu3;
                     cout << endl;
 
                     switch(chooseMenuInMenu3) {
-                        case 1: {   bubbleSort();               break;  }
-                        case 2: {   straightInsertionSort();    break;  }
-                        case 3: {   selectionSort();            break;  }
-                        case 4: {   shellSort();                break;  }
-                        case 5: {   
+                        case 1: {
+                            Booking copy[30];
+
+                            for (int i = 0; i < indexDeparture; i++) {
+                                copy[i] = bookings[i];
+                            }
+                            
+                            bubbleSort(copy);
+                            sortingOutputShow(copy);  
+
+                            cout << endl;
+
+                            break;  
+                        }
+                        case 2: {   
+                            Booking copy[30];
+
+                            for (int i = 0; i < indexDeparture; i++) {
+                                copy[i] = bookings[i];
+                            }
+
+                            straightInsertionSort(copy);
+                            sortingOutputShow(copy);  
+                            
+                            cout << endl;
+
+                            break;  
+                        }
+                        case 3: {   
                             Booking copy[30];
                             for (int i = 0; i < indexDeparture; i++) {
                                 copy[i] = bookings[i];
                             }
 
+                            selectionSort(copy);
+                            sortingOutputShow(copy);      
+                            
+                            cout << endl << endl;
+
+                            break;  
+                        }
+                        case 4: {   
+                            Booking copy[30];
+
+                            for (int i = 0; i < indexDeparture; i++) {
+                                copy[i] = bookings[i];
+                            }
+
+                            shellSort(copy);
+                            sortingOutputShow(copy);     
+                            
+                            cout << endl;
+
+                            break;  
+                        }
+                        case 5: {   
+                            Booking copy[30];
+
+                            int i;
+                            for (i = 0; i < indexDeparture; i++) {
+                                copy[i] = bookings[i];
+                            }
+
+                            //Booking *copyPointer = &copy[i];
+
                             int first = 0;
-                            int last = indexDeparture - 1; 
-                            quickSort(bookings, first, last);
+                            int last = indexDeparture - 1;
+
+                            quickSort(copy, first, last);
+                            sortingOutputShow(copy);
+
+                            cout << endl;
+
                             break;
                         }
-                        case 6: {   cout << "Exit...";          break;  }
+                        case 6: {   
+                            cout << "   Exit..." << endl; 
+                            cout << endl;
+                                    
+                            break;  
+                        }
                         default:{   break;  }
-                        
                     }
                 } while (chooseMenuInMenu3 != 6);
                 break;
             }
             
             case 4: {
-                
+                cout << endl << endl;
                 break;
             }
 
             case 5: {
-
+                cout << endl << endl;
                 break;
             }
 
             default: {
-                cout << "Invalid Option!"<<endl;
+                cout << "   Invalid Option!";
+                cout << endl << endl;
                 break;
             }
         }
@@ -226,6 +341,7 @@ void generateDataPassanger(){
     cout << endl;
 }
 
+/*
 void autoBookTicket() {
     if (indexDeparture >= 30) {
         cout << "All seats already booked";
@@ -266,7 +382,9 @@ void autoBookTicket() {
     Booking& b                  = bookings[indexDeparture];
 
     b.passenger.name    = sampleNames[rand() % 8];
-    b.passenger.nik     = sampleNIKs[rand() % 4];
+    //b.passenger.nik     = sampleNIKs[rand() % 4];
+    int randomBaseNIK = 1000000000 + rand() % 900000000;
+    b.passenger.nik = to_string(randomBaseNIK) + to_string(indexDeparture);
     b.passenger.address = sampleAddresses[rand() % 4];
 
     b.ticket.departureCity  = departuresCity[rand() % 5];
@@ -280,18 +398,91 @@ void autoBookTicket() {
     b.payment.isPaid        = true;
     b.payment.totalPrice    = 100000;
 
-    cout << "Pemesanan otomatis berhasil untuk " << b.passenger.name 
+    cout << "   [RESULT] Pemesanan otomatis berhasil untuk " << b.passenger.name 
          << " dengan NIK " << b.passenger.nik
          << " di kursi " << coach + 1 
-         << "-" << seat + 1 
-         << endl;
+         << "-" << seat + 1;
+
+    indexDeparture++;
+}*/
+void autoBookTicket() {
+    if (indexDeparture >= 30) {
+        cout << "All seats already booked" << endl;
+        return;
+    }
+
+    string sampleNames[]      = {"Budi", "Ani", "Citra", "Dedi", "Eka", "Fajar", "Gita", "Hana"};
+    string sampleAddresses[]  = {"Yogyakarta", "Sleman", "Bantul", "Kulon Progo"};
+    string destinationsCity[] = {"Semarang", "Jepara", "Magelang", "Cilacap", "Boyolali"};
+    string paymentMethods[]   = {"Transfer", "E-Wallet", "Cash"};
+
+    srand(time(0));
+
+    // Cari kursi kosong
+    int coach = -1, seat = -1;
+    bool foundSeat = false;
+
+    for (int g = 0; g < portalClass && !foundSeat; g++) {
+        for (int s = 0; s < portalClassSeat && !foundSeat; s++) {
+            if (!seatsEachPortal[g][s]) {
+                coach = g;
+                seat = s;
+                foundSeat = true;
+            }
+        }
+    }
+
+    if (!foundSeat) {
+        cout << "Tidak ada kursi kosong" << endl;
+        return;
+    }
+
+    // Generate unique NIK
+    string generatedNIK;
+    bool isDuplicate;
+    do {
+        isDuplicate = false;
+        int randomNIK = 100000000 + rand() % 900000000; // Random 9 digit
+        generatedNIK = to_string(randomNIK);
+
+        for (int i = 0; i < indexDeparture; i++) {
+            if (bookings[i].passenger.nik == generatedNIK) {
+                isDuplicate = true;
+                break;
+            }
+        }
+    } while (isDuplicate);
+
+    // Assign data ke bookings
+    seatsEachPortal[coach][seat] = true;
+    Booking& b = bookings[indexDeparture];
+
+    b.passenger.name    = sampleNames[rand() % 8];
+    b.passenger.nik     = generatedNIK;
+    b.passenger.address = sampleAddresses[rand() % 4];
+
+    b.ticket.departureCity     = departuresCity[rand() % 5];
+    b.ticket.destinationCity   = destinationsCity[rand() % 5];
+    b.ticket.coachNumber       = coach;
+    b.ticket.seatNumber        = seat;
+    b.ticket.travelDate        = "2025-04-01";
+
+    b.payment.paymentMethod    = paymentMethods[rand() % 3];
+    b.payment.isPaid           = true;
+    b.payment.totalPrice       = 100000;
+
+    cout << "   [RESULT] Pemesanan otomatis berhasil untuk " << b.passenger.name
+         << " dengan NIK " << b.passenger.nik
+         << " di kursi " << coach + 1
+         << "-" << seat + 1 << endl;
 
     indexDeparture++;
 }
 
+
 void manualInput() {
     if (indexDeparture >= 30) {
-        cout << "Semua kursi telah dipesan!" << endl;
+        cout << "   Semua kursi telah dipesan!" << endl;
         return;
     }
 
@@ -321,7 +512,7 @@ void manualInput() {
 
     cout << "\n[DESTINATION CITY MENU]" << endl;
     for (int i = 0; i < 5; i++) {
-        cout << i + 1 << ". " << destinationsCity[i] <<endl;
+        cout << "   " << i + 1 << ". " << destinationsCity[i] <<endl;
     }
     cout << "   Choose your option: ";
     cin >> chooseDestinationCity;
@@ -372,8 +563,7 @@ void manualInput() {
     bookings[indexDeparture].payment.isPaid         = true;
     bookings[indexDeparture].payment.totalPrice     = 100000;   // isi flat dulu
 
-
-    cout << "Your ticket booking was successful!" << endl;
+    cout << "   [RESULT] Your ticket booking was successful!" << endl;
     indexDeparture++;
 }
 
@@ -381,22 +571,18 @@ void searchByNIK() {
     bool found = false;
     for (int i = 0; i < indexDeparture; ++i) {
         found = true;
-        cout << "\n=== Tiket Ditemukan ===\n";
-        cout << "Nama       : " << bookings[i].passenger.name << endl;
-        cout << "NIK        : " << bookings[i].passenger.nik << endl;
-        cout << "Asal       : " << bookings[i].ticket.departureCity << endl;
-        cout << "Tujuan     : " << bookings[i].ticket.destinationCity << endl;
-        cout << "Kursi      : " << bookings[i].ticket.coachNumber << "-" << bookings[i].ticket.seatNumber << endl;
-        cout << "Total Bayar: Rp" << bookings[i].payment.totalPrice << endl;
+        cout << "\n[FOUND - TICKET]\n";
+        cout << "   Nama       : " << bookings[i].passenger.name << endl;
+        cout << "   NIK        : " << bookings[i].passenger.nik << endl;
+        cout << "   Asal       : " << bookings[i].ticket.departureCity << endl;
+        cout << "   Tujuan     : " << bookings[i].ticket.destinationCity << endl;
+        cout << "   Kursi      : " << bookings[i].ticket.coachNumber << "-" << bookings[i].ticket.seatNumber << endl;
+        cout << "   Total Bayar: Rp" << bookings[i].payment.totalPrice << endl;
         break;    
     }
 }
 
-void seqNonSentinelNotYetSorted(){
-    string searchNIK;
-    cout << "Input NIK you wanna search: ";
-    cin >> searchNIK;
-
+void seqNonSentinelNotYetSorted(string *nikPointer){
     bool found = false;
     int i = 0;
 
@@ -404,7 +590,7 @@ void seqNonSentinelNotYetSorted(){
         (i < indexDeparture) && 
         (!found)
     ) {
-        if (bookings[i].passenger.nik == searchNIK) {
+        if (bookings[i].passenger.nik == *nikPointer) {
             found = true;
         } else {
             i++;
@@ -412,34 +598,26 @@ void seqNonSentinelNotYetSorted(){
     }
 
     if (found) {
-        cout << "\n====== NIK ditemukan =======\n";
-        cout << "Nama       : " << bookings[i].passenger.name << endl;
-        cout << "NIK        : " << bookings[i].passenger.nik << endl;
-        cout << "Asal       : " << bookings[i].ticket.departureCity << endl;
-        cout << "Tujuan     : " << bookings[i].ticket.destinationCity << endl;
-        cout << "Kursi      : " << bookings[i].ticket.coachNumber + 1 << "-" << bookings[i].ticket.seatNumber + 1 << endl;
-        cout << "Total Bayar: Rp" << bookings[i].payment.totalPrice << endl << endl;
+        cout << "\n[FOUND - NIK]\n";
+        cout << "   Nama       : " << bookings[i].passenger.name << endl;
+        cout << "   NIK        : " << bookings[i].passenger.nik << endl;
+        cout << "   Asal       : " << bookings[i].ticket.departureCity << endl;
+        cout << "   Tujuan     : " << bookings[i].ticket.destinationCity << endl;
+        cout << "   Kursi      : " << bookings[i].ticket.coachNumber + 1 << "-" << bookings[i].ticket.seatNumber + 1 << endl;
+        cout << "   Total Bayar: Rp" << bookings[i].payment.totalPrice << endl << endl;
     } else {
-        cout << "NIK not found!\n";
+        cout << "   NIK not found!\n";
     }
 }
 
-void seqSentinelNotYetSorted() {
-    string searchNIK;
-
-    cout << "Input NIK you wanna search: ";
-    cin >> searchNIK;
-
-    // Buat backup untuk menghentikan looping dan menukar nilai nya dengan backup mula-mula setelah looping berakhir (trik utamanya ini)
-    // Buat backup data dari struknya langsung (bukan hanya fieldnya saja)
+void seqSentinelNotYetSorted(string *nikPointer) {
     Booking tempBackup = bookings[indexDeparture];
     
-    // isi index terakhir dengan inputan NIK yang ingin dicari (ibaratnya menganggap index terakhir sebaga sentinel)
-    bookings[indexDeparture].passenger.nik = searchNIK;
+    bookings[indexDeparture].passenger.nik = *nikPointer;
 
     int i = 0;
     // bool found = false;
-    while (bookings[i].passenger.nik != searchNIK) {
+    while (bookings[i].passenger.nik != *nikPointer) {
         i++;
     }
 
@@ -447,105 +625,127 @@ void seqSentinelNotYetSorted() {
     bookings[indexDeparture] = tempBackup;
 
     if (i < indexDeparture) {
-        cout << "\n====== NIK FOUND =======\n";
-        cout << "Nama       : " << bookings[i].passenger.name << endl;
-        cout << "NIK        : " << bookings[i].passenger.nik << endl;
-        cout << "Asal       : " << bookings[i].ticket.departureCity << endl;
-        cout << "Tujuan     : " << bookings[i].ticket.destinationCity << endl;
-        cout << "Kursi      : " << bookings[i].ticket.coachNumber + 1 << "-" << bookings[i].ticket.seatNumber + 1 << endl;
-        cout << "Total Bayar: Rp" << bookings[i].payment.totalPrice << endl << endl;
+        cout << "\n[FOUND - NIK]\n";
+        cout << "   Nama       : " << bookings[i].passenger.name << endl;
+        cout << "   NIK        : " << bookings[i].passenger.nik << endl;
+        cout << "   Asal       : " << bookings[i].ticket.departureCity << endl;
+        cout << "   Tujuan     : " << bookings[i].ticket.destinationCity << endl;
+        cout << "   Kursi      : " << bookings[i].ticket.coachNumber + 1 << "-" << bookings[i].ticket.seatNumber + 1 << endl;
+        cout << "   Total Bayar: Rp" << bookings[i].payment.totalPrice << endl << endl;
     } else {
-        cout << "NIK not found!\n";
+        cout << "   NIK not found!\n";
     }
 }
 
-void bubbleSort() {
-    Booking copy[30];
-    for (int i = 0; i < indexDeparture; i++) {
-        copy[i] = bookings[i];
+void binarySearch(Booking *copyBinary, string *nikPointer) {
+    bubbleSortByNik(copyBinary);
+
+    int i, j, k;
+    bool found;
+
+    found = false;
+    i = 0;
+    j = indexDeparture;
+
+    while((i <= j) && (!found)){
+        k  = (i + j) / 2;
+        if (*nikPointer == copyBinary[k].passenger.nik) {
+            found = true;
+        } else {
+            if (*nikPointer < copyBinary[k].passenger.nik) {
+                j = k - 1;
+            } else {
+                i = k + 1;
+            }
+        }
     }
 
+    if (found) {
+        cout << "\n[FOUND - NIK]\n";
+        cout << "   Nama       : " << copyBinary[k].passenger.name << endl;
+        cout << "   NIK        : " << copyBinary[k].passenger.nik << endl;
+        cout << "   Asal       : " << copyBinary[k].ticket.departureCity << endl;
+        cout << "   Tujuan     : " << copyBinary[k].ticket.destinationCity << endl;
+        cout << "   Kursi      : " << copyBinary[k].ticket.coachNumber + 1 << "-" << copyBinary[k].ticket.seatNumber + 1 << endl;
+        cout << "   Total Bayar: Rp" << copyBinary[k].payment.totalPrice << endl << endl;
+    } else {
+        cout << "   NIK not found!\n";
+    }
+}
+
+void bubbleSortByNik(Booking *copyBubleNik) {
+    for (int i = 0; i < indexDeparture - 1; i++) {
+        for (int j = 0; j < indexDeparture - 1 - i; j++) {    
+            if (copyBubleNik[j].passenger.nik > copyBubleNik[j + 1].passenger.nik) {
+                Booking temp        = copyBubleNik[j];
+                copyBubleNik[j]     = copyBubleNik[j + 1];
+                copyBubleNik[j + 1] = temp;
+            }
+        }
+    }
+}
+
+void bubbleSort(Booking *copyBubble) {
     for (int i = 0; i < indexDeparture - 1; i++) {
         for (int j = 0; j < indexDeparture - 1 - i; j++) {
-            if (copy[j].passenger.name > copy[j + 1].passenger.name) {
-                Booking temp    = copy[j];
-                copy[j]         = copy[j + 1];
-                copy[j + 1]     = temp;
+            if (copyBubble[j].passenger.name > copyBubble[j + 1].passenger.name) {
+                Booking temp      = copyBubble[j];
+                copyBubble[j]     = copyBubble[j + 1];
+                copyBubble[j + 1] = temp;
             }
         }
     }
-
-    sortingOutputShow(copy);
 }
 
-void straightInsertionSort() {
-    Booking copy[30];
-    for (int i = 0; i < indexDeparture; i++) {
-        copy[i] = bookings[i];
-    }
+void straightInsertionSort(Booking *copyInsertion) {
+    int i, j;
+    Booking temp;
 
-    int j;
-
-    for (int i = 1; i < indexDeparture; i++) {
-        Booking temp = copy[i];
+    for (i = 1; i < indexDeparture; i++) {
+        temp = copyInsertion[i];
         j = i - 1;
-        while ((temp.passenger.name < copy[j].passenger.name) & (j >= 0)) {
-            copy[j + 1] = copy[j];
-            j           = j - 1;
-            copy[j + 1] = temp;
+        while ((j >= 0) && (temp.passenger.name < copyInsertion[j].passenger.name) ) {
+            copyInsertion[j + 1] = copyInsertion[j];
+            j                    = j - 1;
+            copyInsertion[j + 1] = temp;
         }
     }
-
-    sortingOutputShow(copy);
 }
 
-void selectionSort() {
-    Booking copy[30];
-    for (int i = 0; i < indexDeparture; i++) {
-        copy[i] = bookings[i];
-    }
-
+void selectionSort(Booking *copySelection) {
     for (int current = 0; current < indexDeparture; current++) {
         for (int j = current + 1; j < indexDeparture; j++) {
-            if (copy[current].passenger.name > copy[j].passenger.name) {
-                Booking temp    = copy[current];
-                copy[current]   = copy[j];
-                copy[j]         = temp;
+            if (copySelection[current].passenger.name > copySelection[j].passenger.name) {
+                Booking temp            = copySelection[current];
+                copySelection[current]  = copySelection[j];
+                copySelection[j]        = temp;
             }
         }
     }
-
-    sortingOutputShow(copy);
 }
 
-void shellSort() {
-    Booking copy[30];
-    for (int i = 0; i < indexDeparture; i++) {
-        copy[i] = bookings[i];
-    }
-
+void shellSort(Booking *copyShell) {
     for (int k = indexDeparture / 2; k > 0; k /= 2) {
         for (int j = k; j < indexDeparture; j++) {
             for (int i = j - k; i >= 0; i -= k) {
-                if (copy[i + k].passenger.name > copy[i].passenger.name) {
+                if (copyShell[i + k].passenger.name > copyShell[i].passenger.name) {
                     break;
                 } else {
-                    Booking mid = copy[i];
-                    copy[i]     = copy[i + k];
-                    copy[i + k] = mid;
+                    Booking mid      = copyShell[i];
+                    copyShell[i]     = copyShell[i + k];
+                    copyShell[i + k] = mid;
                 }
             }
         } 
     }
-
-    sortingOutputShow(copy);
 }
 
-void quickSort(Booking bookingsQuick[], int first, int last) {
+void quickSort(Booking *bookingsQuick, int first, int last) {
     int low, high;
 
     low     = first;
     high    = last;
+
     Booking listSeparator = bookingsQuick[(first + last) / 2];
 
     do {
@@ -565,18 +765,16 @@ void quickSort(Booking bookingsQuick[], int first, int last) {
 
     if (first < high)   { quickSort(bookingsQuick, first, high); };
     if (low < last)     { quickSort(bookingsQuick, low, last);   };
-
-    sortingOutputShow(bookingsQuick);
 }
 
 void sortingOutputShow(Booking *sortingShow) {
-    cout << "====== Data Booking Setelah Sorting (A-Z Nama) ======\n";
+    cout << "[ALL BOOKING DATA - AFTER SORTED (A-Z)]\n";
     for (int i = 0; i < indexDeparture; i++) {
-        cout << i + 1   << ". Nama: "   << sortingShow[i].passenger.name 
-                        << ", NIK: "    << sortingShow[i].passenger.nik 
-                        << ", Asal: "   << sortingShow[i].ticket.departureCity 
-                        << ", Tujuan: " << sortingShow[i].ticket.destinationCity 
-                        << endl;
+        cout << "   " << i + 1  << ". Nama: "   << sortingShow[i].passenger.name 
+                                << ", NIK: "    << sortingShow[i].passenger.nik 
+                                << ", Asal: "   << sortingShow[i].ticket.departureCity 
+                                << ", Tujuan: " << sortingShow[i].ticket.destinationCity 
+                                << endl;
     }
     cout << endl;
 }
