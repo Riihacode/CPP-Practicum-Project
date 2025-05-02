@@ -2,7 +2,6 @@
 #include <string>
 #include <cstdlib>  // untuk rand()
 #include <ctime>    // untuk time()
-
 using namespace std;
 
 const int portalClass = 3;
@@ -80,6 +79,8 @@ void selectionSort(Booking *copySelection);
 void shellSort(Booking *copyShell);
 void quickSort(Booking *copyQuick, int first, int last);
 void sortingOutputShow(Booking *sortingShow);
+void fileOperationSave (Booking bookings[], int totalData);
+void fileOperationSaveSingle(Booking bookings[], int totalData, string targetNIK);
 
 int main() {
     int chooseMenu;
@@ -90,7 +91,8 @@ int main() {
         cout << "   2. Show your ticket information (Searching)"   << endl;
         cout << "   3. Show all ticket information (Sorting)"      << endl;
         cout << "   4. Recursive"                                  << endl;
-        cout << "   5. Exit"                                       << endl;
+        cout << "   5. Print ticket"                               << endl;
+        cout << "   6. Exit"                                       << endl;
         cout << "   Choose your option : ";
         cin >> chooseMenu;
         cout << endl;
@@ -301,7 +303,43 @@ int main() {
             }
 
             case 5: {
+                int chooseMenuInMenu5;
+                do {
+                    cout << "[PRINT TICKET]" << endl;
+                    cout << "   1. Print all ticket"    << endl;
+                    cout << "   2. Print your ticket"   << endl;
+                    cout << "   3. Back to main menu"   << endl;
+                    cout << "   Choose your option : ";
+                    cin >> chooseMenuInMenu5;
+                    cout << endl;
+
+                    switch (chooseMenuInMenu5) {
+                        case 1: {
+                            fileOperationSave (bookings, indexDeparture);
+                            break;
+                        }
+                        case 2: {
+                            string inputNIK;
+
+                            cout << "   Input your NIK : ";
+                            cin >> inputNIK;
+                            fileOperationSaveSingle(bookings, indexDeparture, inputNIK);
+                            break;
+                        }
+                        case 3: {
+                            break;
+                        }
+                        default: {
+                            break;
+                        }
+                    }
+                } while(chooseMenuInMenu5 != 3);
                 cout << endl << endl;
+                break;
+            }
+
+            case 6: {
+                cout << "   Exit..." << endl << endl;
                 break;
             }
 
@@ -312,99 +350,9 @@ int main() {
             }
         }
 
-    } while (chooseMenu != 5);
+    } while (chooseMenu != 6);
 }
 
-void generateDataPassanger(){
-    for (int i = 0; i < 10; i++) {
-        // Passenger
-        bookings[i].passenger.name      = "Passenger Number - " + to_string(i + 1);
-        bookings[i].passenger.nik       = "1232100 - " + to_string(i + 1);
-        bookings[i].passenger.address   = "Indonesia, Regency Code Number - " + to_string(i + 1);
-
-        // TicketInfo
-        bookings[i].ticket.departureCity    = "Yogyakarta";
-        bookings[i].ticket.destinationCity  = "Magelang";
-        //bookings[i].ticket.trainClass       = "Ekonomi";
-        bookings[i].ticket.coachNumber      = 1 ;
-        bookings[i].ticket.seatNumber       = i ;
-        bookings[i].ticket.travelDate       = "2025-04-01";
-
-        // PaymentInfo
-        bookings[i].payment.paymentMethod   = "E-Wallet";
-        bookings[i].payment.isPaid          = true;
-        bookings[i].payment.totalPrice      = 100000;
-
-        indexDeparture++;
-    }
-
-    cout << endl;
-}
-
-/*
-void autoBookTicket() {
-    if (indexDeparture >= 30) {
-        cout << "All seats already booked";
-        return;
-    }
-
-    string sampleNames[]        = {"Budi", "Ani", "Citra", "Dedi", "Eka", "Fajar", "Gita", "Hana"};
-    string sampleNIKs[]         = {"1234567890", "2345678901", "3456789012", "4567890123"};
-    string sampleAddresses[]    = {"Yogyakarta", "Sleman", "Bantul", "Kulon Progo"};
-
-    string destinationsCity[]   = {"Semarang", "Jepara", "Magelang", "Cilacap", "Boyolali"};
-    string trainClass[]         = {"Ekonomi", "Bisnis", "Eksekutif"};
-    string paymentMethods[]     = {"Transfer", "E-Wallet", "Cash"};
-
-    srand(time(0));
-
-    // Cari kursi kosong
-    //int coach = -1, seat = -1;
-    int coach, seat;
-    bool found = false;
-
-    for (int g = 0; g < portalClass && !found; g++) {
-        for (int s = 0; s < portalClassSeat && !found; s++) {
-            if (!seatsEachPortal[g][s]) {
-                coach   = g;
-                seat    = s;
-                found   = true;
-            }
-        }
-    }
-
-    if (!found) {
-        cout << "Tidak ada kursi kosong \n";
-        return;
-    }
-
-    seatsEachPortal[coach][seat]= true;
-    Booking& b                  = bookings[indexDeparture];
-
-    b.passenger.name    = sampleNames[rand() % 8];
-    //b.passenger.nik     = sampleNIKs[rand() % 4];
-    int randomBaseNIK = 1000000000 + rand() % 900000000;
-    b.passenger.nik = to_string(randomBaseNIK) + to_string(indexDeparture);
-    b.passenger.address = sampleAddresses[rand() % 4];
-
-    b.ticket.departureCity  = departuresCity[rand() % 5];
-    b.ticket.destinationCity= destinationsCity[rand() % 5];
-    //b.ticket.trainClass     = trainClass[rand() % 3];
-    b.ticket.coachNumber    = coach;
-    b.ticket.seatNumber     = seat;
-    b.ticket.travelDate     = "2025-04-01";
-
-    b.payment.paymentMethod = paymentMethods[rand() % 3];
-    b.payment.isPaid        = true;
-    b.payment.totalPrice    = 100000;
-
-    cout << "   [RESULT] Pemesanan otomatis berhasil untuk " << b.passenger.name 
-         << " dengan NIK " << b.passenger.nik
-         << " di kursi " << coach + 1 
-         << "-" << seat + 1;
-
-    indexDeparture++;
-}*/
 void autoBookTicket() {
     if (indexDeparture >= 30) {
         cout << "All seats already booked" << endl;
@@ -453,11 +401,16 @@ void autoBookTicket() {
         }
     } while (isDuplicate);
 
+    // Generate unique Name
+    string baseName = sampleNames[rand() % 8];
+    string uniqueName = baseName + "-" + to_string(indexDeparture + 1);
+
     // Assign data ke bookings
     seatsEachPortal[coach][seat] = true;
-    Booking& b = bookings[indexDeparture];
+    Booking &b = bookings[indexDeparture];
 
-    b.passenger.name    = sampleNames[rand() % 8];
+    // b.passenger.name    = sampleNames[rand() % 8];
+    b.passenger.name    = uniqueName;
     b.passenger.nik     = generatedNIK;
     b.passenger.address = sampleAddresses[rand() % 4];
 
@@ -510,6 +463,7 @@ void manualInput() {
     bookings[indexDeparture].ticket.departureCity = departuresCity[chooseDepartureCity - 1];
 
 
+
     cout << "\n[DESTINATION CITY MENU]" << endl;
     for (int i = 0; i < 5; i++) {
         cout << "   " << i + 1 << ". " << destinationsCity[i] <<endl;
@@ -517,6 +471,7 @@ void manualInput() {
     cout << "   Choose your option: ";
     cin >> chooseDestinationCity;
     bookings[indexDeparture].ticket.destinationCity = destinationsCity[chooseDestinationCity - 1];
+
 
 
     // Menampilkan kursi kosong
@@ -534,6 +489,7 @@ void manualInput() {
         cout << endl;
     }
 
+    
 
     cout << "\n[CHOOSE SEAT]" << endl;
     cout << "   Choose Coach Train (1 - 3)     : ";
@@ -777,4 +733,76 @@ void sortingOutputShow(Booking *sortingShow) {
                                 << endl;
     }
     cout << endl;
+}
+
+void fileOperationSave(Booking bookings[], int totalData) {
+    FILE *fp;
+    fp = fopen("ticket_data.txt", "w");
+
+    if (fp == NULL) {
+        cout << "Failed to open file!" << endl;
+        return;
+    }
+
+    for (int i = 0; i < totalData; i++) {
+        fprintf(fp, "==============================\n");
+        fprintf(fp, "         TRAIN TICKET\n");
+        fprintf(fp, "==============================\n");
+        fprintf(fp, "Name           : %s\n", bookings[i].passenger.name.c_str());
+        fprintf(fp, "NIK            : %s\n", bookings[i].passenger.nik.c_str());
+        fprintf(fp, "Address        : %s\n", bookings[i].passenger.address.c_str());
+        fprintf(fp, "Departure City : %s\n", bookings[i].ticket.departureCity.c_str());
+        fprintf(fp, "Destination    : %s\n", bookings[i].ticket.destinationCity.c_str());
+        fprintf(fp, "Coach - Seat   : %d - %d\n", bookings[i].ticket.coachNumber + 1, bookings[i].ticket.seatNumber + 1);
+        fprintf(fp, "Travel Date    : %s\n", bookings[i].ticket.travelDate.c_str());
+        fprintf(fp, "Payment Method : %s\n", bookings[i].payment.paymentMethod.c_str());
+        fprintf(fp, "Paid           : %s\n", bookings[i].payment.isPaid ? "Yes" : "No");
+        fprintf(fp, "Total Price    : Rp%d\n", bookings[i].payment.totalPrice);
+        fprintf(fp, "==============================\n\n");
+    }
+
+    fclose(fp);
+    printf("    All ticket has been saved successfully.\n");
+}
+
+void fileOperationSaveSingle(Booking bookings[], int totalData, string targetNIK) {
+    bool found = false;
+
+    for (int i = 0; i < totalData; i++) {
+        if (bookings[i].passenger.nik == targetNIK) {
+            string fileName = targetNIK + "_ticket_data.txt";
+            FILE *fp;
+            fp = fopen(fileName.c_str(), "w");
+
+            if (fp == NULL) {
+                cout << "   Failed to open ticket file!\n";
+                return;
+            }
+
+            fprintf(fp, "==============================\n");
+            fprintf(fp, "         TRAIN TICKET\n");
+            fprintf(fp, "==============================\n");
+            fprintf(fp, "Name           : %s\n", bookings[i].passenger.name.c_str());
+            fprintf(fp, "NIK            : %s\n", bookings[i].passenger.nik.c_str());
+            fprintf(fp, "Address        : %s\n", bookings[i].passenger.address.c_str());
+            fprintf(fp, "Departure City : %s\n", bookings[i].ticket.departureCity.c_str());
+            fprintf(fp, "Destination    : %s\n", bookings[i].ticket.destinationCity.c_str());
+            fprintf(fp, "Coach - Seat   : %d - %d\n", bookings[i].ticket.coachNumber + 1, bookings[i].ticket.seatNumber + 1);
+            fprintf(fp, "Travel Date    : %s\n", bookings[i].ticket.travelDate.c_str());
+            fprintf(fp, "Payment Method : %s\n", bookings[i].payment.paymentMethod.c_str());
+            fprintf(fp, "Paid           : %s\n", bookings[i].payment.isPaid ? "Yes" : "No");
+            fprintf(fp, "Total Price    : Rp%d\n", bookings[i].payment.totalPrice);
+            fprintf(fp, "==============================\n");
+
+            fclose(fp);
+
+            cout << "   Ticket has been saved successfully: " << fileName << endl;
+            found = true;
+            break;
+        }
+    }
+
+    if (!found) {
+        cout << "   Data not found.\n";
+    }
 }
