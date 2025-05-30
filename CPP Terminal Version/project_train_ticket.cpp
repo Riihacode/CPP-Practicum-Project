@@ -83,6 +83,7 @@ void fileOperationSave (Booking bookings[], int totalData);
 void fileOperationSaveSingle(Booking bookings[], int totalData, string targetNIK);
 
 int main() {
+    cout << "Hello word";
     int chooseMenu;
 
     do {   
