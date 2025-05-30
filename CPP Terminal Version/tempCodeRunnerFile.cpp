@@ -8,7 +8,7 @@ using namespace std;
 const int nomorGerbong = 3;
 const int tempatDudukGerbong = 10;
 
-bool seatsEachPortal[nomorGerbong][tempatDudukGerbong];
+bool kursiTiapGerbong[nomorGerbong][tempatDudukGerbong];
 
 struct Penumpang {
     string 
@@ -276,7 +276,7 @@ void autoBookTicket() {
 
     for (int g = 0; g < nomorGerbong && !found; g++) {
         for (int s = 0; s < tempatDudukGerbong && !found; s++) {
-            if (!seatsEachPortal[g][s]) {
+            if (!kursiTiapGerbong[g][s]) {
                 coach   = g;
                 seat    = s;
                 found   = true;
@@ -289,7 +289,7 @@ void autoBookTicket() {
         return;
     }
 
-    seatsEachPortal[coach][seat]= true;
+    kursiTiapGerbong[coach][seat]= true;
     Pemesanan& b                  = pemesanan[indexKeberangkatan];
 
     b.penumpang.nama    = sampleNames[rand() % 8];
@@ -360,7 +360,7 @@ void manualInput() {
     for (int i = 0; i < 3; i++) {
         cout << "   Coach Train-" << i + 1 << " =" << endl;
         for (int j = 0; j < 10; j++) {
-            if (seatsEachPortal[i][j] != false) {
+            if (kursiTiapGerbong[i][j] != false) {
                 cout << "       [X]" << " ";
             } else {
                 cout << "       [" << to_string(j + 1) << "]";
@@ -377,12 +377,12 @@ void manualInput() {
     cout << "   Choose Seat Number (1 - 10)    : ";
     cin >> seatNumber;  seatNumber  -= 1;
 
-    if (seatsEachPortal[coachNumber][seatNumber]) {
+    if (kursiTiapGerbong[coachNumber][seatNumber]) {
         cout << "       The Seat Number already been booked!";
         return;
     }
 
-    seatsEachPortal[coachNumber][seatNumber]    = true;
+    kursiTiapGerbong[coachNumber][seatNumber]    = true;
     pemesanan[indexKeberangkatan].tiket.nomorGerbong = coachNumber;
     pemesanan[indexKeberangkatan].tiket.nomorTempatDuduk  = seatNumber;
     pemesanan[indexKeberangkatan].tiket.tanggalKeberangkatan  = "2025-04-01";  // Fixed dulu
