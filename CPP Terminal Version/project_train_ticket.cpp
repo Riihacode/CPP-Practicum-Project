@@ -88,6 +88,7 @@ void chooseMenuInMenu5();
 
 int main() {
     cout << "Hello word";
+    cout << "casting";
     int chooseMenu;
 
     do {   
