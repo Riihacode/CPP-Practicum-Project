@@ -65,8 +65,8 @@ int indexKeberangkatan = 0;
 void autoBookTicket();
 void manualInput();
 void searchByNIK();
-void seqNonSentinelNotYetSorted(string *nikPointer);
-void seqSentinelNotYetSorted(string *nikPointer);
+void cariNIKBerurutan(string *pointerNIK);
+void cariNIKDenganSentinel(string *pointerNIK);
 void binarySearch(Pemesanan *copyBinary, string *nikPointer);
 void bubbleSortByNik(Pemesanan *copyBubleNik);
 void bubbleSort(Pemesanan *copyBubble);
@@ -74,14 +74,14 @@ void straightInsertionSort(Pemesanan *copyInsertion);
 void selectionSort(Pemesanan *copySelection);
 void shellSort(Pemesanan *copyShell);
 void quickSort(Pemesanan *copyQuick, int first, int last);
-void sortingOutputShow(Pemesanan *sortingShow);
-void fileOperationSave (Pemesanan bookings[], int totalData);
-void fileOperationSaveSingle(Pemesanan bookings[], int totalData, string targetNIK);
+void tampilkanDataSetelahSorting(Pemesanan *dataSorting);
+void simpanKeFile(Pemesanan bookings[], int totalData);
+void simpanTiketSatu(Pemesanan bookings[], int totalData, string targetNIK);
 
-void chooseMenuInMenu1();
-void chooseMenuInMenu2();
-void chooseMenuInMenu3();
-void chooseMenuInMenu5();
+void pilihMenu1();
+void pilihMenu2();
+void pilihMenu3();
+void pilihMenu5();
 
 int main() {
     cout << "Hello word";
@@ -113,11 +113,11 @@ int main() {
         cout << endl;
 
         switch (pilihanMenu) {
-            case 1: { chooseMenuInMenu1();      break; }
-            case 2: { chooseMenuInMenu2();      break; }
-            case 3: { chooseMenuInMenu3();      break; }
+            case 1: { pilihMenu1();      break; }
+            case 2: { pilihMenu2();      break; }
+            case 3: { pilihMenu3();      break; }
             case 4: { cout << endl << endl;     break;}
-            case 5: { chooseMenuInMenu5();      break; }
+            case 5: { pilihMenu5();      break; }
             case 6: { cout << "   Exit..." << endl << endl; break; }
             default: {cout << "   Invalid Option! \n\n";break; }
         }
@@ -125,7 +125,7 @@ int main() {
     } while (pilihanMenu != 6);
 }
 
-void chooseMenuInMenu1() {
+void pilihMenu1() {
     int chooseMenuInMenu1;
 
     do {
@@ -163,7 +163,7 @@ void chooseMenuInMenu1() {
     cout << endl;
 }
 
-void chooseMenuInMenu2(){
+void pilihMenu2(){
     int chooseMenuInMenu2;
     do {
         cout << "\n[YOUR TICKET INFORMATION]"<< endl;
@@ -180,7 +180,7 @@ void chooseMenuInMenu2(){
                 cout << "   Input NIK you wanna search: ";
                 cin >> searchNIK;
                             
-                seqNonSentinelNotYetSorted(&searchNIK); 
+                cariNIKBerurutan(&searchNIK); 
                 cout << endl << endl; 
                 break;  
             }
@@ -189,7 +189,7 @@ void chooseMenuInMenu2(){
                 cout << "Input NIK you wanna search: ";
                 cin >> searchNIK; 
                 
-                seqSentinelNotYetSorted(&searchNIK);      
+                cariNIKDenganSentinel(&searchNIK);      
                 
                 cout << endl << endl;
                 break;  
@@ -225,8 +225,8 @@ void chooseMenuInMenu2(){
     cout << endl;
 }
 
-void chooseMenuInMenu3() {
-    int chooseMenuInMenu3;
+void pilihMenu3() {
+    int pilihMenu3;
     do {
         cout << "[ALL TICKET INFORMATION]"    << endl;
         cout << "   1. Bubble Sort"                                    << endl;
@@ -236,16 +236,16 @@ void chooseMenuInMenu3() {
         cout << "   5. Quick Sort"                                     << endl;
         cout << "   6. Back to main menu"                              << endl;
         cout << "   Choose your option: ";
-        cin >> chooseMenuInMenu3;
+        cin >> pilihMenu3;
         cout << endl;
-        switch(chooseMenuInMenu3) {
+        switch(pilihMenu3) {
             case 1: {
                 Pemesanan copy[30];
                 for (int i = 0; i < indexKeberangkatan; i++) {
                     copy[i] = pemesanan[i];
                 }
                 bubbleSort(copy);
-                sortingOutputShow(copy); 
+                tampilkanDataSetelahSorting(copy); 
                 cout << endl;
                 break;  
             }
@@ -256,7 +256,7 @@ void chooseMenuInMenu3() {
                     copy[i] = pemesanan[i];
                 }
                 straightInsertionSort(copy);
-                sortingOutputShow(copy);  
+                tampilkanDataSetelahSorting(copy);  
 
                 cout << endl;
 
@@ -269,7 +269,7 @@ void chooseMenuInMenu3() {
                 }
                 
                 selectionSort(copy);
-                sortingOutputShow(copy);   
+                tampilkanDataSetelahSorting(copy);   
                 
                 cout << endl << endl;
                 
@@ -283,7 +283,7 @@ void chooseMenuInMenu3() {
                 }
 
                 shellSort(copy);
-                sortingOutputShow(copy);     
+                tampilkanDataSetelahSorting(copy);     
                             
                 cout << endl;
 
@@ -303,7 +303,7 @@ void chooseMenuInMenu3() {
                 int last = indexKeberangkatan - 1;
                 
                 quickSort(copy, first, last);
-                sortingOutputShow(copy);
+                tampilkanDataSetelahSorting(copy);
 
                 cout << endl;
 
@@ -317,11 +317,11 @@ void chooseMenuInMenu3() {
             }
             default:{   break;  }
         }
-    } while (chooseMenuInMenu3 != 6);
+    } while (pilihMenu3 != 6);
 }
 
-void chooseMenuInMenu5() {
-    int chooseMenuInMenu5;
+void pilihMenu5() {
+    int pilihMenu5;
                 
     do {
         cout << "[PRINT TICKET]" << endl;
@@ -329,12 +329,12 @@ void chooseMenuInMenu5() {
         cout << "   2. Print your ticket"   << endl;
         cout << "   3. Back to main menu"   << endl;
         cout << "   Choose your option : ";
-        cin >> chooseMenuInMenu5;
+        cin >> pilihMenu5;
         cout << endl;
 
-        switch (chooseMenuInMenu5) {
+        switch (pilihMenu5) {
             case 1: {
-                fileOperationSave (pemesanan, indexKeberangkatan);
+                simpanKeFile (pemesanan, indexKeberangkatan);
                 break;
             }
             case 2: {
@@ -343,7 +343,7 @@ void chooseMenuInMenu5() {
                 cout << "   Input your NIK : ";
                 cin >> inputNIK;
                 
-                fileOperationSaveSingle(pemesanan, indexKeberangkatan, inputNIK);
+                simpanTiketSatu(pemesanan, indexKeberangkatan, inputNIK);
                 
                 break;
             }
@@ -354,7 +354,7 @@ void chooseMenuInMenu5() {
                 break;
             }
         }
-    } while(chooseMenuInMenu5 != 3);
+    } while(pilihMenu5 != 3);
     
     cout << endl << endl;
 }
@@ -544,7 +544,7 @@ void searchByNIK() {
     }
 }
 
-void seqNonSentinelNotYetSorted(string *nikPointer){
+void cariNIKBerurutan(string *pointerNIK){
     bool found = false;
     int i = 0;
 
@@ -552,7 +552,7 @@ void seqNonSentinelNotYetSorted(string *nikPointer){
         (i < indexKeberangkatan) && 
         (!found)
     ) {
-        if (pemesanan[i].penumpang.nik == *nikPointer) {
+        if (pemesanan[i].penumpang.nik == *pointerNIK) {
             found = true;
         } else {
             i++;
@@ -572,19 +572,19 @@ void seqNonSentinelNotYetSorted(string *nikPointer){
     }
 }
 
-void seqSentinelNotYetSorted(string *nikPointer) {
-    Pemesanan tempBackup = pemesanan[indexKeberangkatan];
+void cariNIKDenganSentinel(string *pointerNIK) {
+    Pemesanan cadanganData = pemesanan[indexKeberangkatan];
     
-    pemesanan[indexKeberangkatan].penumpang.nik = *nikPointer;
+    pemesanan[indexKeberangkatan].penumpang.nik = *pointerNIK;
 
     int i = 0;
     // bool found = false;
-    while (pemesanan[i].penumpang.nik != *nikPointer) {
+    while (pemesanan[i].penumpang.nik != *pointerNIK) {
         i++;
     }
 
     // Kembalikan data terakhir ke semula
-    pemesanan[indexKeberangkatan] = tempBackup;
+    pemesanan[indexKeberangkatan] = cadanganData;
 
     if (i < indexKeberangkatan) {
         cout << "\n[FOUND - NIK]\n";
@@ -729,19 +729,19 @@ void quickSort(Pemesanan *bookingsQuick, int first, int last) {
     if (low < last)     { quickSort(bookingsQuick, low, last);   };
 }
 
-void sortingOutputShow(Pemesanan *sortingShow) {
-    cout << "[ALL BOOKING DATA - AFTER SORTED (A-Z)]\n";
+void tampilkanDataSetelahSorting(Pemesanan *dataSorting) {
+    cout << "[SEMUA DATA PEMESANAN - SETELAH DIURUTKAN (A-Z)]\n";
     for (int i = 0; i < indexKeberangkatan; i++) {
-        cout << "   " << i + 1  << ". Nama: "   << sortingShow[i].penumpang.nama 
-                                << ", NIK: "    << sortingShow[i].penumpang.nik 
-                                << ", Asal: "   << sortingShow[i].tiket.asalKota 
-                                << ", Tujuan: " << sortingShow[i].tiket.kotaTujuan 
+        cout << "   " << i + 1  << ". Nama: "   << dataSorting[i].penumpang.nama 
+                                << ", NIK: "    << dataSorting[i].penumpang.nik 
+                                << ", Asal: "   << dataSorting[i].tiket.asalKota 
+                                << ", Tujuan: " << dataSorting[i].tiket.kotaTujuan 
                                 << endl;
     }
     cout << endl;
 }
 
-void fileOperationSave(Pemesanan bookings[], int totalData) {
+void simpanKeFile(Pemesanan bookings[], int totalData) {
     FILE *fp;
     fp = fopen("ticket_data.txt", "w");
 
@@ -771,7 +771,7 @@ void fileOperationSave(Pemesanan bookings[], int totalData) {
     printf("    All ticket has been saved successfully.\n");
 }
 
-void fileOperationSaveSingle(Pemesanan bookings[], int totalData, string targetNIK) {
+void simpanTiketSatu(Pemesanan bookings[], int totalData, string targetNIK) {
     bool found = false;
 
     for (int i = 0; i < totalData; i++) {
