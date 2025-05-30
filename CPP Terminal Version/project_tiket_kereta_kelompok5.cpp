@@ -42,11 +42,11 @@ string arrayCityDestination[10] = {
 
 //####################################
 // Struct atau Record
-struct Passenger {
+struct Penumpang {
     string 
-        name, 
+        nama, 
         nik, 
-        address;
+        alamat;
 };
 
 struct Train {
@@ -58,7 +58,7 @@ struct Train {
 };
 
 Train train;
-Passenger passenger;
+Penumpang passenger;
 
 //####################################
 // Deklarasi function
@@ -191,11 +191,11 @@ void inputDataPenumpang() {
 
     cout << "\nInputkan data diri Anda: " << endl;
     cout << "Nama   : ";
-    getline(cin, passenger.name);
+    getline(cin, passenger.nama);
     cout << "NIK    : ";
     getline(cin, passenger.nik);
     cout << "Alamat : ";
-    getline(cin, passenger.address);
+    getline(cin, passenger.alamat);
 
     int pilihan;
     bool kursiDitemukan = false;
@@ -226,7 +226,7 @@ void inputDataPenumpang() {
 
             
             if (kursi[gerbong - 1][nomorKursi - 1].empty()) {
-                kursi[gerbong - 1][nomorKursi - 1] = passenger.name;
+                kursi[gerbong - 1][nomorKursi - 1] = passenger.nama;
                 cout << "Kursi berhasil dipesan!" << endl;
             } else {
                 cout << "Maaf, kursi sudah dipesan." << endl;
@@ -241,7 +241,7 @@ void inputDataPenumpang() {
             for (int i = 0; i < 3; i++) {
                 for (int j = 0; j < 10; j++) {
                     if (kursi[i][j].empty()) {
-                        kursi[i][j] = passenger.name;
+                        kursi[i][j] = passenger.nama;
                         cout    << "Kursi dipilihkan oleh sistem: Gerbong" << i + 1 
                                 << ", Kursi " << j +1 <<endl;
                         
@@ -280,7 +280,7 @@ void inputDataPenumpang() {
 //####################################
 // Function pendukung untuk mengurangi redundansi (penggunaan berulang-ulang)
 void resetData(){
-    passenger = Passenger();    // Reset data penumpang
+    passenger = Penumpang();    // Reset data penumpang
     train = Train();          // Reset data kereta
 }
 

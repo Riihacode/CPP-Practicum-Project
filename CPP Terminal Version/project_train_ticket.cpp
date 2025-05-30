@@ -4,50 +4,50 @@
 #include <ctime>    // untuk time()
 using namespace std;
 
-const int portalClass = 3;
-const int portalClassSeat = 10;
+const int nomorGerbong = 3;
+const int tempatDudukGerbong = 10;
 
-bool seatsEachPortal[portalClass][portalClassSeat];
+bool seatsEachPortal[nomorGerbong][tempatDudukGerbong];
 
-struct Passenger {
-    string name,
+struct Penumpang {
+    string nama,
         nik,
-        address;
+        alamat;
 };
 
-struct TicketInfo{
+struct InfoTiket{
     string 
-        departureCity,
-        destinationCity;
+        asalKota,
+        kotaTujuan;
     int 
-        coachNumber,
-        seatNumber;
-    string travelDate;
+        nomorGerbong,
+        nomorTempatDuduk;
+    string tanggalKeberangkatan;
 };
 
-struct PaymentInfo {
-    string paymentMethod;
-    bool isPaid;
-    int totalPrice;
+struct InfoPembayaran {
+    string metodePembayaran;
+    bool sudahDibayar;
+    int totalHarga;
 };
 
-struct Booking {
-    Passenger passenger;
-    TicketInfo ticket;
-    PaymentInfo payment;
+struct Pemesanan {
+    Penumpang penumpang;
+    InfoTiket tiket;
+    InfoPembayaran pembayaran;
 };
 
-Booking bookings[30];
+Pemesanan pemesanan[30];
 
-string departuresCity[] = {
-    "Yogyakarta", 
-    "Sleman", 
-    "Gunung Kidul", 
-    "Bantul", 
-    "Kulon Progo"
-};
+// string kotaAsal[] = {
+//     "Yogyakarta", 
+//     "Sleman", 
+//     "Gunung Kidul", 
+//     "Bantul", 
+//     "Kulon Progo"
+// };
 
-string destinationsCity[] = {
+string kotaTujuan[] = {
     "Magelang", 
     "Semarang", 
     "Jepara",   
@@ -55,13 +55,13 @@ string destinationsCity[] = {
     "Boyolali"
 };
 
-string paymentMethods[] = {
+string metodePembayaran[] = {
     "Transfer", 
     "E-Wallet", 
     "Cash"
 };
 
-int indexDeparture = 0;
+int indexKeberangkatan = 0;
 
 
 //###################
@@ -70,16 +70,16 @@ void manualInput();
 void searchByNIK();
 void seqNonSentinelNotYetSorted(string *nikPointer);
 void seqSentinelNotYetSorted(string *nikPointer);
-void binarySearch(Booking *copyBinary, string *nikPointer);
-void bubbleSortByNik(Booking *copyBubleNik);
-void bubbleSort(Booking *copyBubble);
-void straightInsertionSort(Booking *copyInsertion);
-void selectionSort(Booking *copySelection);
-void shellSort(Booking *copyShell);
-void quickSort(Booking *copyQuick, int first, int last);
-void sortingOutputShow(Booking *sortingShow);
-void fileOperationSave (Booking bookings[], int totalData);
-void fileOperationSaveSingle(Booking bookings[], int totalData, string targetNIK);
+void binarySearch(Pemesanan *copyBinary, string *nikPointer);
+void bubbleSortByNik(Pemesanan *copyBubleNik);
+void bubbleSort(Pemesanan *copyBubble);
+void straightInsertionSort(Pemesanan *copyInsertion);
+void selectionSort(Pemesanan *copySelection);
+void shellSort(Pemesanan *copyShell);
+void quickSort(Pemesanan *copyQuick, int first, int last);
+void sortingOutputShow(Pemesanan *sortingShow);
+void fileOperationSave (Pemesanan bookings[], int totalData);
+void fileOperationSaveSingle(Pemesanan bookings[], int totalData, string targetNIK);
 
 void chooseMenuInMenu1();
 void chooseMenuInMenu2();
@@ -87,19 +87,34 @@ void chooseMenuInMenu3();
 void chooseMenuInMenu5();
 
 int main() {
+<<<<<<< HEAD
     cout << "Hello word";
     cout << "casting";
+=======
+>>>>>>> 5950db1 ([UPDATE] Refractor English to Indonesian not yet completed)
     int chooseMenu;
 
     do {   
-        cout << "[MAIN MENU]"<< endl;
-        cout << "   1. Book your ticket"                           << endl;
-        cout << "   2. Show your ticket information (Searching)"   << endl;
-        cout << "   3. Show all ticket information (Sorting)"      << endl;
-        cout << "   4. Recursive"                                  << endl;
-        cout << "   5. Print ticket"                               << endl;
-        cout << "   6. Exit"                                       << endl;
-        cout << "   Choose your option : ";
+        // cout << "[MAIN MENU]"<< endl;
+        // cout << "   1. Book your ticket"                           << endl;
+        // cout << "   2. Show your ticket information (Searching)"   << endl;
+        // cout << "   3. Show all ticket information (Sorting)"      << endl;
+        // cout << "   4. Recursive"                                  << endl;
+        // cout << "   5. Print ticket"                               << endl;
+        // cout << "   6. Exit"                                       << endl;
+        // cout << "   Choose your option : ";
+        // cin >> chooseMenu;
+        // cout << endl;
+        cout << "[MENU UTAMA]"<< endl;
+        cout << "   1. Login Akun dan Pesan Tiket"          << endl;
+        cout << "   2. Cari Tiket (Searching)"              << endl;
+        cout << "   3. Tampilkan Seluruh Tiket (Sorting)"   << endl;
+        cout << "   4. Cetak Tiket"                         << endl;
+        cout << "   5. Lihat Tiket"                         << endl;
+        cout << "   5. Edit Tiket"                          << endl;
+        cout << "   6. Hapus Tiket"                         << endl;
+        cout << "   7. Exit"                                << endl;
+        cout << "   Pilih Menu Anda your option : ";
         cin >> chooseMenu;
         cout << endl;
 
@@ -187,9 +202,9 @@ void chooseMenuInMenu2(){
             }
             
             case 3: {   
-                Booking copy[30];
-                for (int i = 0; i < indexDeparture; i++) {
-                    copy[i] = bookings[i];
+                Pemesanan copy[30];
+                for (int i = 0; i < indexKeberangkatan; i++) {
+                    copy[i] = pemesanan[i];
                 }
 
                 string searchNIK;
@@ -231,9 +246,9 @@ void chooseMenuInMenu3() {
         cout << endl;
         switch(chooseMenuInMenu3) {
             case 1: {
-                Booking copy[30];
-                for (int i = 0; i < indexDeparture; i++) {
-                    copy[i] = bookings[i];
+                Pemesanan copy[30];
+                for (int i = 0; i < indexKeberangkatan; i++) {
+                    copy[i] = pemesanan[i];
                 }
                 bubbleSort(copy);
                 sortingOutputShow(copy); 
@@ -241,10 +256,10 @@ void chooseMenuInMenu3() {
                 break;  
             }
             case 2: {   
-                Booking copy[30];
+                Pemesanan copy[30];
                 
-                for (int i = 0; i < indexDeparture; i++) {
-                    copy[i] = bookings[i];
+                for (int i = 0; i < indexKeberangkatan; i++) {
+                    copy[i] = pemesanan[i];
                 }
                 straightInsertionSort(copy);
                 sortingOutputShow(copy);  
@@ -254,9 +269,9 @@ void chooseMenuInMenu3() {
                 break;  
             }
             case 3: {   
-                Booking copy[30];
-                for (int i = 0; i < indexDeparture; i++) {
-                    copy[i] = bookings[i];
+                Pemesanan copy[30];
+                for (int i = 0; i < indexKeberangkatan; i++) {
+                    copy[i] = pemesanan[i];
                 }
                 
                 selectionSort(copy);
@@ -267,10 +282,10 @@ void chooseMenuInMenu3() {
                 break;  
             }
             case 4: {   
-                Booking copy[30];
+                Pemesanan copy[30];
                 
-                for (int i = 0; i < indexDeparture; i++) {
-                    copy[i] = bookings[i];
+                for (int i = 0; i < indexKeberangkatan; i++) {
+                    copy[i] = pemesanan[i];
                 }
 
                 shellSort(copy);
@@ -281,17 +296,17 @@ void chooseMenuInMenu3() {
                 break;  
             }
             case 5: {   
-                Booking copy[30];
+                Pemesanan copy[30];
 
                 int i;
-                for (i = 0; i < indexDeparture; i++) {
-                    copy[i] = bookings[i];
+                for (i = 0; i < indexKeberangkatan; i++) {
+                    copy[i] = pemesanan[i];
                 }
 
                 //Booking *copyPointer = &copy[i];
                 
                 int first = 0;
-                int last = indexDeparture - 1;
+                int last = indexKeberangkatan - 1;
                 
                 quickSort(copy, first, last);
                 sortingOutputShow(copy);
@@ -325,7 +340,7 @@ void chooseMenuInMenu5() {
 
         switch (chooseMenuInMenu5) {
             case 1: {
-                fileOperationSave (bookings, indexDeparture);
+                fileOperationSave (pemesanan, indexKeberangkatan);
                 break;
             }
             case 2: {
@@ -334,7 +349,7 @@ void chooseMenuInMenu5() {
                 cout << "   Input your NIK : ";
                 cin >> inputNIK;
                 
-                fileOperationSaveSingle(bookings, indexDeparture, inputNIK);
+                fileOperationSaveSingle(pemesanan, indexKeberangkatan, inputNIK);
                 
                 break;
             }
@@ -351,7 +366,7 @@ void chooseMenuInMenu5() {
 }
 
 void autoBookTicket() {
-    if (indexDeparture >= 30) {
+    if (indexKeberangkatan >= 30) {
         cout << "All seats already booked" << endl;
         return;
     }
@@ -367,8 +382,8 @@ void autoBookTicket() {
     int coach = -1, seat = -1;
     bool foundSeat = false;
 
-    for (int g = 0; g < portalClass && !foundSeat; g++) {
-        for (int s = 0; s < portalClassSeat && !foundSeat; s++) {
+    for (int g = 0; g < nomorGerbong && !foundSeat; g++) {
+        for (int s = 0; s < tempatDudukGerbong && !foundSeat; s++) {
             if (!seatsEachPortal[g][s]) {
                 coach = g;
                 seat = s;
@@ -390,8 +405,8 @@ void autoBookTicket() {
         int randomNIK = 100000000 + rand() % 900000000; // Random 9 digit
         generatedNIK = to_string(randomNIK);
 
-        for (int i = 0; i < indexDeparture; i++) {
-            if (bookings[i].passenger.nik == generatedNIK) {
+        for (int i = 0; i < indexKeberangkatan; i++) {
+            if (pemesanan[i].penumpang.nik == generatedNIK) {
                 isDuplicate = true;
                 break;
             }
@@ -400,38 +415,38 @@ void autoBookTicket() {
 
     // Generate unique Name
     string baseName = sampleNames[rand() % 8];
-    string uniqueName = baseName + "-" + to_string(indexDeparture + 1);
+    string uniqueName = baseName + "-" + to_string(indexKeberangkatan + 1);
 
     // Assign data ke bookings
     seatsEachPortal[coach][seat] = true;
-    Booking &b = bookings[indexDeparture];
+    Pemesanan &b = pemesanan[indexKeberangkatan];
 
     // b.passenger.name    = sampleNames[rand() % 8];
-    b.passenger.name    = uniqueName;
-    b.passenger.nik     = generatedNIK;
-    b.passenger.address = sampleAddresses[rand() % 4];
+    b.penumpang.nama    = uniqueName;
+    b.penumpang.nik     = generatedNIK;
+    b.penumpang.alamat = sampleAddresses[rand() % 4];
 
-    b.ticket.departureCity     = departuresCity[rand() % 5];
-    b.ticket.destinationCity   = destinationsCity[rand() % 5];
-    b.ticket.coachNumber       = coach;
-    b.ticket.seatNumber        = seat;
-    b.ticket.travelDate        = "2025-04-01";
+    // b.tiket.asalKota     = kotaAsal[rand() % 5];
+    b.tiket.kotaTujuan   = destinationsCity[rand() % 5];
+    b.tiket.nomorGerbong       = coach;
+    b.tiket.nomorTempatDuduk        = seat;
+    b.tiket.tanggalKeberangkatan        = "2025-04-01";
 
-    b.payment.paymentMethod    = paymentMethods[rand() % 3];
-    b.payment.isPaid           = true;
-    b.payment.totalPrice       = 100000;
+    b.pembayaran.metodePembayaran    = paymentMethods[rand() % 3];
+    b.pembayaran.sudahDibayar           = true;
+    b.pembayaran.totalHarga       = 100000;
 
-    cout << "   [RESULT] Pemesanan otomatis berhasil untuk " << b.passenger.name
-         << " dengan NIK " << b.passenger.nik
+    cout << "   [RESULT] Pemesanan otomatis berhasil untuk " << b.penumpang.nama
+         << " dengan NIK " << b.penumpang.nik
          << " di kursi " << coach + 1
          << "-" << seat + 1 << endl;
 
-    indexDeparture++;
+    indexKeberangkatan++;
 }
 
 
 void manualInput() {
-    if (indexDeparture >= 30) {
+    if (indexKeberangkatan >= 30) {
         cout << "   Semua kursi telah dipesan!" << endl;
         return;
     }
@@ -442,32 +457,32 @@ void manualInput() {
     cout << "[INPUT PERSONAL DATA]"<<endl;
     cout << "   Name       : ";
     cin.ignore();
-    getline(cin, bookings[indexDeparture].passenger.name);
+    getline(cin, pemesanan[indexKeberangkatan].penumpang.nama);
     cout << "   NIK        : ";
-    getline(cin, bookings[indexDeparture].passenger.nik);
+    getline(cin, pemesanan[indexKeberangkatan].penumpang.nik);
     cout << "   Address    : ";
-    getline(cin, bookings[indexDeparture].passenger.address);
+    getline(cin, pemesanan[indexKeberangkatan].penumpang.alamat);
     cout << endl << endl;
     
 
 
-    cout << "[DEPARTURE CITY MENU]" << endl;
-    for (int i = 0; i < 5; i++) {
-        cout << i + 1 << ". " << departuresCity[i] <<endl;
-    }
-    cout << "   Choose your option: ";
-    cin >> chooseDepartureCity;
-    bookings[indexDeparture].ticket.departureCity = departuresCity[chooseDepartureCity - 1];
+    // cout << "[DEPARTURE CITY MENU]" << endl;
+    // for (int i = 0; i < 5; i++) {
+    //     cout << i + 1 << ". " << kotaAsal[i] <<endl;
+    // }
+    // cout << "   Choose your option: ";
+    // cin >> chooseDepartureCity;
+    // pemesanan[indexKeberangkatan].tiket.asalKota = kotaAsal[chooseDepartureCity - 1];
 
 
 
     cout << "\n[DESTINATION CITY MENU]" << endl;
     for (int i = 0; i < 5; i++) {
-        cout << "   " << i + 1 << ". " << destinationsCity[i] <<endl;
+        cout << "   " << i + 1 << ". " << kotaTujuan[i] <<endl;
     }
     cout << "   Choose your option: ";
     cin >> chooseDestinationCity;
-    bookings[indexDeparture].ticket.destinationCity = destinationsCity[chooseDestinationCity - 1];
+    pemesanan[indexKeberangkatan].tiket.kotaTujuan = kotaTujuan[chooseDestinationCity - 1];
 
 
 
@@ -500,37 +515,37 @@ void manualInput() {
     }
 
     seatsEachPortal[coachNumber][seatNumber]    = true;
-    bookings[indexDeparture].ticket.coachNumber = coachNumber;
-    bookings[indexDeparture].ticket.seatNumber  = seatNumber;
-    bookings[indexDeparture].ticket.travelDate  = "2025-04-01";  // Fixed dulu
+    pemesanan[indexKeberangkatan].tiket.nomorGerbong = coachNumber;
+    pemesanan[indexKeberangkatan].tiket.nomorTempatDuduk  = seatNumber;
+    pemesanan[indexKeberangkatan].tiket.tanggalKeberangkatan  = "2025-04-01";  // Fixed dulu
 
 
 
     cout << "\n[PAYMENT METHOD]" << endl;
     for (int i = 0; i < 3; i++) {
-        cout << "   " << i + 1 << ". " << paymentMethods[i] << endl;
+        cout << "   " << i + 1 << ". " << metodePembayaran[i] << endl;
     }
     cout << "   Choose your option: ";
     cin >> choosePayment;
-    bookings[indexDeparture].payment.paymentMethod  = paymentMethods[choosePayment - 1];
-    bookings[indexDeparture].payment.isPaid         = true;
-    bookings[indexDeparture].payment.totalPrice     = 100000;   // isi flat dulu
+    pemesanan[indexKeberangkatan].pembayaran.metodePembayaran  = metodePembayaran[choosePayment - 1];
+    pemesanan[indexKeberangkatan].pembayaran.sudahDibayar         = true;
+    pemesanan[indexKeberangkatan].pembayaran.totalHarga     = 100000;   // isi flat dulu
 
     cout << "   [RESULT] Your ticket booking was successful!" << endl;
-    indexDeparture++;
+    indexKeberangkatan++;
 }
 
 void searchByNIK() {
     bool found = false;
-    for (int i = 0; i < indexDeparture; ++i) {
+    for (int i = 0; i < indexKeberangkatan; ++i) {
         found = true;
         cout << "\n[FOUND - TICKET]\n";
-        cout << "   Nama       : " << bookings[i].passenger.name << endl;
-        cout << "   NIK        : " << bookings[i].passenger.nik << endl;
-        cout << "   Asal       : " << bookings[i].ticket.departureCity << endl;
-        cout << "   Tujuan     : " << bookings[i].ticket.destinationCity << endl;
-        cout << "   Kursi      : " << bookings[i].ticket.coachNumber << "-" << bookings[i].ticket.seatNumber << endl;
-        cout << "   Total Bayar: Rp" << bookings[i].payment.totalPrice << endl;
+        cout << "   Nama       : " << pemesanan[i].penumpang.nama << endl;
+        cout << "   NIK        : " << pemesanan[i].penumpang.nik << endl;
+        cout << "   Asal       : " << pemesanan[i].tiket.asalKota << endl;
+        cout << "   Tujuan     : " << pemesanan[i].tiket.kotaTujuan << endl;
+        cout << "   Kursi      : " << pemesanan[i].tiket.nomorGerbong << "-" << pemesanan[i].tiket.nomorTempatDuduk << endl;
+        cout << "   Total Bayar: Rp" << pemesanan[i].pembayaran.totalHarga << endl;
         break;    
     }
 }
@@ -540,10 +555,10 @@ void seqNonSentinelNotYetSorted(string *nikPointer){
     int i = 0;
 
     while (
-        (i < indexDeparture) && 
+        (i < indexKeberangkatan) && 
         (!found)
     ) {
-        if (bookings[i].passenger.nik == *nikPointer) {
+        if (pemesanan[i].penumpang.nik == *nikPointer) {
             found = true;
         } else {
             i++;
@@ -552,45 +567,45 @@ void seqNonSentinelNotYetSorted(string *nikPointer){
 
     if (found) {
         cout << "\n[FOUND - NIK]\n";
-        cout << "   Nama       : " << bookings[i].passenger.name << endl;
-        cout << "   NIK        : " << bookings[i].passenger.nik << endl;
-        cout << "   Asal       : " << bookings[i].ticket.departureCity << endl;
-        cout << "   Tujuan     : " << bookings[i].ticket.destinationCity << endl;
-        cout << "   Kursi      : " << bookings[i].ticket.coachNumber + 1 << "-" << bookings[i].ticket.seatNumber + 1 << endl;
-        cout << "   Total Bayar: Rp" << bookings[i].payment.totalPrice << endl << endl;
+        cout << "   Nama       : " << pemesanan[i].penumpang.nama << endl;
+        cout << "   NIK        : " << pemesanan[i].penumpang.nik << endl;
+        cout << "   Asal       : " << pemesanan[i].tiket.asalKota << endl;
+        cout << "   Tujuan     : " << pemesanan[i].tiket.kotaTujuan << endl;
+        cout << "   Kursi      : " << pemesanan[i].tiket.nomorGerbong + 1 << "-" << pemesanan[i].tiket.nomorTempatDuduk + 1 << endl;
+        cout << "   Total Bayar: Rp" << pemesanan[i].pembayaran.totalHarga << endl << endl;
     } else {
         cout << "   NIK not found!\n";
     }
 }
 
 void seqSentinelNotYetSorted(string *nikPointer) {
-    Booking tempBackup = bookings[indexDeparture];
+    Pemesanan tempBackup = pemesanan[indexKeberangkatan];
     
-    bookings[indexDeparture].passenger.nik = *nikPointer;
+    pemesanan[indexKeberangkatan].penumpang.nik = *nikPointer;
 
     int i = 0;
     // bool found = false;
-    while (bookings[i].passenger.nik != *nikPointer) {
+    while (pemesanan[i].penumpang.nik != *nikPointer) {
         i++;
     }
 
     // Kembalikan data terakhir ke semula
-    bookings[indexDeparture] = tempBackup;
+    pemesanan[indexKeberangkatan] = tempBackup;
 
-    if (i < indexDeparture) {
+    if (i < indexKeberangkatan) {
         cout << "\n[FOUND - NIK]\n";
-        cout << "   Nama       : " << bookings[i].passenger.name << endl;
-        cout << "   NIK        : " << bookings[i].passenger.nik << endl;
-        cout << "   Asal       : " << bookings[i].ticket.departureCity << endl;
-        cout << "   Tujuan     : " << bookings[i].ticket.destinationCity << endl;
-        cout << "   Kursi      : " << bookings[i].ticket.coachNumber + 1 << "-" << bookings[i].ticket.seatNumber + 1 << endl;
-        cout << "   Total Bayar: Rp" << bookings[i].payment.totalPrice << endl << endl;
+        cout << "   Nama       : " << pemesanan[i].penumpang.nama << endl;
+        cout << "   NIK        : " << pemesanan[i].penumpang.nik << endl;
+        cout << "   Asal       : " << pemesanan[i].tiket.asalKota << endl;
+        cout << "   Tujuan     : " << pemesanan[i].tiket.kotaTujuan << endl;
+        cout << "   Kursi      : " << pemesanan[i].tiket.nomorGerbong + 1 << "-" << pemesanan[i].tiket.nomorTempatDuduk + 1 << endl;
+        cout << "   Total Bayar: Rp" << pemesanan[i].pembayaran.totalHarga << endl << endl;
     } else {
         cout << "   NIK not found!\n";
     }
 }
 
-void binarySearch(Booking *copyBinary, string *nikPointer) {
+void binarySearch(Pemesanan *copyBinary, string *nikPointer) {
     bubbleSortByNik(copyBinary);
 
     int i, j, k;
@@ -598,14 +613,14 @@ void binarySearch(Booking *copyBinary, string *nikPointer) {
 
     found = false;
     i = 0;
-    j = indexDeparture;
+    j = indexKeberangkatan;
 
     while((i <= j) && (!found)){
         k  = (i + j) / 2;
-        if (*nikPointer == copyBinary[k].passenger.nik) {
+        if (*nikPointer == copyBinary[k].penumpang.nik) {
             found = true;
         } else {
-            if (*nikPointer < copyBinary[k].passenger.nik) {
+            if (*nikPointer < copyBinary[k].penumpang.nik) {
                 j = k - 1;
             } else {
                 i = k + 1;
@@ -615,22 +630,22 @@ void binarySearch(Booking *copyBinary, string *nikPointer) {
 
     if (found) {
         cout << "\n[FOUND - NIK]\n";
-        cout << "   Nama       : " << copyBinary[k].passenger.name << endl;
-        cout << "   NIK        : " << copyBinary[k].passenger.nik << endl;
-        cout << "   Asal       : " << copyBinary[k].ticket.departureCity << endl;
-        cout << "   Tujuan     : " << copyBinary[k].ticket.destinationCity << endl;
-        cout << "   Kursi      : " << copyBinary[k].ticket.coachNumber + 1 << "-" << copyBinary[k].ticket.seatNumber + 1 << endl;
-        cout << "   Total Bayar: Rp" << copyBinary[k].payment.totalPrice << endl << endl;
+        cout << "   Nama       : " << copyBinary[k].penumpang.nama << endl;
+        cout << "   NIK        : " << copyBinary[k].penumpang.nik << endl;
+        cout << "   Asal       : " << copyBinary[k].tiket.asalKota << endl;
+        cout << "   Tujuan     : " << copyBinary[k].tiket.kotaTujuan << endl;
+        cout << "   Kursi      : " << copyBinary[k].tiket.nomorGerbong + 1 << "-" << copyBinary[k].tiket.nomorTempatDuduk + 1 << endl;
+        cout << "   Total Bayar: Rp" << copyBinary[k].pembayaran.totalHarga << endl << endl;
     } else {
         cout << "   NIK not found!\n";
     }
 }
 
-void bubbleSortByNik(Booking *copyBubleNik) {
-    for (int i = 0; i < indexDeparture - 1; i++) {
-        for (int j = 0; j < indexDeparture - 1 - i; j++) {    
-            if (copyBubleNik[j].passenger.nik > copyBubleNik[j + 1].passenger.nik) {
-                Booking temp        = copyBubleNik[j];
+void bubbleSortByNik(Pemesanan *copyBubleNik) {
+    for (int i = 0; i < indexKeberangkatan - 1; i++) {
+        for (int j = 0; j < indexKeberangkatan - 1 - i; j++) {    
+            if (copyBubleNik[j].penumpang.nik > copyBubleNik[j + 1].penumpang.nik) {
+                Pemesanan temp        = copyBubleNik[j];
                 copyBubleNik[j]     = copyBubleNik[j + 1];
                 copyBubleNik[j + 1] = temp;
             }
@@ -638,11 +653,11 @@ void bubbleSortByNik(Booking *copyBubleNik) {
     }
 }
 
-void bubbleSort(Booking *copyBubble) {
-    for (int i = 0; i < indexDeparture - 1; i++) {
-        for (int j = 0; j < indexDeparture - 1 - i; j++) {
-            if (copyBubble[j].passenger.name > copyBubble[j + 1].passenger.name) {
-                Booking temp      = copyBubble[j];
+void bubbleSort(Pemesanan *copyBubble) {
+    for (int i = 0; i < indexKeberangkatan - 1; i++) {
+        for (int j = 0; j < indexKeberangkatan - 1 - i; j++) {
+            if (copyBubble[j].penumpang.nama > copyBubble[j + 1].penumpang.nama) {
+                Pemesanan temp      = copyBubble[j];
                 copyBubble[j]     = copyBubble[j + 1];
                 copyBubble[j + 1] = temp;
             }
@@ -650,14 +665,14 @@ void bubbleSort(Booking *copyBubble) {
     }
 }
 
-void straightInsertionSort(Booking *copyInsertion) {
+void straightInsertionSort(Pemesanan *copyInsertion) {
     int i, j;
-    Booking temp;
+    Pemesanan temp;
 
-    for (i = 1; i < indexDeparture; i++) {
+    for (i = 1; i < indexKeberangkatan; i++) {
         temp = copyInsertion[i];
         j = i - 1;
-        while ((j >= 0) && (temp.passenger.name < copyInsertion[j].passenger.name) ) {
+        while ((j >= 0) && (temp.penumpang.nama < copyInsertion[j].penumpang.nama) ) {
             copyInsertion[j + 1] = copyInsertion[j];
             j                    = j - 1;
             copyInsertion[j + 1] = temp;
@@ -665,11 +680,11 @@ void straightInsertionSort(Booking *copyInsertion) {
     }
 }
 
-void selectionSort(Booking *copySelection) {
-    for (int current = 0; current < indexDeparture; current++) {
-        for (int j = current + 1; j < indexDeparture; j++) {
-            if (copySelection[current].passenger.name > copySelection[j].passenger.name) {
-                Booking temp            = copySelection[current];
+void selectionSort(Pemesanan *copySelection) {
+    for (int current = 0; current < indexKeberangkatan; current++) {
+        for (int j = current + 1; j < indexKeberangkatan; j++) {
+            if (copySelection[current].penumpang.nama > copySelection[j].penumpang.nama) {
+                Pemesanan temp            = copySelection[current];
                 copySelection[current]  = copySelection[j];
                 copySelection[j]        = temp;
             }
@@ -677,14 +692,14 @@ void selectionSort(Booking *copySelection) {
     }
 }
 
-void shellSort(Booking *copyShell) {
-    for (int k = indexDeparture / 2; k > 0; k /= 2) {
-        for (int j = k; j < indexDeparture; j++) {
+void shellSort(Pemesanan *copyShell) {
+    for (int k = indexKeberangkatan / 2; k > 0; k /= 2) {
+        for (int j = k; j < indexKeberangkatan; j++) {
             for (int i = j - k; i >= 0; i -= k) {
-                if (copyShell[i + k].passenger.name > copyShell[i].passenger.name) {
+                if (copyShell[i + k].penumpang.nama > copyShell[i].penumpang.nama) {
                     break;
                 } else {
-                    Booking mid      = copyShell[i];
+                    Pemesanan mid      = copyShell[i];
                     copyShell[i]     = copyShell[i + k];
                     copyShell[i + k] = mid;
                 }
@@ -693,24 +708,24 @@ void shellSort(Booking *copyShell) {
     }
 }
 
-void quickSort(Booking *bookingsQuick, int first, int last) {
+void quickSort(Pemesanan *bookingsQuick, int first, int last) {
     int low, high;
 
     low     = first;
     high    = last;
 
-    Booking listSeparator = bookingsQuick[(first + last) / 2];
+    Pemesanan listSeparator = bookingsQuick[(first + last) / 2];
 
     do {
-        while (bookingsQuick[low].passenger.name < listSeparator.passenger.name) {
+        while (bookingsQuick[low].penumpang.nama < listSeparator.penumpang.nama) {
             low++;
         }
-        while (bookingsQuick[high].passenger.name > listSeparator.passenger.name) {
+        while (bookingsQuick[high].penumpang.nama > listSeparator.penumpang.nama) {
             high--;
         }
 
         if (low <= high) {
-            Booking temp            = bookingsQuick[low];
+            Pemesanan temp            = bookingsQuick[low];
             bookingsQuick[low++]    = bookingsQuick[high];
             bookingsQuick[high--]   = temp;
         }
@@ -720,19 +735,19 @@ void quickSort(Booking *bookingsQuick, int first, int last) {
     if (low < last)     { quickSort(bookingsQuick, low, last);   };
 }
 
-void sortingOutputShow(Booking *sortingShow) {
+void sortingOutputShow(Pemesanan *sortingShow) {
     cout << "[ALL BOOKING DATA - AFTER SORTED (A-Z)]\n";
-    for (int i = 0; i < indexDeparture; i++) {
-        cout << "   " << i + 1  << ". Nama: "   << sortingShow[i].passenger.name 
-                                << ", NIK: "    << sortingShow[i].passenger.nik 
-                                << ", Asal: "   << sortingShow[i].ticket.departureCity 
-                                << ", Tujuan: " << sortingShow[i].ticket.destinationCity 
+    for (int i = 0; i < indexKeberangkatan; i++) {
+        cout << "   " << i + 1  << ". Nama: "   << sortingShow[i].penumpang.nama 
+                                << ", NIK: "    << sortingShow[i].penumpang.nik 
+                                << ", Asal: "   << sortingShow[i].tiket.asalKota 
+                                << ", Tujuan: " << sortingShow[i].tiket.kotaTujuan 
                                 << endl;
     }
     cout << endl;
 }
 
-void fileOperationSave(Booking bookings[], int totalData) {
+void fileOperationSave(Pemesanan bookings[], int totalData) {
     FILE *fp;
     fp = fopen("ticket_data.txt", "w");
 
@@ -745,16 +760,16 @@ void fileOperationSave(Booking bookings[], int totalData) {
         fprintf(fp, "==============================\n");
         fprintf(fp, "         TRAIN TICKET\n");
         fprintf(fp, "==============================\n");
-        fprintf(fp, "Name           : %s\n", bookings[i].passenger.name.c_str());
-        fprintf(fp, "NIK            : %s\n", bookings[i].passenger.nik.c_str());
-        fprintf(fp, "Address        : %s\n", bookings[i].passenger.address.c_str());
-        fprintf(fp, "Departure City : %s\n", bookings[i].ticket.departureCity.c_str());
-        fprintf(fp, "Destination    : %s\n", bookings[i].ticket.destinationCity.c_str());
-        fprintf(fp, "Coach - Seat   : %d - %d\n", bookings[i].ticket.coachNumber + 1, bookings[i].ticket.seatNumber + 1);
-        fprintf(fp, "Travel Date    : %s\n", bookings[i].ticket.travelDate.c_str());
-        fprintf(fp, "Payment Method : %s\n", bookings[i].payment.paymentMethod.c_str());
-        fprintf(fp, "Paid           : %s\n", bookings[i].payment.isPaid ? "Yes" : "No");
-        fprintf(fp, "Total Price    : Rp%d\n", bookings[i].payment.totalPrice);
+        fprintf(fp, "Name           : %s\n", bookings[i].penumpang.nama.c_str());
+        fprintf(fp, "NIK            : %s\n", bookings[i].penumpang.nik.c_str());
+        fprintf(fp, "Address        : %s\n", bookings[i].penumpang.alamat.c_str());
+        fprintf(fp, "Departure City : %s\n", bookings[i].tiket.asalKota.c_str());
+        fprintf(fp, "Destination    : %s\n", bookings[i].tiket.kotaTujuan.c_str());
+        fprintf(fp, "Coach - Seat   : %d - %d\n", bookings[i].tiket.nomorGerbong + 1, bookings[i].tiket.nomorTempatDuduk + 1);
+        fprintf(fp, "Travel Date    : %s\n", bookings[i].tiket.tanggalKeberangkatan.c_str());
+        fprintf(fp, "Payment Method : %s\n", bookings[i].pembayaran.metodePembayaran.c_str());
+        fprintf(fp, "Paid           : %s\n", bookings[i].pembayaran.sudahDibayar ? "Yes" : "No");
+        fprintf(fp, "Total Price    : Rp%d\n", bookings[i].pembayaran.totalHarga);
         fprintf(fp, "==============================\n\n");
     }
 
@@ -762,11 +777,11 @@ void fileOperationSave(Booking bookings[], int totalData) {
     printf("    All ticket has been saved successfully.\n");
 }
 
-void fileOperationSaveSingle(Booking bookings[], int totalData, string targetNIK) {
+void fileOperationSaveSingle(Pemesanan bookings[], int totalData, string targetNIK) {
     bool found = false;
 
     for (int i = 0; i < totalData; i++) {
-        if (bookings[i].passenger.nik == targetNIK) {
+        if (bookings[i].penumpang.nik == targetNIK) {
             string fileName = targetNIK + "_ticket_data.txt";
             FILE *fp;
             fp = fopen(fileName.c_str(), "w");
@@ -779,16 +794,16 @@ void fileOperationSaveSingle(Booking bookings[], int totalData, string targetNIK
             fprintf(fp, "==============================\n");
             fprintf(fp, "         TRAIN TICKET\n");
             fprintf(fp, "==============================\n");
-            fprintf(fp, "Name           : %s\n", bookings[i].passenger.name.c_str());
-            fprintf(fp, "NIK            : %s\n", bookings[i].passenger.nik.c_str());
-            fprintf(fp, "Address        : %s\n", bookings[i].passenger.address.c_str());
-            fprintf(fp, "Departure City : %s\n", bookings[i].ticket.departureCity.c_str());
-            fprintf(fp, "Destination    : %s\n", bookings[i].ticket.destinationCity.c_str());
-            fprintf(fp, "Coach - Seat   : %d - %d\n", bookings[i].ticket.coachNumber + 1, bookings[i].ticket.seatNumber + 1);
-            fprintf(fp, "Travel Date    : %s\n", bookings[i].ticket.travelDate.c_str());
-            fprintf(fp, "Payment Method : %s\n", bookings[i].payment.paymentMethod.c_str());
-            fprintf(fp, "Paid           : %s\n", bookings[i].payment.isPaid ? "Yes" : "No");
-            fprintf(fp, "Total Price    : Rp%d\n", bookings[i].payment.totalPrice);
+            fprintf(fp, "Name           : %s\n", bookings[i].penumpang.nama.c_str());
+            fprintf(fp, "NIK            : %s\n", bookings[i].penumpang.nik.c_str());
+            fprintf(fp, "Address        : %s\n", bookings[i].penumpang.alamat.c_str());
+            fprintf(fp, "Departure City : %s\n", bookings[i].tiket.asalKota.c_str());
+            fprintf(fp, "Destination    : %s\n", bookings[i].tiket.kotaTujuan.c_str());
+            fprintf(fp, "Coach - Seat   : %d - %d\n", bookings[i].tiket.nomorGerbong + 1, bookings[i].tiket.nomorTempatDuduk + 1);
+            fprintf(fp, "Travel Date    : %s\n", bookings[i].tiket.tanggalKeberangkatan.c_str());
+            fprintf(fp, "Payment Method : %s\n", bookings[i].pembayaran.metodePembayaran.c_str());
+            fprintf(fp, "Paid           : %s\n", bookings[i].pembayaran.sudahDibayar ? "Yes" : "No");
+            fprintf(fp, "Total Price    : Rp%d\n", bookings[i].pembayaran.totalHarga);
             fprintf(fp, "==============================\n");
 
             fclose(fp);
