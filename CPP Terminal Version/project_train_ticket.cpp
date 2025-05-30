@@ -2,28 +2,47 @@
 #include <string>
 #include <cstdlib>  // untuk rand()
 #include <ctime>    // untuk time()
+
 using namespace std;
 
 const int nomorGerbong = 3;
 const int tempatDudukGerbong = 10;
+const int maxTanggal = 10; // Jumlah maksimum tanggal simulasi
+const int maksPemesananPerTanggal = 30; // Kuota per tanggal
 
 bool kursiTiapGerbong[nomorGerbong][tempatDudukGerbong];
 
-struct Penumpang {
-    string 
-        nama,
-        nik,
-        alamat;
+struct GuestAccount {
+    string email = "guestaccount@gmail.com";
+    string password = "12345678";
 };
+
+struct Tujuan {
+    string kota;
+    int harga;
+};
+
+// struct Penumpang {
+//     string nama;
+//     string nik;
+//     string alamat;
+// };
+struct Penumpang {
+    string nama;      // Nama lengkap penumpang
+    string nik;       // Nomor Induk Kependudukan (atau passport)
+    string alamat;    // Alamat domisili
+    int umur;         // Umur penumpang
+    string noHp;      // Nomor telepon aktif
+};
+
 struct InfoTiket{
-    string 
-        asalKota,
-        kotaTujuan;
-    int 
-        nomorGerbong,
-        nomorTempatDuduk;
+    string asalKota;
+    string kotaTujuan;
+    int nomorGerbong;
+    int nomorTempatDuduk;
     string tanggalKeberangkatan;
 };
+
 struct InfoPembayaran {
     string metodePembayaran;
     bool sudahDibayar;
@@ -37,14 +56,7 @@ struct Pemesanan {
 };
 
 Pemesanan pemesanan[30];
-
-// string kotaAsal[] = {
-//     "Yogyakarta", 
-//     "Sleman", 
-//     "Gunung Kidul", 
-//     "Bantul", 
-//     "Kulon Progo"
-// };
+GuestAccount guest;
 
 string kotaTujuan[] = {
     "Magelang", 
@@ -60,11 +72,38 @@ string metodePembayaran[] = {
     "Cash"
 };
 
+string daftarTanggal[maxTanggal] = {
+    "30-01-2025", "31-01-2025", "01-02-2025", "02-02-2025", "03-02-2025",
+    "04-02-2025", "05-02-2025", "06-02-2025", "07-02-2025", "08-02-2025"
+};
+
+Tujuan daftarTujuan[] = {
+    {"Solo Balapan", 30000},
+    {"Kutoarjo",      30000},
+    {"Purwokerto",    60000},
+    {"Madiun",        60000},
+    {"Semarang",      50000},
+    {"Cilacap",       80000},
+    {"Tegal",         90000},
+    {"Magelang",      25000}
+};
+
+const int jumlahTujuan = sizeof(daftarTujuan) / sizeof(daftarTujuan[0]);
+
+
+bool kursiTerpakai[maxTanggal][nomorGerbong][tempatDudukGerbong] = {};
+Pemesanan semuaPemesanan[maxTanggal][maksPemesananPerTanggal];
+int jumlahPemesanan[maxTanggal] = {};
+
 int indexKeberangkatan = 0;
 
 //###################
-void autoBookTicket();
-void manualInput();
+// void autoBookTicket();
+// void autoBookTicket(int indexTanggal, string kotaTujuanDipilih);
+void autoBookTicket(int indexTanggal, int indexKotaTujuan);
+// void manualInput();
+// void manualInput(int indexTanggal, string kotaTujuanDipilih);
+void manualInput(int indexTanggal, int indexKotaTujuan);
 
 // Searching
 void searchByNIK();
@@ -90,6 +129,8 @@ void menuCariTiket();
 void menuTampilkanSeluruhTiket();
 void pilihMenu5();
 
+void tampilkanSeluruhDataPemesanan();
+
 int main() {
     cout << "Hello word";
     cout << "casting";
@@ -114,7 +155,8 @@ int main() {
         cout << "   5. Lihat Tiket"                         << endl;
         cout << "   6. Edit Tiket"                          << endl;
         cout << "   7. Hapus Tiket"                         << endl;
-        cout << "   8. Exit"                                << endl;
+        cout << "   8. Tampilkan Data Tiket (untuk development) \n";
+        cout << "   9. Exit"                                << endl;
         cout << "   Pilih Menu : ";
         cin >> pilihanMenu;
         cout << endl;
@@ -125,52 +167,138 @@ int main() {
             case 3: { menuTampilkanSeluruhTiket();  break; }
             case 4: {     break;}
             case 5: { pilihMenu5();      break; }
-            case 6: { cout << "   Exit..." << endl << endl; break; }
+            case 8: { tampilkanSeluruhDataPemesanan(); break; }
+            case 9: { cout << "   Exit..." << endl << endl; break; }
             default: {cout << "   Invalid Option! \n\n";break; }
         }
 
-    } while (pilihanMenu != 8);
+    } while (pilihanMenu != 9);
 }
 
-void menuLoginDanPesanTiket() {
-    int pilihMenu;
+// void menuLoginDanPesanTiket() {
+//     int pilihMenu;
 
+//     do {
+//         cout << "[PESAN TIKET ANDA]"                << endl;
+//         cout << "   1. Generate Data Customer"      << endl;
+//         cout << "   2. Manual Input Data Customer"  << endl;
+//         cout << "   3. Kembali ke Menu Utama"       << endl;
+//         cout << "   Pilih Menu : ";
+//         cin >> pilihMenu;
+//         cout << endl;
+
+//         switch (pilihMenu){
+//             case 1: {   
+//                 int indexTanggal;
+//                 cout << "\n[PILIH TANGGAL KEBERANGKATAN]" << endl;
+
+//                 for (int i = 0; i < maxTanggal; i++) {
+//                     cout << "   " << i + 1 << ". " << daftarTanggal[i] << endl;
+//                 }
+
+//                 cout << "   Pilih (1 - " << maxTanggal << "): ";
+//                 cin >> indexTanggal;
+//                 indexTanggal -= 1; // ubah ke index array
+
+//                 // autoBookTicket();
+//                 autoBookTicket(indexTanggal);
+//                 cout << endl << endl;
+//                 break; 
+//             }
+
+//             case 2: {   
+//                 manualInput();
+//                 cout<< endl << endl; 
+//                 break; 
+//             }
+
+//             case 3: {   
+//                 cout << "   Exit..."<< endl << endl; 
+//                 break; 
+//             }
+
+//             default:{   
+//                 cout << "   Invalid"<< endl << endl; 
+//                 break; 
+//             }
+//         }
+//     } while (pilihMenu != 3);
+
+//     cout << endl;
+// }
+
+void menuLoginDanPesanTiket() {
+    // [1] LOGIN
+    string inputEmail, inputPassword;
+    cout << "[LOGIN GUEST ACCOUNT]" << endl;
+    cout << "   Email    : "; cin >> inputEmail;
+    cout << "   Password : "; cin >> inputPassword;
+
+    if (inputEmail != guest.email || inputPassword != guest.password) {
+        cout << "   Login gagal! Kembali ke menu utama.\n";
+        return;
+    }
+
+    cout << "   Login berhasil! Selamat datang, Guest.\n\n";
+
+    // [2] PILIH KOTA TUJUAN
+    // cout << "[PILIH KOTA TUJUAN]" << endl;
+    // for (int i = 0; i < 5; i++) {
+    //     cout << "   " << i + 1 << ". " << kotaTujuan[i] << endl;
+    // }
+    // int indexKotaTujuan;
+    // cout << "   Pilih (1 - 5): ";
+    // cin >> indexKotaTujuan;
+    // indexKotaTujuan -= 1;
+    cout << "[PILIH KOTA TUJUAN]" << endl;
+    for (int i = 0; i < jumlahTujuan; i++) {
+        cout << "   " << i + 1 << ". " << daftarTujuan[i].kota << " - Rp" << daftarTujuan[i].harga << endl;
+    }
+    int indexKotaTujuan;
+    cout << "   Pilih (1 - " << jumlahTujuan << "): ";
+    cin >> indexKotaTujuan;
+    indexKotaTujuan -= 1;
+
+
+    // [3] PILIH TANGGAL
+    cout << "\n[PILIH TANGGAL KEBERANGKATAN]" << endl;
+    for (int i = 0; i < maxTanggal; i++) {
+        cout << "   " << i + 1 << ". " << daftarTanggal[i] << endl;
+    }
+    int indexTanggal;
+    cout << "   Pilih (1 - " << maxTanggal << "): ";
+    cin >> indexTanggal;
+    indexTanggal -= 1;
+
+    // [4] MASUK SUBMENU
+    int pilihMenu;
     do {
-        cout << "[PESAN TIKET ANDA]"                << endl;
-        cout << "   1. Generate Data Customer"      << endl;
-        cout << "   2. Manual Input Data Customer"  << endl;
-        cout << "   3. Kembali ke Menu Utama"       << endl;
+        cout << "\n[PESAN TIKET ANDA]" << endl;
+        cout << "   1. Generate Data Customer (Auto)" << endl;
+        cout << "   2. Manual Input Data Customer" << endl;
+        cout << "   3. Kembali ke Menu Utama" << endl;
         cout << "   Pilih Menu : ";
         cin >> pilihMenu;
         cout << endl;
 
         switch (pilihMenu){
-            case 1: {   
-                autoBookTicket();
-                cout << endl << endl;
-                break; 
-            }
-
-            case 2: {   
-                manualInput();
-                cout<< endl << endl; 
-                break; 
-            }
-
-            case 3: {   
-                cout << "   Exit..."<< endl << endl; 
-                break; 
-            }
-
-            default:{   
-                cout << "   Invalid"<< endl << endl; 
-                break; 
-            }
+            case 1:
+                // autoBookTicket(indexTanggal, kotaTujuan[indexKotaTujuan]);
+                autoBookTicket(indexTanggal, indexKotaTujuan);
+                break;
+            case 2:
+                // manualInput(indexTanggal, kotaTujuan[indexKotaTujuan]);
+                manualInput(indexTanggal, indexKotaTujuan);
+                break;
+            case 3:
+                cout << "   Kembali ke menu utama..." << endl;
+                break;
+            default:
+                cout << "   Invalid option!\n";
         }
     } while (pilihMenu != 3);
-
-    cout << endl;
 }
+
 
 void menuCariTiket(){
     int pilihMenu;
@@ -369,27 +497,106 @@ void pilihMenu5() {
     cout << endl << endl;
 }
 
-void autoBookTicket() {
-    if (indexKeberangkatan >= 30) {
-        cout << "Seluruh Kursi Telah Dipesan!" << endl;
+// void autoBookTicket() {
+//     if (indexKeberangkatan >= 30) {
+//         cout << "Seluruh Kursi Telah Dipesan!" << endl;
+//         return;
+//     }
+
+//     string sampelNama[]         = {"Budi", "Ani", "Citra", "Dedi", "Eka", "Fajar", "Gita", "Hana"};
+//     string sampelAlamat[]       = {"Yogyakarta", "Sleman", "Bantul", "Kulon Progo"};
+//     string kotaTujuan[]         = {"Semarang", "Jepara", "Magelang", "Cilacap", "Boyolali"};
+//     string metodePembayaran[]   = {"Transfer", "E-Wallet", "Cash"};
+
+//     srand(time(0));
+
+//     // Cari kursi kosong
+//     int gerbong = -1;
+//     int kursi = -1;
+//     bool foundKursi = false;
+
+//     for (int g = 0; g < nomorGerbong && !foundKursi; g++) {
+//         for (int s = 0; s < tempatDudukGerbong && !foundKursi; s++) {
+//             if (!kursiTiapGerbong[g][s]) {
+//                 gerbong = g;
+//                 kursi = s;
+//                 foundKursi = true;
+//             }
+//         }
+//     }
+
+//     if (!foundKursi) {
+//         cout << "Tidak ada kursi kosong" << endl;
+//         return;
+//     }
+
+//     // Generate unique NIK
+//     string generatedNIK;
+//     bool terduplikat;
+//     do {
+//         terduplikat = false;
+//         int randomNIK = 100000000 + rand() % 900000000; // Random 9 digit
+//         generatedNIK = to_string(randomNIK);
+
+//         for (int i = 0; i < indexKeberangkatan; i++) {
+//             if (pemesanan[i].penumpang.nik == generatedNIK) {
+//                 terduplikat = true;
+//                 break;
+//             }
+//         }
+//     } while (terduplikat);
+
+//     // Generate unique Name
+//     string namaDasar = sampelNama[rand() % 8];
+//     string namaUnique = namaDasar + "-" + to_string(indexKeberangkatan + 1);
+
+//     // Assign data ke bookings
+//     kursiTiapGerbong[gerbong][kursi] = true;
+//     Pemesanan &booking = pemesanan[indexKeberangkatan];
+
+//     // b.passenger.name    = sampleNames[rand() % 8];
+//     booking.penumpang.nama    = namaUnique;
+//     booking.penumpang.nik     = generatedNIK;
+//     booking.penumpang.alamat  = sampelAlamat[rand() % 4];
+
+//     // b.tiket.asalKota     = kotaAsal[rand() % 5];
+//     booking.tiket.kotaTujuan            = kotaTujuan[rand() % 5];
+//     booking.tiket.nomorGerbong          = gerbong;
+//     booking.tiket.nomorTempatDuduk      = kursi;
+//     booking.tiket.tanggalKeberangkatan  = "2025-04-01";
+
+//     booking.pembayaran.metodePembayaran = metodePembayaran[rand() % 3];
+//     booking.pembayaran.sudahDibayar     = true;
+//     booking.pembayaran.totalHarga       = 100000;
+
+//     cout << "   [HASIL] Pemesanan otomatis berhasil untuk " << booking.penumpang.nama
+//          << " dengan NIK " << booking.penumpang.nik
+//          << " di kursi " << gerbong + 1
+//          << "-" << kursi + 1 << endl;
+
+//     indexKeberangkatan++;
+// }
+// void autoBookTicket(int indexTanggal, string kotaTujuanDipilih) {
+void autoBookTicket(int indexTanggal, int indexKotaTujuan) {
+    if (jumlahPemesanan[indexTanggal] >= maksPemesananPerTanggal) {
+        cout << "   Semua tiket pada tanggal ini telah habis!\n";
         return;
     }
 
-    string sampelNama[]         = {"Budi", "Ani", "Citra", "Dedi", "Eka", "Fajar", "Gita", "Hana"};
-    string sampelAlamat[]       = {"Yogyakarta", "Sleman", "Bantul", "Kulon Progo"};
-    string kotaTujuan[]         = {"Semarang", "Jepara", "Magelang", "Cilacap", "Boyolali"};
-    string metodePembayaran[]   = {"Transfer", "E-Wallet", "Cash"};
+    string sampelNama[]       = {"Budi", "Ani", "Citra", "Dedi", "Eka", "Fajar", "Gita", "Hana"};
+    string sampelAlamat[]     = {"Yogyakarta", "Sleman", "Bantul", "Kulon Progo"};
+    string metodePembayaran[] = {"Transfer", "E-Wallet", "Cash"};
 
     srand(time(0));
 
-    // Cari kursi kosong
     int gerbong = -1;
     int kursi = -1;
     bool foundKursi = false;
 
+    // Cari kursi kosong pada tanggal yang dipilih
     for (int g = 0; g < nomorGerbong && !foundKursi; g++) {
         for (int s = 0; s < tempatDudukGerbong && !foundKursi; s++) {
-            if (!kursiTiapGerbong[g][s]) {
+            if (!kursiTerpakai[indexTanggal][g][s]) {
                 gerbong = g;
                 kursi = s;
                 foundKursi = true;
@@ -398,7 +605,7 @@ void autoBookTicket() {
     }
 
     if (!foundKursi) {
-        cout << "Tidak ada kursi kosong" << endl;
+        cout << "   Tidak ada kursi kosong pada tanggal ini\n";
         return;
     }
 
@@ -407,139 +614,244 @@ void autoBookTicket() {
     bool terduplikat;
     do {
         terduplikat = false;
-        int randomNIK = 100000000 + rand() % 900000000; // Random 9 digit
+        int randomNIK = 100000000 + rand() % 900000000;
         generatedNIK = to_string(randomNIK);
 
-        for (int i = 0; i < indexKeberangkatan; i++) {
-            if (pemesanan[i].penumpang.nik == generatedNIK) {
+        for (int i = 0; i < jumlahPemesanan[indexTanggal]; i++) {
+            if (semuaPemesanan[indexTanggal][i].penumpang.nik == generatedNIK) {
                 terduplikat = true;
                 break;
             }
         }
     } while (terduplikat);
 
-    // Generate unique Name
-    string namaDasar = sampelNama[rand() % 8];
-    string namaUnique = namaDasar + "-" + to_string(indexKeberangkatan + 1);
+    // Generate nama unik
+    string namaDasar  = sampelNama[rand() % 8];
+    string namaUnique = namaDasar + "-" + to_string(jumlahPemesanan[indexTanggal] + 1);
 
-    // Assign data ke bookings
-    kursiTiapGerbong[gerbong][kursi] = true;
-    Pemesanan &booking = pemesanan[indexKeberangkatan];
+    // Simpan data ke struct
+    Pemesanan &booking = semuaPemesanan[indexTanggal][jumlahPemesanan[indexTanggal]];
 
-    // b.passenger.name    = sampleNames[rand() % 8];
-    booking.penumpang.nama    = namaUnique;
-    booking.penumpang.nik     = generatedNIK;
-    booking.penumpang.alamat  = sampelAlamat[rand() % 4];
+    kursiTerpakai[indexTanggal][gerbong][kursi] = true;
 
-    // b.tiket.asalKota     = kotaAsal[rand() % 5];
-    booking.tiket.kotaTujuan            = kotaTujuan[rand() % 5];
-    booking.tiket.nomorGerbong          = gerbong;
-    booking.tiket.nomorTempatDuduk      = kursi;
-    booking.tiket.tanggalKeberangkatan  = "2025-04-01";
+    booking.penumpang.nama     = namaUnique;
+    booking.penumpang.nik      = generatedNIK;
+    booking.penumpang.alamat   = sampelAlamat[rand() % 4];
+    // Tambahan untuk melengkapi data struct Penumpang
+    booking.penumpang.umur  = 17 + rand() % 40; // Umur acak 17 - 56 tahun
+    // Simulasi No HP unik acak
+    string noHpAwal = "08";
+    for (int i = 0; i < 10; i++) {
+        noHpAwal += to_string(rand() % 10);
+    }
+    booking.penumpang.noHp = noHpAwal;
 
-    booking.pembayaran.metodePembayaran = metodePembayaran[rand() % 3];
-    booking.pembayaran.sudahDibayar     = true;
-    booking.pembayaran.totalHarga       = 100000;
 
-    cout << "   [HASIL] Pemesanan otomatis berhasil untuk " << booking.penumpang.nama
-         << " dengan NIK " << booking.penumpang.nik
-         << " di kursi " << gerbong + 1
-         << "-" << kursi + 1 << endl;
+    booking.tiket.asalKota               = "Yogyakarta";
+    // booking.tiket.kotaTujuan             = kotaTujuanDipilih;
+    booking.tiket.kotaTujuan             = daftarTujuan[indexKotaTujuan].kota;
+    booking.tiket.nomorGerbong           = gerbong;
+    booking.tiket.nomorTempatDuduk       = kursi;
+    booking.tiket.tanggalKeberangkatan   = daftarTanggal[indexTanggal];
 
-    indexKeberangkatan++;
+    booking.pembayaran.metodePembayaran  = metodePembayaran[rand() % 3];
+    booking.pembayaran.sudahDibayar      = true;
+    // booking.pembayaran.totalHarga        = 100000;
+    booking.pembayaran.totalHarga        = daftarTujuan[indexKotaTujuan].harga;
+
+    cout << "   [AUTO-PESAN] Berhasil dipesan oleh " << booking.penumpang.nama
+         << " (NIK: " << booking.penumpang.nik << ") pada " << daftarTanggal[indexTanggal]
+         << ", Kursi " << gerbong + 1 << "-" << kursi + 1 << endl;
+
+    jumlahPemesanan[indexTanggal]++;
 }
 
+// void manualInput() {
+//     if (indexKeberangkatan >= 30) {
+//         cout << "   Semua kursi telah dipesan!" << endl;
+//         return;
+//     }
 
-void manualInput() {
-    if (indexKeberangkatan >= 30) {
-        cout << "   Semua kursi telah dipesan!" << endl;
+//     // int chooseDepartureCity, chooseDestinationCity, chooseTrainClass, choosePayment;
+//     int pilihKotaTujuan, pilihPembayaran;
+//     int nomorGerbong, nomorKursi;
+
+//     cout << "[INPUT DATA PRIBADI]"<<endl;
+//     cout << "   Nama       : ";
+//     cin.ignore();
+//     getline(cin, pemesanan[indexKeberangkatan].penumpang.nama);
+//     cout << "   NIK        : ";
+//     getline(cin, pemesanan[indexKeberangkatan].penumpang.nik);
+//     cout << "   Alamat     : ";
+//     getline(cin, pemesanan[indexKeberangkatan].penumpang.alamat);
+//     cout << endl << endl;
+    
+
+
+//     // cout << "[DEPARTURE CITY MENU]" << endl;
+//     // for (int i = 0; i < 5; i++) {
+//     //     cout << i + 1 << ". " << kotaAsal[i] <<endl;
+//     // }
+//     // cout << "   Choose your option: ";
+//     // cin >> chooseDepartureCity;
+//     // pemesanan[indexKeberangkatan].tiket.asalKota = kotaAsal[chooseDepartureCity - 1];
+
+
+
+//     cout << "\n[MENU KOTA TUJUAN]" << endl;
+//     for (int i = 0; i < 5; i++) {
+//         cout << "   " << i + 1 << ". " << kotaTujuan[i] <<endl;
+//     }
+//     cout << "   Choose your option: ";
+//     cin >> pilihKotaTujuan;
+//     pemesanan[indexKeberangkatan].tiket.kotaTujuan = kotaTujuan[pilihKotaTujuan - 1];
+
+
+
+//     // Menampilkan kursi kosong
+//     cout << "\n[KURSI YANG TERSEDIA]" << endl;
+//     for (int i = 0; i < 3; i++) {
+//         cout << "   Coach Train-" << i + 1 << " =" << endl;
+//         for (int j = 0; j < 10; j++) {
+//             if (kursiTiapGerbong[i][j] != false) {
+//                 cout << "       [X]" << " ";
+//             } else {
+//                 cout << "       [" << to_string(j + 1) << "]";
+//             }
+
+//         }
+//         cout << endl;
+//     }
+
+    
+
+//     cout << "\n[PILIH KURSI]" << endl;
+//     cout << "   Pilih Gerbong Kereta (1 - 3) : ";
+//     cin >> nomorGerbong; nomorGerbong -= 1;
+//     cout << "   Pilih Nomor Kursi (1 - 10)   : ";
+//     cin >> nomorKursi;  nomorKursi  -= 1;
+
+//     if (kursiTiapGerbong[nomorGerbong][nomorKursi]) {
+//         cout << "       Nomor Kursi Telah Dipesan!";
+//         return;
+//     }
+
+//     kursiTiapGerbong[nomorGerbong][nomorKursi]    = true;
+//     pemesanan[indexKeberangkatan].tiket.nomorGerbong = nomorGerbong;
+//     pemesanan[indexKeberangkatan].tiket.nomorTempatDuduk  = nomorKursi;
+//     pemesanan[indexKeberangkatan].tiket.tanggalKeberangkatan  = "2025-04-01";  // Fixed dulu
+
+
+
+//     cout << "\n[PAYMENT METHOD]" << endl;
+//     for (int i = 0; i < 3; i++) {
+//         cout << "   " << i + 1 << ". " << metodePembayaran[i] << endl;
+//     }
+//     cout << "   Choose your option: ";
+//     cin >> pilihPembayaran;
+//     pemesanan[indexKeberangkatan].pembayaran.metodePembayaran  = metodePembayaran[pilihPembayaran - 1];
+//     pemesanan[indexKeberangkatan].pembayaran.sudahDibayar         = true;
+//     pemesanan[indexKeberangkatan].pembayaran.totalHarga     = 100000;   // isi flat dulu
+
+//     cout << "   [RESULT] Your ticket booking was successful!" << endl;
+//     indexKeberangkatan++;
+// }
+
+// void manualInput(int indexTanggal, string kotaTujuanDipilih) {
+void manualInput(int indexTanggal, int indexKotaTujuan) {
+    if (jumlahPemesanan[indexTanggal] >= maksPemesananPerTanggal) {
+        cout << "   Semua kursi telah dipesan untuk tanggal ini!\n";
         return;
     }
 
-    // int chooseDepartureCity, chooseDestinationCity, chooseTrainClass, choosePayment;
-    int pilihKotaTujuan, pilihPembayaran;
-    int nomorGerbong, nomorKursi;
+    int jumlah;
+    cout << "\n[INPUT JUMLAH PENUMPANG]" << endl;
+    cout << "   Berapa tiket yang ingin dipesan? ";
+    cin >> jumlah;
 
-    cout << "[INPUT DATA PRIBADI]"<<endl;
-    cout << "   Nama       : ";
+    int sisaKursi = maksPemesananPerTanggal - jumlahPemesanan[indexTanggal];
+    if (jumlah > sisaKursi) {
+        cout << "   Maaf, hanya tersedia " << sisaKursi << " kursi pada tanggal ini.\n";
+        return;
+    }
+
     cin.ignore();
-    getline(cin, pemesanan[indexKeberangkatan].penumpang.nama);
-    cout << "   NIK        : ";
-    getline(cin, pemesanan[indexKeberangkatan].penumpang.nik);
-    cout << "   Alamat     : ";
-    getline(cin, pemesanan[indexKeberangkatan].penumpang.alamat);
-    cout << endl << endl;
-    
+    // int hargaPerTiket = 100000;
+    int hargaPerTiket = daftarTujuan[indexKotaTujuan].harga;
+    int totalHargaAkun = 0;
 
+    for (int i = 0; i < jumlah; i++) {
+        cout << "\n===================================" << endl;
+        cout << "[DATA PENUMPANG KE-" << i + 1 << "]" << endl;
 
-    // cout << "[DEPARTURE CITY MENU]" << endl;
-    // for (int i = 0; i < 5; i++) {
-    //     cout << i + 1 << ". " << kotaAsal[i] <<endl;
-    // }
-    // cout << "   Choose your option: ";
-    // cin >> chooseDepartureCity;
-    // pemesanan[indexKeberangkatan].tiket.asalKota = kotaAsal[chooseDepartureCity - 1];
+        Pemesanan &booking = semuaPemesanan[indexTanggal][jumlahPemesanan[indexTanggal]];
 
+        cout << "   Nama    : ";
+        getline(cin, booking.penumpang.nama);
+        cout << "   NIK     : ";
+        getline(cin, booking.penumpang.nik);
+        cout << "   Alamat  : ";
+        getline(cin, booking.penumpang.alamat);
+        cout << "   Umur    : ";
+        cin >> booking.penumpang.umur;
+        cin.ignore();
+        cout << "   No HP   : ";
+        getline(cin, booking.penumpang.noHp);
 
-
-    cout << "\n[MENU KOTA TUJUAN]" << endl;
-    for (int i = 0; i < 5; i++) {
-        cout << "   " << i + 1 << ". " << kotaTujuan[i] <<endl;
-    }
-    cout << "   Choose your option: ";
-    cin >> pilihKotaTujuan;
-    pemesanan[indexKeberangkatan].tiket.kotaTujuan = kotaTujuan[pilihKotaTujuan - 1];
-
-
-
-    // Menampilkan kursi kosong
-    cout << "\n[KURSI YANG TERSEDIA]" << endl;
-    for (int i = 0; i < 3; i++) {
-        cout << "   Coach Train-" << i + 1 << " =" << endl;
-        for (int j = 0; j < 10; j++) {
-            if (kursiTiapGerbong[i][j] != false) {
-                cout << "       [X]" << " ";
-            } else {
-                cout << "       [" << to_string(j + 1) << "]";
+        // Visualisasi kursi terbaru
+        cout << "\n[KURSI TERSEDIA - " << daftarTanggal[indexTanggal] << "]\n";
+        for (int g = 0; g < nomorGerbong; g++) {
+            cout << "   Gerbong " << g + 1 << " : ";
+            for (int k = 0; k < tempatDudukGerbong; k++) {
+                if (kursiTerpakai[indexTanggal][g][k]) {
+                    cout << "[X] ";
+                } else {
+                    cout << "[" << k + 1 << "] ";
+                }
             }
-
+            cout << endl;
         }
-        cout << endl;
+
+        int pilihGerbong, pilihKursi;
+        cout << "\n[PILIH KURSI UNTUK PENUMPANG " << i + 1 << "]" << endl;
+        cout << "   Pilih Gerbong (1 - 3): "; 
+        cin >> pilihGerbong; pilihGerbong -= 1;
+        cout << "   Pilih Nomor Kursi (1 - 10): "; 
+        cin >> pilihKursi; pilihKursi -= 1;
+
+        if (kursiTerpakai[indexTanggal][pilihGerbong][pilihKursi]) {
+            cout << "   Kursi sudah terisi! Tiket ke-" << i + 1 << " dibatalkan.\n";
+            continue; // skip iterasi dan tidak menambah index
+        }
+
+        kursiTerpakai[indexTanggal][pilihGerbong][pilihKursi] = true;
+
+        // Tiket
+        booking.tiket.asalKota = "Yogyakarta";
+        // booking.tiket.kotaTujuan = kotaTujuanDipilih;
+        booking.tiket.kotaTujuan = daftarTujuan[indexKotaTujuan].kota;
+        booking.tiket.nomorGerbong = pilihGerbong;
+        booking.tiket.nomorTempatDuduk = pilihKursi;
+        booking.tiket.tanggalKeberangkatan = daftarTanggal[indexTanggal];
+
+        // Pembayaran per individu
+        booking.pembayaran.metodePembayaran = "Ditanggung Akun Guest";
+        booking.pembayaran.sudahDibayar = true;
+        booking.pembayaran.totalHarga = hargaPerTiket;
+
+        jumlahPemesanan[indexTanggal]++;
+        totalHargaAkun += hargaPerTiket;
+
+        cout << "   [BERHASIL] Tiket ke-" << i + 1 << " telah dicatat.\n";
+        cin.ignore();
     }
 
-    
-
-    cout << "\n[PILIH KURSI]" << endl;
-    cout << "   Pilih Gerbong Kereta (1 - 3) : ";
-    cin >> nomorGerbong; nomorGerbong -= 1;
-    cout << "   Pilih Nomor Kursi (1 - 10)   : ";
-    cin >> nomorKursi;  nomorKursi  -= 1;
-
-    if (kursiTiapGerbong[nomorGerbong][nomorKursi]) {
-        cout << "       Nomor Kursi Telah Dipesan!";
-        return;
-    }
-
-    kursiTiapGerbong[nomorGerbong][nomorKursi]    = true;
-    pemesanan[indexKeberangkatan].tiket.nomorGerbong = nomorGerbong;
-    pemesanan[indexKeberangkatan].tiket.nomorTempatDuduk  = nomorKursi;
-    pemesanan[indexKeberangkatan].tiket.tanggalKeberangkatan  = "2025-04-01";  // Fixed dulu
-
-
-
-    cout << "\n[PAYMENT METHOD]" << endl;
-    for (int i = 0; i < 3; i++) {
-        cout << "   " << i + 1 << ". " << metodePembayaran[i] << endl;
-    }
-    cout << "   Choose your option: ";
-    cin >> pilihPembayaran;
-    pemesanan[indexKeberangkatan].pembayaran.metodePembayaran  = metodePembayaran[pilihPembayaran - 1];
-    pemesanan[indexKeberangkatan].pembayaran.sudahDibayar         = true;
-    pemesanan[indexKeberangkatan].pembayaran.totalHarga     = 100000;   // isi flat dulu
-
-    cout << "   [RESULT] Your ticket booking was successful!" << endl;
-    indexKeberangkatan++;
+    cout << "\n===================================" << endl;
+    cout << "[TOTAL PEMBAYARAN]" << endl;
+    cout << "   Total tiket berhasil dipesan : " << jumlahPemesanan[indexTanggal] << endl;
+    cout << "   Total pembayaran oleh Guest  : Rp" << totalHargaAkun << endl;
 }
+
 
 void searchByNIK() {
     bool found = false;
@@ -823,4 +1135,29 @@ void fileSaveTiketSingle(Pemesanan bookings[], int totalData, string targetNIK) 
     if (!found) {
         cout << "   Data tidak ditemukan.\n";
     }
+}
+
+void tampilkanSeluruhDataPemesanan() {
+    cout << "\n========== DAFTAR SELURUH PEMESANAN ==========\n";
+
+    for (int t = 0; t < maxTanggal; t++) {
+        if (jumlahPemesanan[t] == 0) continue;
+
+        cout << "\n     Tanggal Keberangkatan: " << daftarTanggal[t] << endl;
+        cout << "---------------------------------------------" << endl;
+
+        for (int i = 0; i < jumlahPemesanan[t]; i++) {
+            Pemesanan &p = semuaPemesanan[t][i];
+            cout << i + 1 << ". Nama    : " << p.penumpang.nama << endl;
+            cout << "   NIK     : " << p.penumpang.nik << endl;
+            cout << "   Asal    : " << p.tiket.asalKota << endl;
+            cout << "   Tujuan  : " << p.tiket.kotaTujuan << endl;
+            cout << "   Kursi   : Gerbong " << p.tiket.nomorGerbong + 1
+                 << " - Kursi " << p.tiket.nomorTempatDuduk + 1 << endl;
+            cout << "   Harga   : Rp" << p.pembayaran.totalHarga << endl;
+            cout << "---------------------------------------------" << endl;
+        }
+    }
+
+    cout << "\n==============================================" << endl;
 }
