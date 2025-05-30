@@ -10,8 +10,7 @@ const int portalClassSeat = 10;
 bool seatsEachPortal[portalClass][portalClassSeat];
 
 struct Passenger {
-    string 
-        name,
+    string name,
         nik,
         address;
 };
@@ -82,6 +81,11 @@ void sortingOutputShow(Booking *sortingShow);
 void fileOperationSave (Booking bookings[], int totalData);
 void fileOperationSaveSingle(Booking bookings[], int totalData, string targetNIK);
 
+void chooseMenuInMenu1();
+void chooseMenuInMenu2();
+void chooseMenuInMenu3();
+void chooseMenuInMenu5();
+
 int main() {
     cout << "Hello word";
     int chooseMenu;
@@ -99,259 +103,250 @@ int main() {
         cout << endl;
 
         switch (chooseMenu) {
-            case 1: {
-                int chooseMenuInMenu1;
-
-                do {
-                    cout << "[BOOK YOUR TICKET]"<< endl;
-                    cout << "   1. Generate Data Customer"                     << endl;
-                    cout << "   2. Manual Input Data Customer"                 << endl;
-                    cout << "   3. Back to main menu"                          << endl;
-                    cout << "   Choose Your Option: ";
-                    cin >> chooseMenuInMenu1;
-                    cout << endl;
-
-                    switch (chooseMenuInMenu1){
-                        case 1: {   
-                            autoBookTicket();
-                            cout << endl << endl;
-                            break; 
-                        }
-                        case 2: {   
-                            manualInput();
-                            cout<< endl << endl; 
-                            break; 
-                        }
-                        case 3: {   cout << "   Exit..."<< endl << endl; break; }
-                        default:{   cout << "   Invalid"<< endl << endl; break; }
-                    }
-                } while (chooseMenuInMenu1 != 3);
-                cout << endl;
-
-                break;
-            }
-                
-            case 2: {
-                int chooseMenuInMenu2;
-                do {
-                    cout << "\n[YOUR TICKET INFORMATION]"<< endl;
-                    cout << "   1. Sequential Non Sentinel Search Not Yet Sorted"  << endl;
-                    cout << "   2. Sequential Sentinel Search Not Yet Sorted"      << endl;
-                    cout << "   3. Binary Search"                                  << endl;
-                    cout << "   4. Back to main menu"                              << endl;
-                    cout << "   Choose your option: ";
-                    cin >> chooseMenuInMenu2;
-                    cout << endl;
-
-                    switch(chooseMenuInMenu2) {
-                        case 1: {   
-                            string searchNIK;
-                            cout << "   Input NIK you wanna search: ";
-                            cin >> searchNIK;
-                            
-                            seqNonSentinelNotYetSorted(&searchNIK); 
-                            cout << endl << endl; 
-
-                            break;  
-                        }
-                        case 2: {
-                            string searchNIK;
-
-                            cout << "Input NIK you wanna search: ";
-                            cin >> searchNIK; 
-
-                            seqSentinelNotYetSorted(&searchNIK);      
-                            cout << endl << endl;
-                            break;  
-                        }
-                        case 3: {   
-                            Booking copy[30];
-                            for (int i = 0; i < indexDeparture; i++) {
-                                copy[i] = bookings[i];
-                            }
-
-                            string searchNIK;
-
-                            cout << "Input NIK you wanna search: ";
-                            cin >> searchNIK; 
-
-                            binarySearch(copy, &searchNIK);
-                            cout << endl << endl;
-
-                            break;                                  
-                        }
-                        case 4: {  
-                            cout << "   Exit...";             
-                            cout << endl << endl;
-                            
-                            break;  }
-                        default:{   
-                            cout << endl << endl;
-                            break;                                  
-                        }
-                    }
-                } while (chooseMenuInMenu2 != 4);
-                cout << endl;
-
-                break;
-            }
-
-            case 3: {
-                int chooseMenuInMenu3;
-                do {
-                    cout << "[ALL TICKET INFORMATION]"    << endl;
-                    cout << "   1. Bubble Sort"                                    << endl;
-                    cout << "   2. Straight Insertion Sort"                        << endl;
-                    cout << "   3. Straight Selection Sort"                        << endl;
-                    cout << "   4. Shell Sort"                                     << endl;
-                    cout << "   5. Quick Sort"                                     << endl;
-                    cout << "   6. Back to main menu"                              << endl;
-                    cout << "   Choose your option: ";
-                    cin >> chooseMenuInMenu3;
-                    cout << endl;
-
-                    switch(chooseMenuInMenu3) {
-                        case 1: {
-                            Booking copy[30];
-
-                            for (int i = 0; i < indexDeparture; i++) {
-                                copy[i] = bookings[i];
-                            }
-                            
-                            bubbleSort(copy);
-                            sortingOutputShow(copy);  
-
-                            cout << endl;
-
-                            break;  
-                        }
-                        case 2: {   
-                            Booking copy[30];
-
-                            for (int i = 0; i < indexDeparture; i++) {
-                                copy[i] = bookings[i];
-                            }
-
-                            straightInsertionSort(copy);
-                            sortingOutputShow(copy);  
-                            
-                            cout << endl;
-
-                            break;  
-                        }
-                        case 3: {   
-                            Booking copy[30];
-                            for (int i = 0; i < indexDeparture; i++) {
-                                copy[i] = bookings[i];
-                            }
-
-                            selectionSort(copy);
-                            sortingOutputShow(copy);      
-                            
-                            cout << endl << endl;
-
-                            break;  
-                        }
-                        case 4: {   
-                            Booking copy[30];
-
-                            for (int i = 0; i < indexDeparture; i++) {
-                                copy[i] = bookings[i];
-                            }
-
-                            shellSort(copy);
-                            sortingOutputShow(copy);     
-                            
-                            cout << endl;
-
-                            break;  
-                        }
-                        case 5: {   
-                            Booking copy[30];
-
-                            int i;
-                            for (i = 0; i < indexDeparture; i++) {
-                                copy[i] = bookings[i];
-                            }
-
-                            //Booking *copyPointer = &copy[i];
-
-                            int first = 0;
-                            int last = indexDeparture - 1;
-
-                            quickSort(copy, first, last);
-                            sortingOutputShow(copy);
-
-                            cout << endl;
-
-                            break;
-                        }
-                        case 6: {   
-                            cout << "   Exit..." << endl; 
-                            cout << endl;
-                                    
-                            break;  
-                        }
-                        default:{   break;  }
-                    }
-                } while (chooseMenuInMenu3 != 6);
-                break;
-            }
-            
-            case 4: {
-                cout << endl << endl;
-                break;
-            }
-
-            case 5: {
-                int chooseMenuInMenu5;
-                do {
-                    cout << "[PRINT TICKET]" << endl;
-                    cout << "   1. Print all ticket"    << endl;
-                    cout << "   2. Print your ticket"   << endl;
-                    cout << "   3. Back to main menu"   << endl;
-                    cout << "   Choose your option : ";
-                    cin >> chooseMenuInMenu5;
-                    cout << endl;
-
-                    switch (chooseMenuInMenu5) {
-                        case 1: {
-                            fileOperationSave (bookings, indexDeparture);
-                            break;
-                        }
-                        case 2: {
-                            string inputNIK;
-
-                            cout << "   Input your NIK : ";
-                            cin >> inputNIK;
-                            fileOperationSaveSingle(bookings, indexDeparture, inputNIK);
-                            break;
-                        }
-                        case 3: {
-                            break;
-                        }
-                        default: {
-                            break;
-                        }
-                    }
-                } while(chooseMenuInMenu5 != 3);
-                cout << endl << endl;
-                break;
-            }
-
-            case 6: {
-                cout << "   Exit..." << endl << endl;
-                break;
-            }
-
-            default: {
-                cout << "   Invalid Option!";
-                cout << endl << endl;
-                break;
-            }
+            case 1: { chooseMenuInMenu1();      break; }
+            case 2: { chooseMenuInMenu2();      break; }
+            case 3: { chooseMenuInMenu3();      break; }
+            case 4: { cout << endl << endl;     break;}
+            case 5: { chooseMenuInMenu5();      break; }
+            case 6: { cout << "   Exit..." << endl << endl; break; }
+            default: {cout << "   Invalid Option! \n\n";break; }
         }
 
     } while (chooseMenu != 6);
+}
+
+void chooseMenuInMenu1() {
+    int chooseMenuInMenu1;
+
+    do {
+        cout << "[BOOK YOUR TICKET]"<< endl;
+        cout << "   1. Generate Data Customer"                     << endl;
+        cout << "   2. Manual Input Data Customer"                 << endl;
+        cout << "   3. Back to main menu"                          << endl;
+        cout << "   Choose Your Option: ";
+        cin >> chooseMenuInMenu1;
+        cout << endl;
+
+        switch (chooseMenuInMenu1){
+            case 1: {   
+                autoBookTicket();
+                cout << endl << endl;
+                break; 
+            }
+            case 2: {   
+                manualInput();
+                cout<< endl << endl; 
+                break; 
+            }
+            case 3: {   
+                cout << "   Exit..."<< endl << endl; 
+                break; 
+            }
+
+            default:{   
+                cout << "   Invalid"<< endl << endl; 
+                break; 
+            }
+        }
+    } while (chooseMenuInMenu1 != 3);
+
+    cout << endl;
+}
+
+void chooseMenuInMenu2(){
+    int chooseMenuInMenu2;
+    do {
+        cout << "\n[YOUR TICKET INFORMATION]"<< endl;
+        cout << "   1. Sequential Non Sentinel Search Not Yet Sorted"  << endl;
+        cout << "   2. Sequential Sentinel Search Not Yet Sorted"      << endl;
+        cout << "   3. Binary Search"                                  << endl;
+        cout << "   4. Back to main menu"                              << endl;
+        cin >> chooseMenuInMenu2;
+        cout << endl;
+        
+        switch(chooseMenuInMenu2) {
+            case 1: {   
+                string searchNIK;
+                cout << "   Input NIK you wanna search: ";
+                cin >> searchNIK;
+                            
+                seqNonSentinelNotYetSorted(&searchNIK); 
+                cout << endl << endl; 
+                break;  
+            }
+            case 2: {
+                string searchNIK;
+                cout << "Input NIK you wanna search: ";
+                cin >> searchNIK; 
+                
+                seqSentinelNotYetSorted(&searchNIK);      
+                
+                cout << endl << endl;
+                break;  
+            }
+            
+            case 3: {   
+                Booking copy[30];
+                for (int i = 0; i < indexDeparture; i++) {
+                    copy[i] = bookings[i];
+                }
+
+                string searchNIK;
+
+                cout << "Input NIK you wanna search: ";
+                cin >> searchNIK; 
+
+                binarySearch(copy, &searchNIK);
+                cout << endl << endl;
+
+                break;                                  
+            }
+            case 4: {  
+                cout << "   Exit...";             
+                cout << endl << endl;
+                            
+                break;  }
+            default:{   
+                cout << endl << endl;
+                break;                                  
+            }
+        }
+    } while (chooseMenuInMenu2 != 4);
+    cout << endl;
+}
+
+void chooseMenuInMenu3() {
+    int chooseMenuInMenu3;
+    do {
+        cout << "[ALL TICKET INFORMATION]"    << endl;
+        cout << "   1. Bubble Sort"                                    << endl;
+        cout << "   2. Straight Insertion Sort"                        << endl;
+        cout << "   3. Straight Selection Sort"                        << endl;
+        cout << "   4. Shell Sort"                                     << endl;
+        cout << "   5. Quick Sort"                                     << endl;
+        cout << "   6. Back to main menu"                              << endl;
+        cout << "   Choose your option: ";
+        cin >> chooseMenuInMenu3;
+        cout << endl;
+        switch(chooseMenuInMenu3) {
+            case 1: {
+                Booking copy[30];
+                for (int i = 0; i < indexDeparture; i++) {
+                    copy[i] = bookings[i];
+                }
+                bubbleSort(copy);
+                sortingOutputShow(copy); 
+                cout << endl;
+                break;  
+            }
+            case 2: {   
+                Booking copy[30];
+                
+                for (int i = 0; i < indexDeparture; i++) {
+                    copy[i] = bookings[i];
+                }
+                straightInsertionSort(copy);
+                sortingOutputShow(copy);  
+
+                cout << endl;
+
+                break;  
+            }
+            case 3: {   
+                Booking copy[30];
+                for (int i = 0; i < indexDeparture; i++) {
+                    copy[i] = bookings[i];
+                }
+                
+                selectionSort(copy);
+                sortingOutputShow(copy);   
+                
+                cout << endl << endl;
+                
+                break;  
+            }
+            case 4: {   
+                Booking copy[30];
+                
+                for (int i = 0; i < indexDeparture; i++) {
+                    copy[i] = bookings[i];
+                }
+
+                shellSort(copy);
+                sortingOutputShow(copy);     
+                            
+                cout << endl;
+
+                break;  
+            }
+            case 5: {   
+                Booking copy[30];
+
+                int i;
+                for (i = 0; i < indexDeparture; i++) {
+                    copy[i] = bookings[i];
+                }
+
+                //Booking *copyPointer = &copy[i];
+                
+                int first = 0;
+                int last = indexDeparture - 1;
+                
+                quickSort(copy, first, last);
+                sortingOutputShow(copy);
+
+                cout << endl;
+
+                break;
+            }
+            case 6: {   
+                cout << "   Exit..." << endl; 
+                cout << endl;
+                
+                break;  
+            }
+            default:{   break;  }
+        }
+    } while (chooseMenuInMenu3 != 6);
+}
+
+void chooseMenuInMenu5() {
+    int chooseMenuInMenu5;
+                
+    do {
+        cout << "[PRINT TICKET]" << endl;
+        cout << "   1. Print all ticket"    << endl;
+        cout << "   2. Print your ticket"   << endl;
+        cout << "   3. Back to main menu"   << endl;
+        cout << "   Choose your option : ";
+        cin >> chooseMenuInMenu5;
+        cout << endl;
+
+        switch (chooseMenuInMenu5) {
+            case 1: {
+                fileOperationSave (bookings, indexDeparture);
+                break;
+            }
+            case 2: {
+                string inputNIK;
+                
+                cout << "   Input your NIK : ";
+                cin >> inputNIK;
+                
+                fileOperationSaveSingle(bookings, indexDeparture, inputNIK);
+                
+                break;
+            }
+            case 3: {
+                break;
+            }
+            default: {
+                break;
+            }
+        }
+    } while(chooseMenuInMenu5 != 3);
+    
+    cout << endl << endl;
 }
 
 void autoBookTicket() {
