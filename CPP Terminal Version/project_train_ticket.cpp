@@ -87,11 +87,8 @@ void chooseMenuInMenu3();
 void chooseMenuInMenu5();
 
 int main() {
-<<<<<<< HEAD
     cout << "Hello word";
     cout << "casting";
-=======
->>>>>>> 5950db1 ([UPDATE] Refractor English to Indonesian not yet completed)
     int chooseMenu;
 
     do {   
