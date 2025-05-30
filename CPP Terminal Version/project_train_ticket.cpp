@@ -14,7 +14,6 @@ struct Penumpang {
         nik,
         alamat;
 };
-
 struct InfoTiket{
     string 
         asalKota,
@@ -24,7 +23,6 @@ struct InfoTiket{
         nomorTempatDuduk;
     string tanggalKeberangkatan;
 };
-
 struct InfoPembayaran {
     string metodePembayaran;
     bool sudahDibayar;
@@ -63,7 +61,6 @@ string metodePembayaran[] = {
 
 int indexKeberangkatan = 0;
 
-
 //###################
 void autoBookTicket();
 void manualInput();
@@ -89,7 +86,7 @@ void chooseMenuInMenu5();
 int main() {
     cout << "Hello word";
     cout << "casting";
-    int chooseMenu;
+    int pilihanMenu;
 
     do {   
         // cout << "[MAIN MENU]"<< endl;
@@ -112,10 +109,10 @@ int main() {
         cout << "   6. Hapus Tiket"                         << endl;
         cout << "   7. Exit"                                << endl;
         cout << "   Pilih Menu Anda your option : ";
-        cin >> chooseMenu;
+        cin >> pilihanMenu;
         cout << endl;
 
-        switch (chooseMenu) {
+        switch (pilihanMenu) {
             case 1: { chooseMenuInMenu1();      break; }
             case 2: { chooseMenuInMenu2();      break; }
             case 3: { chooseMenuInMenu3();      break; }
@@ -125,7 +122,7 @@ int main() {
             default: {cout << "   Invalid Option! \n\n";break; }
         }
 
-    } while (chooseMenu != 6);
+    } while (pilihanMenu != 6);
 }
 
 void chooseMenuInMenu1() {
