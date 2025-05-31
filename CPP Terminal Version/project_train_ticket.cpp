@@ -2,6 +2,7 @@
 #include <string>
 #include <cstdlib>  // untuk rand()
 #include <ctime>    // untuk time()
+#include <fstream>
 
 using namespace std;
 
@@ -121,7 +122,7 @@ void quickSort(Pemesanan *copyQuick, int first, int last);
 void tampilkanDataSetelahSorting(Pemesanan *dataSorting);
 
 // File Opearation
-void fileSave(Pemesanan bookings[], int totalData);
+void fileSaveTiketSemua(Pemesanan bookings[], int totalData);
 void fileSaveTiketSingle(Pemesanan bookings[], int totalData, string targetNIK);
 
 void menuLoginDanPesanTiket();
@@ -130,6 +131,13 @@ void menuTampilkanSeluruhTiket();
 void pilihMenu5();
 
 void tampilkanSeluruhDataPemesanan();
+
+// void simpanSemuaTiketKeFile(bool append);
+// void simpanTiketPerPenumpang();
+// void menuCreateTiket();
+void simpanTiketBerdasarkanNIK();
+void bacaTiketDariFile();
+void updateTiketDariFile();
 
 int main() {
     cout << "Hello word";
@@ -165,8 +173,12 @@ int main() {
             case 1: { menuLoginDanPesanTiket();     break; }
             case 2: { menuCariTiket();              break; }
             case 3: { menuTampilkanSeluruhTiket();  break; }
-            case 4: {     break;}
-            case 5: { pilihMenu5();      break; }
+            // case 4: { menuCreateTiket(); break; }
+            // case 4: { simpanTiketPerPenumpang(); break; }
+            case 4: { simpanTiketBerdasarkanNIK(); break; }
+            case 5: { bacaTiketDariFile();      break; }
+            case 6: { updateTiketDariFile(); break; }
+            case 7: { break; }
             case 8: { tampilkanSeluruhDataPemesanan(); break; }
             case 9: { cout << "   Exit..." << endl << endl; break; }
             default: {cout << "   Invalid Option! \n\n";break; }
@@ -174,6 +186,23 @@ int main() {
 
     } while (pilihanMenu != 9);
 }
+
+// void menuCreateTiket() {
+//     int pilihMode;
+//     cout << "\n[MENU CETAK TIKET]" << endl;
+//     cout << "   1. Tulis ulang semua tiket (overwrite)" << endl;
+//     cout << "   2. Tambahkan ke file lama (append)" << endl;
+//     cout << "   3. Kembali ke menu utama" << endl;
+//     cout << "   Pilih mode: ";
+//     cin >> pilihMode;
+
+//     switch(pilihMode) {
+//         case 1: { simpanSemuaTiketKeFile(false); break; }
+//         case 2: { simpanSemuaTiketKeFile(true); break; }
+//         case 3: { cout << "    Exit ... "; break; }
+//         default: { cout << "   Invalid input" << endl; break; }
+//     }
+// }
 
 // void menuLoginDanPesanTiket() {
 //     int pilihMenu;
@@ -472,7 +501,7 @@ void pilihMenu5() {
 
         switch (pilihMenu) {
             case 1: {
-                fileSave (pemesanan, indexKeberangkatan);
+                fileSaveTiketSemua (pemesanan, indexKeberangkatan);
                 break;
             }
             case 2: {
@@ -1065,7 +1094,7 @@ void tampilkanDataSetelahSorting(Pemesanan *dataSorting) {
     cout << endl;
 }
 
-void fileSave(Pemesanan bookings[], int totalData) {
+void fileSaveTiketSemua(Pemesanan bookings[], int totalData) {
     FILE *fp;
     fp = fopen("ticket_data.txt", "w");
 
@@ -1160,4 +1189,258 @@ void tampilkanSeluruhDataPemesanan() {
     }
 
     cout << "\n==============================================" << endl;
+}
+
+// void simpanSemuaTiketKeFile(bool append = false) {
+//     ofstream file;
+
+//     if (append) {
+//         file.open("semua_tiket.txt", ios::app);  // Tambah di akhir
+//     } else {
+//         file.open("semua_tiket.txt", ios::out);  // Timpa isi lama
+//     }
+
+//     if (!file.is_open()) {
+//         cout << "Gagal membuka file untuk menulis!" << endl;
+//         return;
+//     }
+
+//     for (int t = 0; t < maxTanggal; t++) {
+//         if (jumlahPemesanan[t] == 0) continue;
+
+//         file << "======================" << endl;
+//         file << "Tanggal: " << daftarTanggal[t] << endl;
+//         file << "======================" << endl;
+
+//         for (int i = 0; i < jumlahPemesanan[t]; i++) {
+//             Pemesanan &p = semuaPemesanan[t][i];
+//             file << "Nama       : " << p.penumpang.nama << endl;
+//             file << "NIK        : " << p.penumpang.nik << endl;
+//             file << "Alamat     : " << p.penumpang.alamat << endl;
+//             file << "Umur       : " << p.penumpang.umur << endl;
+//             file << "No HP      : " << p.penumpang.noHp << endl;
+//             file << "Asal       : " << p.tiket.asalKota << endl;
+//             file << "Tujuan     : " << p.tiket.kotaTujuan << endl;
+//             file << "Gerbong    : " << p.tiket.nomorGerbong + 1 << endl;
+//             file << "Kursi      : " << p.tiket.nomorTempatDuduk + 1 << endl;
+//             file << "Harga      : Rp" << p.pembayaran.totalHarga << endl;
+//             file << "----------------------" << endl;
+//         }
+//     }
+
+//     file.close();
+
+//     if (append)
+//         cout << "✅ Tiket berhasil ditambahkan ke 'semua_tiket.txt'\n";
+//     else
+//         cout << "✅ Semua tiket ditimpa & disimpan ulang ke 'semua_tiket.txt'\n";
+// }
+
+// void simpanTiketPerPenumpang() {
+//     for (int t = 0; t < maxTanggal; t++) {
+//         if (jumlahPemesanan[t] == 0) continue;
+
+//         for (int i = 0; i < jumlahPemesanan[t]; i++) {
+//             Pemesanan &p = semuaPemesanan[t][i];
+
+//             string namaFile = "tiket_" + p.penumpang.nik + "_" + daftarTanggal[t] + ".txt";
+//             fstream file;
+//             file.open(namaFile, ios::out | ios::trunc);
+
+//             if (!file.is_open()) {
+//                 cout << "❌ Gagal membuka file untuk: " << p.penumpang.nik << endl;
+//                 continue;
+//             }
+
+//             file << "======= TIKET KERETA =======\n";
+//             file << "Tanggal     : " << daftarTanggal[t] << "\n";
+//             file << "Nama        : " << p.penumpang.nama << "\n";
+//             file << "NIK         : " << p.penumpang.nik << "\n";
+//             file << "Alamat      : " << p.penumpang.alamat << "\n";
+//             file << "Umur        : " << p.penumpang.umur << "\n";
+//             file << "No HP       : " << p.penumpang.noHp << "\n";
+//             file << "Asal        : " << p.tiket.asalKota << "\n";
+//             file << "Tujuan      : " << p.tiket.kotaTujuan << "\n";
+//             file << "Gerbong     : " << p.tiket.nomorGerbong + 1 << "\n";
+//             file << "Kursi       : " << p.tiket.nomorTempatDuduk + 1 << "\n";
+//             file << "Harga       : Rp" << p.pembayaran.totalHarga << "\n";
+//             file << "=============================\n";
+
+//             file.close();
+//         }
+//     }
+
+//     cout << "✅ Semua tiket berhasil disimpan dalam file terpisah per penumpang.\n";
+// }
+
+void simpanTiketBerdasarkanNIK() {
+    string inputNIK, inputTanggal;
+    cout << "\n[MENU CETAK TIKET PER PENUMPANG]\n";
+    cout << "   Masukkan NIK: ";
+    cin >> inputNIK;
+    cin.ignore();
+    cout << "   Masukkan tanggal keberangkatan (dd-mm-yyyy): ";
+    getline(cin, inputTanggal);
+
+    // Cari index tanggal yang sesuai
+    int indexTanggal = -1;
+    for (int i = 0; i < maxTanggal; i++) {
+        if (daftarTanggal[i] == inputTanggal) {
+            indexTanggal = i;
+            break;
+        }
+    }
+
+    if (indexTanggal == -1) {
+        cout << "   Tanggal tidak ditemukan dalam sistem.\n";
+        return;
+    }
+
+    // Cari pemesanan dengan NIK yang cocok
+    bool found = false;
+    for (int i = 0; i < jumlahPemesanan[indexTanggal]; i++) {
+        Pemesanan &p = semuaPemesanan[indexTanggal][i];
+        if (p.penumpang.nik == inputNIK) {
+            found = true;
+
+            string namaFile = "tiket_" + p.penumpang.nik + "_" + daftarTanggal[indexTanggal] + ".txt";
+            fstream file(namaFile, ios::out | ios::trunc);
+
+            if (!file.is_open()) {
+                cout << "   Gagal membuka file untuk NIK: " << p.penumpang.nik << endl;
+                return;
+            }
+
+            file << "======= TIKET KERETA =======\n";
+            file << "Tanggal Keberangkatan  : " << daftarTanggal[indexTanggal] << "\n";
+            file << "Nama                   : " << p.penumpang.nama << "\n";
+            file << "NIK                    : " << p.penumpang.nik << "\n";
+            file << "Alamat                 : " << p.penumpang.alamat << "\n";
+            file << "Umur                   : " << p.penumpang.umur << "\n";
+            file << "No HP                  : " << p.penumpang.noHp << "\n";
+            file << "Asal                   : " << p.tiket.asalKota << "\n";
+            file << "Tujuan                 : " << p.tiket.kotaTujuan << "\n";
+            file << "Gerbong                : " << p.tiket.nomorGerbong + 1 << "\n";
+            file << "Kursi                  : " << p.tiket.nomorTempatDuduk + 1 << "\n";
+            file << "Harga                  : Rp" << p.pembayaran.totalHarga << "\n";
+            file << "=============================\n";
+
+            file.close();
+
+            cout << "   Tiket berhasil dicetak ke file: " << namaFile << "\n";
+            return;
+        }
+    }
+
+    if (!found) {
+        cout << "   Tiket dengan NIK tersebut tidak ditemukan pada tanggal yang dimasukkan.\n";
+    }
+}
+
+void bacaTiketDariFile() {
+    string inputNIK, inputTanggal;
+
+    cout << "\n[MENU LIHAT TIKET PER PENUMPANG]\n";
+    cout << "   Masukkan NIK: ";
+    cin >> inputNIK;
+    cin.ignore();
+    cout << "   Masukkan tanggal keberangkatan (dd-mm-yyyy): ";
+    getline(cin, inputTanggal);
+
+    // Bentuk nama file tiket
+    string namaFile = "tiket_" + inputNIK + "_" + inputTanggal + ".txt";
+
+    fstream file;
+    file.open(namaFile, ios::in);
+
+    if (!file.is_open()) {
+        cout << "   Tiket tidak ditemukan untuk NIK dan tanggal tersebut.\n";
+        return;
+    }
+
+    cout << "\n[ISI TIKET]\n";
+    string baris;
+    while (getline(file, baris)) {
+        cout << "   " << baris << endl;
+    }
+
+    file.close();
+    cout << endl;
+}
+
+// Perlu diperbaiki terutama daklam penginputan ulanmg
+void updateTiketDariFile() {
+    string inputNIK, inputTanggal;
+
+    cout << "\n[MENU UPDATE TIKET]\n";
+    cout << "   Masukkan NIK: ";
+    cin >> inputNIK;
+    cin.ignore();
+    cout << "   Masukkan tanggal keberangkatan (dd-mm-yyyy): ";
+    getline(cin, inputTanggal);
+
+    string namaFile = "tiket_" + inputNIK + "_" + inputTanggal + ".txt";
+
+    // Cek apakah file tiket ada
+    fstream file;
+
+    file.open(namaFile, ios::in);
+    if (!file.is_open()) {
+        cout << "   File tiket tidak ditemukan.\n";
+        return;
+    }
+
+    // Tampilkan isi lama
+    cout << "\n[ISI TIKET LAMA]:\n";
+    string baris;
+
+    while (getline(file, baris)) {
+        cout << baris << endl;
+    }
+    file.close();
+
+    // Input data baru
+    Pemesanan p;
+    p.penumpang.nik = inputNIK;
+    cout << "\nSilakan masukkan data baru:\n";
+    cout << "Nama                   : "; getline(cin, p.penumpang.nama);
+    cout << "Alamat                 : "; getline(cin, p.penumpang.alamat);
+    cout << "Umur                   : "; cin >> p.penumpang.umur; cin.ignore();
+    cout << "No HP                  : "; getline(cin, p.penumpang.noHp);
+
+    // Untuk sekarang kita tidak ubah kursi, gerbong, dll.
+    cout << "Kota Asal              : "; getline(cin, p.tiket.asalKota);
+    cout << "Kota Tujuan            : "; getline(cin, p.tiket.kotaTujuan);
+    cout << "Nomor Gerbong (1-3)    : "; cin >> p.tiket.nomorGerbong;
+    cout << "Nomor Kursi   (1-10)   : "; cin >> p.tiket.nomorTempatDuduk;
+    cout << "Harga Tiket            : "; cin >> p.pembayaran.totalHarga;
+    cin.ignore();
+
+    // Tanggal tetap sama
+    p.tiket.tanggalKeberangkatan = inputTanggal;
+
+    // Simpan ulang
+    fstream fileEdit;
+    file.open(namaFile, ios::out | ios::trunc);
+    if (!file.is_open()) {
+        cout << "   Gagal membuka file untuk update.\n";
+        return;
+    }
+
+    file << "======= TIKET KERETA (UPDATED) =======\n";
+    file << "Tanggal Keberangkatan : " << p.tiket.tanggalKeberangkatan << "\n";
+    file << "Nama                  : " << p.penumpang.nama << "\n";
+    file << "NIK                   : " << p.penumpang.nik << "\n";
+    file << "Alamat                : " << p.penumpang.alamat << "\n";
+    file << "Umur                  : " << p.penumpang.umur << "\n";
+    file << "No HP                 : " << p.penumpang.noHp << "\n";
+    file << "Asal                  : " << p.tiket.asalKota << "\n";
+    file << "Tujuan                : " << p.tiket.kotaTujuan << "\n";
+    file << "Gerbong               : " << p.tiket.nomorGerbong << "\n";
+    file << "Kursi                 : " << p.tiket.nomorTempatDuduk << "\n";
+    file << "Harga                 : Rp" << p.pembayaran.totalHarga << "\n";
+    file << "======================================\n";
+
+    file.close();
+    cout << "   Tiket berhasil diperbarui.\n";
 }

@@ -1,0 +1,13 @@
+======= TIKET KERETA (UPDATED) =======
+Tanggal Keberangkatan : 30-01-2025
+Nama                  : ahmad
+NIK                   : 100018518
+Alamat                : karang kopek
+Umur                  : 20
+No HP                 : 081
+Asal                  : yogyakarta
+Tujuan                : solo balapan
+Gerbong               : 4
+Kursi                 : 3
+Harga                 : Rp1000000
+======================================

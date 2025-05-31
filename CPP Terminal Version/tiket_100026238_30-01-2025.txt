@@ -1,0 +1,13 @@
+======= TIKET KERETA =======
+Tanggal Keberangkatan  : 30-01-2025
+Nama                   : Dedi-2
+NIK                    : 100026238
+Alamat                 : Kulon Progo
+Umur                   : 20
+No HP                  : 088895684884
+Asal                   : Yogyakarta
+Tujuan                 : Solo Balapan
+Gerbong                : 1
+Kursi                  : 2
+Harga                  : Rp30000
+=============================

@@ -1,0 +1,13 @@
+======= TIKET KERETA =======
+Tanggal     : 30-01-2025
+Nama        : Ani-2
+NIK         : 100031637
+Alamat      : Bantul
+Umur        : 27
+No HP       : 084754282172
+Asal        : Yogyakarta
+Tujuan      : Solo Balapan
+Gerbong     : 1
+Kursi       : 2
+Harga       : Rp30000
+=============================
