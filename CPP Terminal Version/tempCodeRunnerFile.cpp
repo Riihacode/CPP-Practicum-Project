@@ -19,7 +19,7 @@ struct Penumpang {
 
 struct InfoTiket{
     string 
-        asalKota,
+        asalKotaStatsiun,
         kotaTujuan;
     int 
         nomorGerbong,
@@ -235,7 +235,7 @@ void generateDataPassanger(){
         pemesanan[i].penumpang.alamat   = "Indonesia, Regency Code Number - " + to_string(i + 1);
 
         // TicketInfo
-        pemesanan[i].tiket.asalKota    = "Yogyakarta";
+        pemesanan[i].tiket.asalKotaStatsiun    = "Yogyakarta";
         pemesanan[i].tiket.kotaTujuan  = "Magelang";
         //bookings[i].ticket.trainClass       = "Ekonomi";
         pemesanan[i].tiket.nomorGerbong      = 1 ;
@@ -296,7 +296,7 @@ void autoBookTicket() {
     b.penumpang.nik     = sampleNIKs[rand() % 4];
     b.penumpang.alamat = sampleAddresses[rand() % 4];
 
-    b.tiket.asalKota  = kotaAsal[rand() % 5];
+    b.tiket.asalKotaStatsiun  = kotaAsal[rand() % 5];
     b.tiket.kotaTujuan= destinationsCity[rand() % 5];
     //b.ticket.trainClass     = trainClass[rand() % 3];
     b.tiket.nomorGerbong    = coach;
@@ -343,7 +343,7 @@ void manualInput() {
     }
     cout << "   Choose your option: ";
     cin >> chooseDepartureCity;
-    pemesanan[indexKeberangkatan].tiket.asalKota = kotaAsal[chooseDepartureCity - 1];
+    pemesanan[indexKeberangkatan].tiket.asalKotaStatsiun = kotaAsal[chooseDepartureCity - 1];
 
 
     cout << "\n[DESTINATION CITY MENU]" << endl;
@@ -411,7 +411,7 @@ void searchByNIK() {
         cout << "\n=== Tiket Ditemukan ===\n";
         cout << "Nama       : " << pemesanan[i].penumpang.nama << endl;
         cout << "NIK        : " << pemesanan[i].penumpang.nik << endl;
-        cout << "Asal       : " << pemesanan[i].tiket.asalKota << endl;
+        cout << "Asal       : " << pemesanan[i].tiket.asalKotaStatsiun << endl;
         cout << "Tujuan     : " << pemesanan[i].tiket.kotaTujuan << endl;
         cout << "Kursi      : " << pemesanan[i].tiket.nomorGerbong << "-" << pemesanan[i].tiket.nomorTempatDuduk << endl;
         cout << "Total Bayar: Rp" << pemesanan[i].pembayaran.totalHarga << endl;
@@ -442,7 +442,7 @@ void seqNonSentinelNotYetSorted(){
         cout << "\n====== NIK ditemukan =======\n";
         cout << "Nama       : " << pemesanan[i].penumpang.nama << endl;
         cout << "NIK        : " << pemesanan[i].penumpang.nik << endl;
-        cout << "Asal       : " << pemesanan[i].tiket.asalKota << endl;
+        cout << "Asal       : " << pemesanan[i].tiket.asalKotaStatsiun << endl;
         cout << "Tujuan     : " << pemesanan[i].tiket.kotaTujuan << endl;
         cout << "Kursi      : " << pemesanan[i].tiket.nomorGerbong + 1 << "-" << pemesanan[i].tiket.nomorTempatDuduk + 1 << endl;
         cout << "Total Bayar: Rp" << pemesanan[i].pembayaran.totalHarga << endl << endl;
@@ -477,7 +477,7 @@ void seqSentinelNotYetSorted() {
         cout << "\n====== NIK FOUND =======\n";
         cout << "Nama       : " << pemesanan[i].penumpang.nama << endl;
         cout << "NIK        : " << pemesanan[i].penumpang.nik << endl;
-        cout << "Asal       : " << pemesanan[i].tiket.asalKota << endl;
+        cout << "Asal       : " << pemesanan[i].tiket.asalKotaStatsiun << endl;
         cout << "Tujuan     : " << pemesanan[i].tiket.kotaTujuan << endl;
         cout << "Kursi      : " << pemesanan[i].tiket.nomorGerbong + 1 << "-" << pemesanan[i].tiket.nomorTempatDuduk + 1 << endl;
         cout << "Total Bayar: Rp" << pemesanan[i].pembayaran.totalHarga << endl << endl;
@@ -597,7 +597,7 @@ void sortingOutputShow(Pemesanan *sortingShow) {
     for (int i = 0; i < indexKeberangkatan; i++) {
         cout << i + 1   << ". Nama: "   << sortingShow[i].penumpang.nama 
                         << ", NIK: "    << sortingShow[i].penumpang.nik 
-                        << ", Asal: "   << sortingShow[i].tiket.asalKota 
+                        << ", Asal: "   << sortingShow[i].tiket.asalKotaStatsiun 
                         << ", Tujuan: " << sortingShow[i].tiket.kotaTujuan 
                         << endl;
     }
