@@ -3,6 +3,7 @@
 #include <cstdlib>  // untuk rand()
 #include <ctime>    // untuk time()
 #include <fstream>
+#include <algorithm> // tambahan ini untuk std::swap
 
 using namespace std;
 
@@ -328,7 +329,6 @@ void menuLoginDanPesanTiket() {
     } while (pilihMenu != 3);
 }
 
-
 void menuCariTiket(){
     int pilihMenu;
     do {
@@ -339,9 +339,18 @@ void menuCariTiket(){
         cout << "   4. Kembali ke Menu Utama"                           << endl;
         cout << "   Pilih Menu : ";
         cin >> pilihMenu;
+        if (cin.fail()) {
+        cin.clear();
+        cin.ignore(10000, '\n');
+        cout << "   Input tidak valid! Silakan masukkan angka.\n\n";
+        continue;
+        }
         cout << endl;
-        
         switch(pilihMenu) {
+            if (indexKeberangkatan == 0) {
+                cout << "   [!] Data pemesanan kosong! Silakan input data terlebih dahulu.\n\n";
+                break;
+            }
             case 1: {   
                 string searchNIK;
                 cout << "   Input NIK yang ingin anda cari : ";
@@ -395,95 +404,69 @@ void menuCariTiket(){
 void menuTampilkanSeluruhTiket() {
     int pilihMenu3;
     do {
-        cout << "[ALL TICKET INFORMATION]"    << endl;
-        cout << "   1. Bubble Sort"                                    << endl;
-        cout << "   2. Straight Insertion Sort"                        << endl;
-        cout << "   3. Straight Selection Sort"                        << endl;
-        cout << "   4. Shell Sort"                                     << endl;
-        cout << "   5. Quick Sort"                                     << endl;
-        cout << "   6. Back to main menu"                              << endl;
+        cout << "[ALL TICKET INFORMATION]\n";
+        cout << "   1. Bubble Sort\n";
+        cout << "   2. Straight Insertion Sort\n";
+        cout << "   3. Straight Selection Sort\n";
+        cout << "   4. Shell Sort\n";
+        cout << "   5. Quick Sort\n";
+        cout << "   6. Back to main menu\n";
         cout << "   Choose your option: ";
         cin >> pilihMenu3;
-        cout << endl;
-        switch(pilihMenu3) {
-            case 1: {
-                Pemesanan copy[30];
-                for (int i = 0; i < indexKeberangkatan; i++) {
-                    copy[i] = pemesanan[i];
-                }
-                bubbleSort(copy);
-                tampilkanDataSetelahSorting(copy); 
-                cout << endl;
-                break;  
-            }
-            case 2: {   
-                Pemesanan copy[30];
-                
-                for (int i = 0; i < indexKeberangkatan; i++) {
-                    copy[i] = pemesanan[i];
-                }
-                straightInsertionSort(copy);
-                tampilkanDataSetelahSorting(copy);  
 
-                cout << endl;
-
-                break;  
-            }
-            case 3: {   
-                Pemesanan copy[30];
-                for (int i = 0; i < indexKeberangkatan; i++) {
-                    copy[i] = pemesanan[i];
-                }
-                
-                selectionSort(copy);
-                tampilkanDataSetelahSorting(copy);   
-                
-                cout << endl << endl;
-                
-                break;  
-            }
-            case 4: {   
-                Pemesanan copy[30];
-                
-                for (int i = 0; i < indexKeberangkatan; i++) {
-                    copy[i] = pemesanan[i];
-                }
-
-                shellSort(copy);
-                tampilkanDataSetelahSorting(copy);     
-                            
-                cout << endl;
-
-                break;  
-            }
-            case 5: {   
-                Pemesanan copy[30];
-
-                int i;
-                for (i = 0; i < indexKeberangkatan; i++) {
-                    copy[i] = pemesanan[i];
-                }
-
-                //Booking *copyPointer = &copy[i];
-                
-                int first = 0;
-                int last = indexKeberangkatan - 1;
-                
-                quickSort(copy, first, last);
-                tampilkanDataSetelahSorting(copy);
-
-                cout << endl;
-
-                break;
-            }
-            case 6: {   
-                cout << "   Exit..." << endl; 
-                cout << endl;
-                
-                break;  
-            }
-            default:{   break;  }
+        if (cin.fail()) {
+            cin.clear();
+            cin.ignore(10000, '\n');
+            cout << "   Input tidak valid! Masukkan angka 1 - 6.\n\n";
+            continue;
         }
+
+        if (pilihMenu3 >= 1 && pilihMenu3 <= 5 && indexKeberangkatan == 0) {
+            cout << "   [!] Data pemesanan kosong. Silakan input data terlebih dahulu!\n\n";
+            continue;
+        }
+
+        Pemesanan copy[30];
+        for (int i = 0; i < indexKeberangkatan; i++) {
+            copy[i] = pemesanan[i];
+        }
+
+        switch (pilihMenu3) {
+            case 1:
+                bubbleSort(copy);
+                tampilkanDataSetelahSorting(copy);
+                break;
+
+            case 2:
+                straightInsertionSort(copy);
+                tampilkanDataSetelahSorting(copy);
+                break;
+
+            case 3:
+                selectionSort(copy);
+                tampilkanDataSetelahSorting(copy);
+                break;
+
+            case 4:
+                shellSort(copy);
+                tampilkanDataSetelahSorting(copy);
+                break;
+
+            case 5:
+                quickSort(copy, 0, indexKeberangkatan - 1);
+                tampilkanDataSetelahSorting(copy);
+                break;
+
+            case 6:
+                cout << "   Kembali ke menu utama...\n\n";
+                break;
+
+            default:
+                cout << "   Pilihan tidak tersedia. Silakan pilih angka 1 - 6.\n\n";
+                break;
+        }
+        cout << endl;
+
     } while (pilihMenu3 != 6);
 }
 
@@ -881,19 +864,29 @@ void manualInput(int indexTanggal, int indexKotaTujuan) {
     cout << "   Total pembayaran oleh Guest  : Rp" << totalHargaAkun << endl;
 }
 
-
 void searchByNIK() {
+    string targetNIK;
+    cout << "Masukkan NIK yang ingin dicari: ";
+    cin >> targetNIK;
+
     bool found = false;
+
     for (int i = 0; i < indexKeberangkatan; ++i) {
-        found = true;
-        cout << "\n[FOUND - TICKET]\n";
-        cout << "   Nama       : " << pemesanan[i].penumpang.nama << endl;
-        cout << "   NIK        : " << pemesanan[i].penumpang.nik << endl;
-        cout << "   Asal       : " << pemesanan[i].tiket.asalKota << endl;
-        cout << "   Tujuan     : " << pemesanan[i].tiket.kotaTujuan << endl;
-        cout << "   Kursi      : " << pemesanan[i].tiket.nomorGerbong << "-" << pemesanan[i].tiket.nomorTempatDuduk << endl;
-        cout << "   Total Bayar: Rp" << pemesanan[i].pembayaran.totalHarga << endl;
-        break;    
+        if (pemesanan[i].penumpang.nik == targetNIK) {
+            found = true;
+            cout << "\n[FOUND - TICKET]\n";
+            cout << "   Nama       : " << pemesanan[i].penumpang.nama << endl;
+            cout << "   NIK        : " << pemesanan[i].penumpang.nik << endl;
+            cout << "   Asal       : " << pemesanan[i].tiket.asalKota << endl;
+            cout << "   Tujuan     : " << pemesanan[i].tiket.kotaTujuan << endl;
+            cout << "   Kursi      : " << pemesanan[i].tiket.nomorGerbong << "-" << pemesanan[i].tiket.nomorTempatDuduk << endl;
+            cout << "   Total Bayar: Rp" << pemesanan[i].pembayaran.totalHarga << endl;
+            break; // stop setelah ketemu
+        }
+    }
+
+    if (!found) {
+        cout << "\n[NOT FOUND] Tiket dengan NIK tersebut tidak ditemukan.\n";
     }
 }
 
@@ -919,6 +912,7 @@ void searchSeqNonSentinelBelumUrut(string *pointerNIK){
         cout << "   Asal       : " << pemesanan[i].tiket.asalKota << endl;
         cout << "   Tujuan     : " << pemesanan[i].tiket.kotaTujuan << endl;
         cout << "   Kursi      : " << pemesanan[i].tiket.nomorGerbong + 1 << "-" << pemesanan[i].tiket.nomorTempatDuduk + 1 << endl;
+        cout << "   Tanggal    : " << pemesanan[i].tiket.tanggalKeberangkatan << endl;
         cout << "   Total Bayar: Rp" << pemesanan[i].pembayaran.totalHarga << endl << endl;
     } else {
         cout << "   NIK not found!\n";
@@ -926,9 +920,9 @@ void searchSeqNonSentinelBelumUrut(string *pointerNIK){
 }
 
 void searchSeqSentinelBelumUrut(string *pointerNIK) {
-    Pemesanan cadanganData = pemesanan[indexKeberangkatan];
+    Pemesanan cadanganData = pemesanan[indexKeberangkatan]; //simpan data terakhir
     
-    pemesanan[indexKeberangkatan].penumpang.nik = *pointerNIK;
+    pemesanan[indexKeberangkatan].penumpang.nik = *pointerNIK; // menyimpan sentinel di akhir array
 
     int i = 0;
     // bool found = false;
@@ -946,6 +940,7 @@ void searchSeqSentinelBelumUrut(string *pointerNIK) {
         cout << "   Asal       : " << pemesanan[i].tiket.asalKota << endl;
         cout << "   Tujuan     : " << pemesanan[i].tiket.kotaTujuan << endl;
         cout << "   Kursi      : " << pemesanan[i].tiket.nomorGerbong + 1 << "-" << pemesanan[i].tiket.nomorTempatDuduk + 1 << endl;
+        cout << "   Tanggal    : " << pemesanan[i].tiket.tanggalKeberangkatan << endl;
         cout << "   Total Bayar: Rp" << pemesanan[i].pembayaran.totalHarga << endl << endl;
     } else {
         cout << "   NIK not found!\n";
@@ -955,13 +950,15 @@ void searchSeqSentinelBelumUrut(string *pointerNIK) {
 void searchBinarySearch(Pemesanan *copyBinary, string *nikPointer) {
     bubbleSortBerdasarNik(copyBinary);
 
+    // deklarasi variable
     int i, j, k;
     bool found;
 
     found = false;
     i = 0;
-    j = indexKeberangkatan;
+    j = indexKeberangkatan - 1;
 
+    // loop Binary Search
     while((i <= j) && (!found)){
         k  = (i + j) / 2;
         if (*nikPointer == copyBinary[k].penumpang.nik) {
@@ -992,9 +989,10 @@ void bubbleSortBerdasarNik(Pemesanan *copyBubleNik) {
     for (int i = 0; i < indexKeberangkatan - 1; i++) {
         for (int j = 0; j < indexKeberangkatan - 1 - i; j++) {    
             if (copyBubleNik[j].penumpang.nik > copyBubleNik[j + 1].penumpang.nik) {
-                Pemesanan temp        = copyBubleNik[j];
+                Pemesanan temp      = copyBubleNik[j];
                 copyBubleNik[j]     = copyBubleNik[j + 1];
                 copyBubleNik[j + 1] = temp;
+                std::swap(copyBubleNik[j], copyBubleNik[j + 1]); // bentuk penyederhanaan penukaran elemes dengan std::swap()
             }
         }
     }
@@ -1004,9 +1002,10 @@ void bubbleSort(Pemesanan *copyBubble) {
     for (int i = 0; i < indexKeberangkatan - 1; i++) {
         for (int j = 0; j < indexKeberangkatan - 1 - i; j++) {
             if (copyBubble[j].penumpang.nama > copyBubble[j + 1].penumpang.nama) {
-                Pemesanan temp      = copyBubble[j];
-                copyBubble[j]     = copyBubble[j + 1];
-                copyBubble[j + 1] = temp;
+               // Pemesanan temp      = copyBubble[j];
+               // copyBubble[j]     = copyBubble[j + 1];
+               // copyBubble[j + 1] = temp;
+                std::swap(copyBubble[j], copyBubble[j + 1]); // bentuk penyederhanaan penukaran elemes dengan std::swap()
             }
         }
     }
@@ -1021,37 +1020,44 @@ void straightInsertionSort(Pemesanan *copyInsertion) {
         j = i - 1;
         while ((j >= 0) && (temp.penumpang.nama < copyInsertion[j].penumpang.nama) ) {
             copyInsertion[j + 1] = copyInsertion[j];
-            j                    = j - 1;
-            copyInsertion[j + 1] = temp;
+            j = j - 1;
         }
+        copyInsertion[j + 1] = temp;
     }
 }
 
 void selectionSort(Pemesanan *copySelection) {
-    for (int current = 0; current < indexKeberangkatan; current++) {
-        for (int j = current + 1; j < indexKeberangkatan; j++) {
-            if (copySelection[current].penumpang.nama > copySelection[j].penumpang.nama) {
-                Pemesanan temp            = copySelection[current];
-                copySelection[current]  = copySelection[j];
-                copySelection[j]        = temp;
+    for (int i = 0; i < indexKeberangkatan - 1; i++) {
+        int indexMin = i;
+
+        for (int j = i + 1; j < indexKeberangkatan; j++) {
+            if (copySelection[j].penumpang.nama < copySelection[indexMin].penumpang.nama) {
+                indexMin = j;
             }
+        }
+
+        if (indexMin != i) {
+            std::swap(copySelection[i], copySelection[indexMin]);
         }
     }
 }
 
 void shellSort(Pemesanan *copyShell) {
-    for (int k = indexKeberangkatan / 2; k > 0; k /= 2) {
-        for (int j = k; j < indexKeberangkatan; j++) {
-            for (int i = j - k; i >= 0; i -= k) {
-                if (copyShell[i + k].penumpang.nama > copyShell[i].penumpang.nama) {
-                    break;
-                } else {
-                    Pemesanan mid      = copyShell[i];
-                    copyShell[i]     = copyShell[i + k];
-                    copyShell[i + k] = mid;
-                }
+    for (int gap = indexKeberangkatan / 2; gap > 0; gap /= 2) {
+        for (int i = gap; i < indexKeberangkatan; i++) {
+            Pemesanan temp = copyShell[i];
+            int j = i;
+
+            while (j >= gap && temp.penumpang.nama < copyShell[j - gap].penumpang.nama) {
+                copyShell[j] = copyShell[j - gap];
+                j -= gap;
             }
-        } 
+
+            copyShell[j] = temp;
+
+            // gap menentukan jarak antar elemen yang dibandingkan
+            // di dalam while, elemen" yang lebih besar dair temp di geser ke kanan
+        }
     }
 }
 
@@ -1072,9 +1078,12 @@ void quickSort(Pemesanan *pemesananQuick, int first, int last) {
         }
 
         if (low <= high) {
-            Pemesanan temp            = pemesananQuick[low];
-            pemesananQuick[low++]    = pemesananQuick[high];
-            pemesananQuick[high--]   = temp;
+            //Pemesanan temp            = pemesananQuick[low];
+            //pemesananQuick[low++]    = pemesananQuick[high];
+            //pemesananQuick[high--]   = temp;
+            std::swap(pemesananQuick[low], pemesananQuick[high]);
+            low++;
+            high--;
         }
     } while (low <= high);
 
@@ -1084,12 +1093,16 @@ void quickSort(Pemesanan *pemesananQuick, int first, int last) {
 
 void tampilkanDataSetelahSorting(Pemesanan *dataSorting) {
     cout << "[SEMUA DATA PEMESANAN - SETELAH DIURUTKAN (A-Z)]\n";
+    cout << "==================================================\n";
     for (int i = 0; i < indexKeberangkatan; i++) {
-        cout << "   " << i + 1  << ". Nama: "   << dataSorting[i].penumpang.nama 
-                                << ", NIK: "    << dataSorting[i].penumpang.nik 
-                                << ", Asal: "   << dataSorting[i].tiket.asalKota 
-                                << ", Tujuan: " << dataSorting[i].tiket.kotaTujuan 
-                                << endl;
+        cout << i + 1 << ". Nama        : " << dataSorting[i].penumpang.nama << endl;
+        cout << "   NIK         : " << dataSorting[i].penumpang.nik << endl;
+        cout << "   Asal        : " << dataSorting[i].tiket.asalKota << endl;
+        cout << "   Tujuan      : " << dataSorting[i].tiket.kotaTujuan << endl;
+        cout << "   Kursi       : " << dataSorting[i].tiket.nomorGerbong + 1 
+                                         << "-" << dataSorting[i].tiket.nomorTempatDuduk + 1 << endl;
+        cout << "   Total Bayar : Rp" << dataSorting[i].pembayaran.totalHarga << endl;
+        cout << "----------------------------------------------------\n";
     }
     cout << endl;
 }
@@ -1269,6 +1282,7 @@ void tampilkanSeluruhDataPemesanan() {
 //             file.close();
 //         }
 //     }
+
 
 //     cout << "✅ Semua tiket berhasil disimpan dalam file terpisah per penumpang.\n";
 // }
