@@ -117,16 +117,18 @@ void searchSeqNonSentinelBelumUrut(string *pointerNIK);
 void searchSeqSentinelBelumUrut(string *pointerNIK);
 void searchBinarySearch(string *nikPointer);
 void printPemesanan(const Pemesanan &p, const string &tanggal, int nomor);
-int flattenData(Pemesanan *copy, string *tanggalKeberangkatan);
+int flattenDataSorting(Pemesanan *copy, string *tanggalKeberangkatan);
 
 // Sorting
 void bubbleSortByNIK(Pemesanan *copy, string *tanggalKeberangkatan, int total);
-void bubbleSort(Pemesanan *copyBubble);
+// void bubbleSort(Pemesanan *copyBubble);
+void bubbleSortByNama(Pemesanan *copy, string *tanggal, int total);
 void straightInsertionSort(Pemesanan *copyInsertion);
 void selectionSort(Pemesanan *copySelection);
 void shellSort(Pemesanan *copyShell);
 void quickSort(Pemesanan *copyQuick, int first, int last);
-void tampilkanDataSetelahSorting(Pemesanan *dataSorting);
+// void tampilkanDataSetelahSorting(Pemesanan *dataSorting);
+void tampilkanHasilSorting(Pemesanan *data, string *tanggal, int total);
 
 // File Operation
 void fileCreateTiketDenganNIK();
@@ -284,23 +286,12 @@ void menuCariTiket(){
             }
             
             case 3: {  
-                // Pemesanan copy[300];
-                // for (int i = 0; i < indexKeberangkatan; i++) {
-                //     copy[i] = pemesanan[i];
-                // }
-
-                // Pemesanan copy[300];  // max 10 tanggal × 30 tiket
-                // int jumlahData = flattenPemesanan(copy);
-
                 string searchNIK;
 
                 cout << "   Input NIK yang ingin anda cari : ";
                 cin >> searchNIK; 
 
-                // searchBinarySearch(copy, &searchNIK);
-                // searchBinarySearch(copy, &searchNIK, jumlahData);
                 searchBinarySearch(&searchNIK);
-                
                 cout << endl << endl;
 
                 break;                                  
@@ -315,9 +306,18 @@ void menuCariTiket(){
 void menuTampilkanSeluruhTiket() {
     int pilihMenu;
     do {
-        if (indexKeberangkatan == 0) {
+        // Cek apakah data kosong
+        bool isEmpty = true;
+        for (int i = 0; i < maxTanggal; i++) {
+            if (jumlahPemesanan[i] > 0) {
+                isEmpty = false;
+                break;
+            }
+        }
+
+        if (isEmpty) {
             cout << "   [!] Data pemesanan kosong. Silakan input data terlebih dahulu!\n\n";
-            continue;
+            return;
         }
 
         cout << "[ALL TICKET INFORMATION]\n";
@@ -337,38 +337,38 @@ void menuTampilkanSeluruhTiket() {
             continue;
         }
 
-        Pemesanan copy[30];
-        for (int i = 0; i < indexKeberangkatan; i++) {
-            copy[i] = pemesanan[i];
-        }
+        Pemesanan dataFlatten[300];
+        string tanggal[300];
+        int total = flattenDataSorting(dataFlatten, tanggal);
 
         switch (pilihMenu) {
             case 1: {
-                bubbleSort(copy);
-                tampilkanDataSetelahSorting(copy);
+                // bubbleSort(copy);
+                bubbleSortByNama(dataFlatten, tanggal, total);
+                tampilkanHasilSorting(dataFlatten, tanggal, total);
                 break;
             }
 
             case 2: {
-                straightInsertionSort(copy);
-                tampilkanDataSetelahSorting(copy);
+                // straightInsertionSort(copy);
+                // tampilkanDataSetelahSorting(copy);
                 break;
             }
                 
             case 3: {
-                selectionSort(copy);
-                tampilkanDataSetelahSorting(copy);
+                // selectionSort(copy);
+                // tampilkanDataSetelahSorting(copy);
                 break;
             }
 
             case 4: {
-                shellSort(copy);
-                tampilkanDataSetelahSorting(copy);
+                // shellSort(copy);
+                // tampilkanDataSetelahSorting(copy);
                 break;
             }
             case 5: {
-                quickSort(copy, 0, indexKeberangkatan - 1);
-                tampilkanDataSetelahSorting(copy);
+                // quickSort(copy, 0, indexKeberangkatan - 1);
+                // tampilkanDataSetelahSorting(copy);
                 break;
             }
 
@@ -639,29 +639,26 @@ void searchSeqNonSentinelBelumUrut(string* pointerNIK) {
     bool found = false;
     int tanggal = 0;
 
-    cout << "\n[HASIL PENCARIAN BERDASARKAN NIK]:\n";
+    cout << "\n[HASIL PENCARIAN BERDASARKAN NIK - SEQUENTIAL NON SENTINEL]:\n";
 
-    // Telusuri seluruh tanggal
     while (tanggal < maxTanggal) {
-        int i = 0;
-        int nomor = 1;
         bool tanggalSudahDitampilkan = false;
+        int nomor = 1;
+        int i = 0;
 
         while (i < jumlahPemesanan[tanggal]) {
-            if (semuaPemesanan[tanggal][i].penumpang.nik == *pointerNIK) {
-                if (!found) {
-                    found = true;
-                }
+            Pemesanan& p = semuaPemesanan[tanggal][i];
+
+            if (p.penumpang.nik == *pointerNIK) {
+                found = true;
 
                 if (!tanggalSudahDitampilkan) {
                     cout << "\nTanggal Keberangkatan : " << daftarTanggal[tanggal] << "\n";
+                    cout << "====================================\n";
                     tanggalSudahDitampilkan = true;
                 }
 
-                Pemesanan& p = semuaPemesanan[tanggal][i];
-
                 printPemesanan(p, daftarTanggal[tanggal], nomor);
-
                 nomor++;
             }
 
@@ -709,17 +706,15 @@ void searchSeqSentinelBelumUrut(string *pointerNIK) {
                 Pemesanan& p = semuaPemesanan[tanggal][i];
 
                 if (p.penumpang.nik == *pointerNIK) {
-                    if (!found) {
-                        found = true;
-                    }
+                    found = true;
 
                     if (!tanggalSudahDitampilkan) {
                         cout << "\nTanggal Keberangkatan : " << daftarTanggal[tanggal] << "\n";
+                        cout << "====================================\n";
                         tanggalSudahDitampilkan = true;
                     }
                     
                     printPemesanan(p, daftarTanggal[tanggal], nomor);
-
                     nomor++;
                 }
 
@@ -738,7 +733,7 @@ void searchSeqSentinelBelumUrut(string *pointerNIK) {
 void searchBinarySearch(string *nikPointer) {
     Pemesanan copy[300];
     string tanggal[300];
-    int total = flattenData(copy, tanggal);
+    int total = flattenDataSorting(copy, tanggal);
 
     bubbleSortByNIK(copy, tanggal, total);
 
@@ -785,7 +780,7 @@ void searchBinarySearch(string *nikPointer) {
     }
 }
 
-int flattenData(Pemesanan *copy, string *tanggalKeberangkatan) {
+int flattenDataSorting(Pemesanan *copy, string *tanggalKeberangkatan) {
     int total = 0;
     for (int i = 0; i < maxTanggal; i++) {
         for (int j = 0; j < jumlahPemesanan[i]; j++) {
@@ -836,13 +831,32 @@ void bubbleSortByNIK(Pemesanan *copy, string *tanggalKeberangkatan, int total) {
 }
 
 
-void bubbleSort(Pemesanan *copyBubble) {
-    for (int i = 0; i < indexKeberangkatan - 1; i++) {
-        for (int j = 0; j < indexKeberangkatan - 1 - i; j++) {
-            if (copyBubble[j].penumpang.nama > copyBubble[j + 1].penumpang.nama) {
-                Pemesanan temp      = copyBubble[j];
-                copyBubble[j]     = copyBubble[j + 1];
-                copyBubble[j + 1] = temp;
+// void bubbleSort(Pemesanan *copyBubble) {
+//     for (int i = 0; i < indexKeberangkatan - 1; i++) {
+//         for (int j = 0; j < indexKeberangkatan - 1 - i; j++) {
+//             if (copyBubble[j].penumpang.nama > copyBubble[j + 1].penumpang.nama) {
+//                 Pemesanan temp      = copyBubble[j];
+//                 copyBubble[j]     = copyBubble[j + 1];
+//                 copyBubble[j + 1] = temp;
+//             }
+//         }
+//     }
+// }
+
+
+void bubbleSortByNama(Pemesanan *copy, string *tanggal, int total) {
+    for (int i = 0; i < total - 1; i++) {
+        for (int j = 0; j < total - 1 - i; j++) {
+            if (copy[j].penumpang.nama > copy[j + 1].penumpang.nama) {
+                // Tukar data
+                Pemesanan temp = copy[j];
+                copy[j] = copy[j + 1];
+                copy[j + 1] = temp;
+
+                // Tukar tanggal juga agar tidak tertukar
+                string tempTgl = tanggal[j];
+                tanggal[j] = tanggal[j + 1];
+                tanggal[j + 1] = tempTgl;
             }
         }
     }
@@ -925,20 +939,48 @@ void quickSort(Pemesanan *pemesananQuick, int first, int last) {
     if (low < last)     { quickSort(pemesananQuick, low, last);   };
 }
 
-void tampilkanDataSetelahSorting(Pemesanan *dataSorting) {
+// void tampilkanDataSetelahSorting(Pemesanan *dataSorting) {
+//     cout << "[SEMUA DATA PEMESANAN - SETELAH DIURUTKAN (A-Z)]\n";
+//     cout << "==================================================\n";
+//     for (int i = 0; i < indexKeberangkatan; i++) {
+//         cout << i + 1 << ". Nama        : " << dataSorting[i].penumpang.nama << endl;
+//         cout << "   NIK         : " << dataSorting[i].penumpang.nik << endl;
+//         cout << "   Asal        : " << dataSorting[i].tiket.asalKotaStasiun << endl;
+//         cout << "   Tujuan      : " << dataSorting[i].tiket.kotaTujuan << endl;
+//         cout << "   Kursi       : " << dataSorting[i].tiket.nomorGerbong + 1 
+//                                     << "-" << dataSorting[i].tiket.nomorTempatDuduk + 1 << endl;
+//         cout << "   Total Bayar : Rp" << dataSorting[i].pembayaran.totalHarga << endl;
+//         cout << "----------------------------------------------------\n";
+//     }
+//     cout << endl;
+// }
+
+
+void tampilkanHasilSorting(Pemesanan *data, string *tanggal, int total) {
     cout << "[SEMUA DATA PEMESANAN - SETELAH DIURUTKAN (A-Z)]\n";
     cout << "==================================================\n";
-    for (int i = 0; i < indexKeberangkatan; i++) {
-        cout << i + 1 << ". Nama        : " << dataSorting[i].penumpang.nama << endl;
-        cout << "   NIK         : " << dataSorting[i].penumpang.nik << endl;
-        cout << "   Asal        : " << dataSorting[i].tiket.asalKotaStasiun << endl;
-        cout << "   Tujuan      : " << dataSorting[i].tiket.kotaTujuan << endl;
-        cout << "   Kursi       : " << dataSorting[i].tiket.nomorGerbong + 1 
-                                    << "-" << dataSorting[i].tiket.nomorTempatDuduk + 1 << endl;
-        cout << "   Total Bayar : Rp" << dataSorting[i].pembayaran.totalHarga << endl;
+
+    string lastTgl = "";
+    int nomor = 1;
+
+    for (int i = 0; i < total; i++) {
+        if (tanggal[i] != lastTgl) {
+            lastTgl = tanggal[i];
+            nomor = 1;
+            cout << "\nTanggal Keberangkatan: " << lastTgl << "\n";
+        }
+
+        cout << nomor << ". Nama        : " << data[i].penumpang.nama << endl;
+        cout << "   NIK         : " << data[i].penumpang.nik << endl;
+        cout << "   Asal        : " << data[i].tiket.asalKotaStasiun << endl;
+        cout << "   Tujuan      : " << data[i].tiket.kotaTujuan << endl;
+        cout << "   Kursi       : " << data[i].tiket.nomorGerbong + 1
+                                        << "-" << data[i].tiket.nomorTempatDuduk + 1 << endl;
+        cout << "   Total Bayar : Rp" << data[i].pembayaran.totalHarga << endl;
         cout << "----------------------------------------------------\n";
+
+        nomor++;
     }
-    cout << endl;
 }
 
 void tampilkanSeluruhDataPemesanan() {
