@@ -98,7 +98,6 @@ bool kursiTiapGerbong[nomorGerbong][tempatDudukGerbong];
 bool kursiTerpakai[maxTanggal][nomorGerbong][tempatDudukGerbong] = {};
 
 int jumlahPemesanan[maxTanggal] = {};
-int indexKeberangkatan          = 0;
 const int jumlahTujuan          = sizeof(daftarTujuan) / sizeof(daftarTujuan[0]);
 
 // ####################### RE-DECLARATION FUNCTION #######################
@@ -622,32 +621,6 @@ void manualInput(int indexTanggal, int indexKotaTujuan) {
 }
 
 // ########################## SEARCHING ################################
-void searchByNIK() {
-    string targetNIK;
-    cout << "Masukkan NIK yang ingin dicari: ";
-    cin >> targetNIK;
-
-    bool found = false;
-
-    for (int i = 0; i < indexKeberangkatan; ++i) {
-        if (pemesanan[i].penumpang.nik == targetNIK) {
-            found = true;
-            cout << "\n[FOUND - TICKET]\n";
-            cout << "   Nama       : " << pemesanan[i].penumpang.nama << endl;
-            cout << "   NIK        : " << pemesanan[i].penumpang.nik << endl;
-            cout << "   Asal       : " << pemesanan[i].tiket.asalKotaStasiun << endl;
-            cout << "   Tujuan     : " << pemesanan[i].tiket.kotaTujuan << endl;
-            cout << "   Kursi      : " << pemesanan[i].tiket.nomorGerbong << "-" << pemesanan[i].tiket.nomorTempatDuduk << endl;
-            cout << "   Total Bayar: Rp" << pemesanan[i].pembayaran.totalHarga << endl;
-            break; // stop setelah ketemu
-        }
-    }
-
-    if (!found) {
-        cout << "\n[NOT FOUND] Tiket dengan NIK tersebut tidak ditemukan.\n";
-    }
-}
-
 void searchSeqNonSentinelBelumUrut(string* pointerNIK) {
     bool found = false;
     int tanggal = 0;
