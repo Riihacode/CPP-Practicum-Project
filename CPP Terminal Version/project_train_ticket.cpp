@@ -92,7 +92,6 @@ Tujuan daftarTujuan[] = {
 GuestAccount guest;
 Pemesanan semuaPemesanan[maxTanggal][maksPemesananPerTanggal];
 
-bool kursiTiapGerbong[nomorGerbong][tempatDudukGerbong];
 bool kursiTerpakai[maxTanggal][nomorGerbong][tempatDudukGerbong] = {};
 
 int jumlahPemesanan[maxTanggal] = {};
