@@ -1,0 +1,15 @@
+======= TIKET KERETA =======
+Tanggal Keberangkatan : 30-01-2025
+Nama                  : ggg
+NIK                   : 666
+Alamat                : bbb
+Umur                  : 24
+No HP                 : 098
+Asal Kota Stasiun     : Yogyakarta
+Tujuan                : Klaten
+Gerbong               : 1
+Kursi                 : 2
+Metode Pembayaran     : BCA
+Status Pembayaran     : Sudah Dibayar
+Harga                 : Rp20000
+=============================

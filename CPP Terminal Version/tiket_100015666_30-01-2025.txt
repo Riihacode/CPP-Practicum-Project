@@ -1,0 +1,15 @@
+======= TIKET KERETA =======
+Tanggal Keberangkatan : 30-01-2025
+Nama                  : Ani-4
+NIK                   : 100015666
+Alamat                : Sleman
+Umur                  : 44
+No HP                 : 086000731269
+Asal Kota Stasiun     : Yogyakarta
+Tujuan                : Klaten
+Gerbong               : 1
+Kursi                 : 4
+Metode Pembayaran     : BRI
+Status Pembayaran     : Sudah Dibayar
+Harga                 : Rp20000
+=============================
