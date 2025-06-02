@@ -54,7 +54,6 @@ struct Pemesanan {
     InfoPembayaran pembayaran;
 };
 
-
 // ############################ ARRAY 1D ####################################
 // ARRAY untuk pemilihan input
 string metodePembayaran[] = {
@@ -740,10 +739,9 @@ void searchBinarySearch(string *nikPointer) {
     }
 
     int kiri = mid;
-    while (kiri > 0 && copy[kiri - 1].penumpang.nik == *nikPointer) kiri--;
+    while (kiri > 0          && copy[kiri - 1].penumpang.nik == *nikPointer)  { kiri--;  }
     int kanan = mid;
-    while (kanan < total - 1 && copy[kanan + 1].penumpang.nik == *nikPointer) kanan++;
-
+    while (kanan < total - 1 && copy[kanan + 1].penumpang.nik == *nikPointer) { kanan++; }
     cout << "\n[HASIL PENCARIAN BERDASARKAN NIK]:\n";
 
     string lastTanggal = "";
