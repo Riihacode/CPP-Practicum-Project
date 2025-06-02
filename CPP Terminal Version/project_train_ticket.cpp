@@ -121,14 +121,12 @@ int flattenDataSorting(Pemesanan *copy, string *tanggalKeberangkatan);
 
 // Sorting
 void bubbleSortByNIK(Pemesanan *copy, string *tanggalKeberangkatan, int total);
-// void bubbleSort(Pemesanan *copyBubble);
 void bubbleSortByNama(Pemesanan *copy, string *tanggal, int total);
-void straightInsertionSort(Pemesanan *copyInsertion);
-void selectionSort(Pemesanan *copySelection);
-void shellSort(Pemesanan *copyShell);
-void quickSort(Pemesanan *copyQuick, int first, int last);
-// void tampilkanDataSetelahSorting(Pemesanan *dataSorting);
-void tampilkanHasilSorting(Pemesanan *data, string *tanggal, int total);
+void insertionSortByNama(Pemesanan *copy, string *tanggal, int total);
+void selectionSortByNama(Pemesanan *copy, string *tanggal, int total);
+void shellSortByNama(Pemesanan *copy, string *tanggal, int total);
+void quickSortByNama(Pemesanan *copy, string *tanggal, int left, int right);
+void tampilkanDataSetelahSorting(Pemesanan *dataSorting, string *tanggal, int total);
 
 // File Operation
 void fileCreateTiketDenganNIK();
@@ -337,38 +335,53 @@ void menuTampilkanSeluruhTiket() {
             continue;
         }
 
-        Pemesanan dataFlatten[300];
-        string tanggal[300];
-        int total = flattenDataSorting(dataFlatten, tanggal);
-
         switch (pilihMenu) {
             case 1: {
-                // bubbleSort(copy);
-                bubbleSortByNama(dataFlatten, tanggal, total);
-                tampilkanHasilSorting(dataFlatten, tanggal, total);
+                Pemesanan copy[maxTanggal * maksPemesananPerTanggal];
+                string tanggal[maxTanggal * maksPemesananPerTanggal];
+                int total = flattenDataSorting(copy, tanggal);
+                
+                bubbleSortByNama(copy, tanggal, total);
+                tampilkanDataSetelahSorting(copy, tanggal, total);
                 break;
             }
 
             case 2: {
-                // straightInsertionSort(copy);
-                // tampilkanDataSetelahSorting(copy);
+                Pemesanan copy[maxTanggal * maksPemesananPerTanggal];
+                string tanggal[maxTanggal * maksPemesananPerTanggal];
+                int total = flattenDataSorting(copy, tanggal);
+
+                insertionSortByNama(copy, tanggal, total);
+                tampilkanDataSetelahSorting(copy, tanggal, total);
                 break;
             }
                 
             case 3: {
-                // selectionSort(copy);
-                // tampilkanDataSetelahSorting(copy);
+                Pemesanan copy[maxTanggal * maksPemesananPerTanggal];
+                string tanggal[maxTanggal * maksPemesananPerTanggal];
+                int total = flattenDataSorting(copy, tanggal);
+
+                selectionSortByNama(copy, tanggal, total);
+                tampilkanDataSetelahSorting(copy, tanggal, total);
                 break;
             }
 
             case 4: {
-                // shellSort(copy);
-                // tampilkanDataSetelahSorting(copy);
+                Pemesanan copy[maxTanggal * maksPemesananPerTanggal];
+                string tanggal[maxTanggal * maksPemesananPerTanggal];
+                int total = flattenDataSorting(copy, tanggal);
+
+                shellSortByNama(copy, tanggal, total);
+                tampilkanDataSetelahSorting(copy, tanggal, total);
                 break;
             }
             case 5: {
-                // quickSort(copy, 0, indexKeberangkatan - 1);
-                // tampilkanDataSetelahSorting(copy);
+                Pemesanan copy[maxTanggal * maksPemesananPerTanggal];
+                string tanggal[maxTanggal * maksPemesananPerTanggal];
+                int total = flattenDataSorting(copy, tanggal);
+
+                quickSortByNama(copy, tanggal, 0, total - 1);
+                tampilkanDataSetelahSorting(copy, tanggal, total);
                 break;
             }
 
@@ -780,18 +793,6 @@ void searchBinarySearch(string *nikPointer) {
     }
 }
 
-int flattenDataSorting(Pemesanan *copy, string *tanggalKeberangkatan) {
-    int total = 0;
-    for (int i = 0; i < maxTanggal; i++) {
-        for (int j = 0; j < jumlahPemesanan[i]; j++) {
-            copy[total] = semuaPemesanan[i][j];
-            tanggalKeberangkatan[total] = daftarTanggal[i];
-            total++;
-        }
-    }
-    return total;
-}
-
 // Fungsi untuk mencetak 1 tiket dengan tanggal
 void printPemesanan(const Pemesanan &p, const string &tanggal, int nomor) {
     cout << "-----------------------------\n";
@@ -812,6 +813,18 @@ void printPemesanan(const Pemesanan &p, const string &tanggal, int nomor) {
 }
 
 // ############################ SORTING #################################
+int flattenDataSorting(Pemesanan *copy, string *tanggalKeberangkatan) {
+    int total = 0;
+    for (int i = 0; i < maxTanggal; i++) {
+        for (int j = 0; j < jumlahPemesanan[i]; j++) {
+            copy[total] = semuaPemesanan[i][j];
+            tanggalKeberangkatan[total] = daftarTanggal[i];
+            total++;
+        }
+    }
+    return total;
+}
+
 void bubbleSortByNIK(Pemesanan *copy, string *tanggalKeberangkatan, int total) {
     for (int i = 0; i < total - 1; i++) {
         for (int j = 0; j < total - 1 - i; j++) {
@@ -830,158 +843,134 @@ void bubbleSortByNIK(Pemesanan *copy, string *tanggalKeberangkatan, int total) {
     }
 }
 
-
-// void bubbleSort(Pemesanan *copyBubble) {
-//     for (int i = 0; i < indexKeberangkatan - 1; i++) {
-//         for (int j = 0; j < indexKeberangkatan - 1 - i; j++) {
-//             if (copyBubble[j].penumpang.nama > copyBubble[j + 1].penumpang.nama) {
-//                 Pemesanan temp      = copyBubble[j];
-//                 copyBubble[j]     = copyBubble[j + 1];
-//                 copyBubble[j + 1] = temp;
-//             }
-//         }
-//     }
-// }
-
-
 void bubbleSortByNama(Pemesanan *copy, string *tanggal, int total) {
     for (int i = 0; i < total - 1; i++) {
         for (int j = 0; j < total - 1 - i; j++) {
             if (copy[j].penumpang.nama > copy[j + 1].penumpang.nama) {
                 // Tukar data
-                Pemesanan temp = copy[j];
-                copy[j] = copy[j + 1];
-                copy[j + 1] = temp;
+                Pemesanan temp  = copy[j];
+                copy[j]         = copy[j + 1];
+                copy[j + 1]     = temp;
 
                 // Tukar tanggal juga agar tidak tertukar
-                string tempTgl = tanggal[j];
-                tanggal[j] = tanggal[j + 1];
-                tanggal[j + 1] = tempTgl;
+                string tempTgl  = tanggal[j];
+                tanggal[j]      = tanggal[j + 1];
+                tanggal[j + 1]  = tempTgl;
             }
         }
     }
 }
 
-void straightInsertionSort(Pemesanan *copyInsertion) {
-    int i, j;
-    Pemesanan temp;
+void insertionSortByNama(Pemesanan *copy, string *tanggal, int total) {
+    for (int i = 1; i < total; i++) {
+        Pemesanan tempPemesanan = copy[i];
+        string tempTanggal      = tanggal[i];
 
-    for (i = 1; i < indexKeberangkatan; i++) {
-        temp = copyInsertion[i];
-        j = i - 1;
-        while ((j >= 0) && (temp.penumpang.nama < copyInsertion[j].penumpang.nama) ) {
-            copyInsertion[j + 1] = copyInsertion[j];
-            j = j - 1;
+        int j = i - 1;
+        while (j >= 0 && tempPemesanan.penumpang.nama < copy[j].penumpang.nama) {
+            copy[j + 1]     = copy[j];
+            tanggal[j + 1]  = tanggal[j];
+            j--;
         }
-        copyInsertion[j + 1] = temp;
+
+        copy[j + 1]     = tempPemesanan;
+        tanggal[j + 1]  = tempTanggal;
     }
 }
 
-void selectionSort(Pemesanan *copySelection) {
-    for (int i = 0; i < indexKeberangkatan - 1; i++) {
+void selectionSortByNama(Pemesanan *copy, string *tanggal, int total) {
+    for (int i = 0; i < total - 1; i++) {
         int indexMin = i;
 
-        for (int j = i + 1; j < indexKeberangkatan; j++) {
-            if (copySelection[j].penumpang.nama < copySelection[indexMin].penumpang.nama) {
+        for (int j = i + 1; j < total; j++) {
+            if (copy[j].penumpang.nama < copy[indexMin].penumpang.nama) {
                 indexMin = j;
             }
         }
 
         if (indexMin != i) {
-            std::swap(copySelection[i], copySelection[indexMin]);
+            Pemesanan tempPemesanan = copy[i];
+            string tempTanggal = tanggal[i];
+
+            copy[i] = copy[indexMin];
+            tanggal[i] = tanggal[indexMin];
+
+            copy[indexMin] = tempPemesanan;
+            tanggal[indexMin] = tempTanggal;
         }
     }
 }
 
-void shellSort(Pemesanan *copyShell) {
-    for (int gap = indexKeberangkatan / 2; gap > 0; gap /= 2) {
-        for (int i = gap; i < indexKeberangkatan; i++) {
-            Pemesanan temp = copyShell[i];
-            int j = i;
+void shellSortByNama(Pemesanan *copy, string *tanggal, int total) {
+    for (int gap = total / 2; gap > 0; gap /= 2) {
+        for (int i = gap; i < total; i++) {
+            Pemesanan tempPemesanan = copy[i];
+            string tempTanggal      = tanggal[i];
+            int j                   = i;
 
-            while (j >= gap && temp.penumpang.nama < copyShell[j - gap].penumpang.nama) {
-                copyShell[j] = copyShell[j - gap];
+            while (
+                j >= gap 
+                && copy[j - gap].penumpang.nama > tempPemesanan.penumpang.nama
+            ) {
+                copy[j]     = copy[j - gap];
+                tanggal[j]  = tanggal[j - gap];
                 j -= gap;
             }
 
-            copyShell[j] = temp;
-
-            // gap menentukan jarak antar elemen yang dibandingkan
-            // di dalam while, elemen" yang lebih besar dair temp di geser ke kanan
+            copy[j]     = tempPemesanan;
+            tanggal[j]  = tempTanggal;
         }
     }
 }
 
-void quickSort(Pemesanan *pemesananQuick, int first, int last) {
-    int low, high;
+void quickSortByNama(Pemesanan *copy, string *tanggal, int left, int right) {
+    if (left >= right) return;
 
-    low     = first;
-    high    = last;
+    int i = left, j = right;
+    Pemesanan pivot = copy[(left + right) / 2];
+    string pivotTanggal = tanggal[(left + right) / 2];
 
-    Pemesanan listSeparator = pemesananQuick[(first + last) / 2];
+    while (i <= j) {
+        while (copy[i].penumpang.nama < pivot.penumpang.nama) { i++; }
+        while (copy[j].penumpang.nama > pivot.penumpang.nama) { j--; }
+        if (i <= j) {
+            // Tukar isi copy[i] <-> copy[j]
+            Pemesanan tempPemesanan = copy[i];
+            string tempTanggal      = tanggal[i];
 
-    do {
-        while (pemesananQuick[low].penumpang.nama < listSeparator.penumpang.nama) {
-            low++;
+            copy[i]     = copy[j];
+            tanggal[i]  = tanggal[j];
+
+            copy[j]     = tempPemesanan;
+            tanggal[j]  = tempTanggal;
+
+            i++;
+            j--;
         }
-        while (pemesananQuick[high].penumpang.nama > listSeparator.penumpang.nama) {
-            high--;
-        }
+    }
 
-        if (low <= high) {
-            Pemesanan temp           = pemesananQuick[low];
-            pemesananQuick[low++]    = pemesananQuick[high];
-            pemesananQuick[high--]   = temp;
-        }
-    } while (low <= high);
-
-    if (first < high)   { quickSort(pemesananQuick, first, high); };
-    if (low < last)     { quickSort(pemesananQuick, low, last);   };
+    // Rekursif kiri dan kanan
+    if (left < j)  { quickSortByNama(copy, tanggal, left, j);   }
+    if (i < right) { quickSortByNama(copy, tanggal, i, right);  }
 }
 
-// void tampilkanDataSetelahSorting(Pemesanan *dataSorting) {
-//     cout << "[SEMUA DATA PEMESANAN - SETELAH DIURUTKAN (A-Z)]\n";
-//     cout << "==================================================\n";
-//     for (int i = 0; i < indexKeberangkatan; i++) {
-//         cout << i + 1 << ". Nama        : " << dataSorting[i].penumpang.nama << endl;
-//         cout << "   NIK         : " << dataSorting[i].penumpang.nik << endl;
-//         cout << "   Asal        : " << dataSorting[i].tiket.asalKotaStasiun << endl;
-//         cout << "   Tujuan      : " << dataSorting[i].tiket.kotaTujuan << endl;
-//         cout << "   Kursi       : " << dataSorting[i].tiket.nomorGerbong + 1 
-//                                     << "-" << dataSorting[i].tiket.nomorTempatDuduk + 1 << endl;
-//         cout << "   Total Bayar : Rp" << dataSorting[i].pembayaran.totalHarga << endl;
-//         cout << "----------------------------------------------------\n";
-//     }
-//     cout << endl;
-// }
-
-
-void tampilkanHasilSorting(Pemesanan *data, string *tanggal, int total) {
+void tampilkanDataSetelahSorting(Pemesanan *dataSorting, string *tanggal, int total) {
     cout << "[SEMUA DATA PEMESANAN - SETELAH DIURUTKAN (A-Z)]\n";
     cout << "==================================================\n";
-
-    string lastTgl = "";
-    int nomor = 1;
-
     for (int i = 0; i < total; i++) {
-        if (tanggal[i] != lastTgl) {
-            lastTgl = tanggal[i];
-            nomor = 1;
-            cout << "\nTanggal Keberangkatan: " << lastTgl << "\n";
-        }
-
-        cout << nomor << ". Nama        : " << data[i].penumpang.nama << endl;
-        cout << "   NIK         : " << data[i].penumpang.nik << endl;
-        cout << "   Asal        : " << data[i].tiket.asalKotaStasiun << endl;
-        cout << "   Tujuan      : " << data[i].tiket.kotaTujuan << endl;
-        cout << "   Kursi       : " << data[i].tiket.nomorGerbong + 1
-                                        << "-" << data[i].tiket.nomorTempatDuduk + 1 << endl;
-        cout << "   Total Bayar : Rp" << data[i].pembayaran.totalHarga << endl;
+        cout << i + 1 << ". Nama        : " << dataSorting[i].penumpang.nama << endl;
+        cout << "   NIK         : " << dataSorting[i].penumpang.nik << endl;
+        cout << "   Tanggal     : " << tanggal[i] << endl;
+        cout << "   Asal        : " << dataSorting[i].tiket.asalKotaStasiun << endl;
+        cout << "   Tujuan      : " << dataSorting[i].tiket.kotaTujuan << endl;
+        cout << "   Kursi       : " << dataSorting[i].tiket.nomorGerbong + 1 
+                                          << "-" << dataSorting[i].tiket.nomorTempatDuduk + 1 << endl;
+        cout << "   Total Bayar : Rp" << dataSorting[i].pembayaran.totalHarga << endl;
         cout << "----------------------------------------------------\n";
-
-        nomor++;
     }
+    cout << endl;
 }
+
 
 void tampilkanSeluruhDataPemesanan() {
     cout << "\n========== DAFTAR SELURUH PEMESANAN ==========\n";
