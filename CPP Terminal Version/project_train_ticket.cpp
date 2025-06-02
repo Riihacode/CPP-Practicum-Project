@@ -408,9 +408,9 @@ void autoBookTicket(int indexTanggal, int indexKotaTujuan) {
     for (int grbg = 0; grbg < nomorGerbong && !foundKursi; grbg++) {
         for (int krsi = 0; krsi < tempatDudukGerbong && !foundKursi; krsi++) {
             if (!kursiTerpakai[indexTanggal][grbg][krsi]) {
-                gerbong = grbg;
-                kursi = krsi;
-                foundKursi = true;
+                gerbong     = grbg;
+                kursi       = krsi;
+                foundKursi  = true;
             }
         }
     }
@@ -505,8 +505,7 @@ void manualInput(int indexTanggal, int indexKotaTujuan) {
 
         cout << "   Nama    : ";
         getline(cin, booking.penumpang.nama);
-        // cout << "   NIK     : ";
-        // getline(cin, booking.penumpang.nik);
+        
         do {
             cout << "   NIK     : ";
             getline(cin, booking.penumpang.nik);
@@ -714,8 +713,8 @@ void searchSeqSentinelBelumUrut(string *pointerNIK) {
 }
 
 void searchBinarySearch(string *nikPointer) {
-    Pemesanan copy[300];
-    string tanggal[300];
+    Pemesanan copy[maxTanggal * maksPemesananPerTanggal];
+    string tanggal[maxTanggal * maksPemesananPerTanggal];
     int total = flattenDataSorting(copy, tanggal);
 
     bubbleSortByNIK(copy, tanggal, total);
