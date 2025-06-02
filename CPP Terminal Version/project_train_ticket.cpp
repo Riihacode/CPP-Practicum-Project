@@ -90,7 +90,6 @@ Tujuan daftarTujuan[] = {
 
 // ################# STRUCT VARIABLE & GLOBAL VARIABLE ###################
 // Deklarasi Variable Struct, array kursi yang hendak dipesan, dan variabel bantuan
-Pemesanan pemesanan[30];    // nanti dihapus & pindah pakai semuaPemesanan
 GuestAccount guest;
 Pemesanan semuaPemesanan[maxTanggal][maksPemesananPerTanggal];
 
@@ -111,7 +110,6 @@ void autoBookTicket(int indexTanggal, int indexKotaTujuan);
 void manualInput(int indexTanggal, int indexKotaTujuan);
 
 // Searching
-void searchByNIK();
 void searchSeqNonSentinelBelumUrut(string *pointerNIK);
 void searchSeqSentinelBelumUrut(string *pointerNIK);
 void searchBinarySearch(string *nikPointer);
@@ -196,7 +194,6 @@ void menuLoginDanPesanTiket() {
     cout << "   Pilih (1 - " << jumlahTujuan << "): ";
     cin >> indexKotaTujuan;
     indexKotaTujuan -= 1;
-
 
     // [3] PILIH TANGGAL
     cout << "\n[PILIH TANGGAL KEBERANGKATAN]" << endl;
@@ -734,7 +731,7 @@ void searchBinarySearch(string *nikPointer) {
         } else if (*nikPointer < copy[mid].penumpang.nik) {
             right = mid - 1;
         } else {
-            left = mid + 1;
+            left  = mid + 1;
         }
     }
 
@@ -780,7 +777,11 @@ void printPemesanan(const Pemesanan &p, const string &tanggal, int nomor) {
     cout << "   Gerbong               : " << p.tiket.nomorGerbong + 1 << "\n";
     cout << "   Kursi                 : " << p.tiket.nomorTempatDuduk + 1 << "\n";
     cout << "   Metode Pembayaran     : " << p.pembayaran.metodePembayaran << "\n";
-    cout << "   Status Pembayaran     : " << (p.pembayaran.sudahDibayar ? "Sudah Dibayar" : "Belum Dibayar") << "\n";
+    if (p.pembayaran.sudahDibayar == true) {
+        cout << "   Status Pembayaran     : " << "Sudah Dibayar" << endl;
+    } else {
+        cout << "   Status Pembayaran     : " << "Belum Dibayar" << endl;
+    }
     cout << "   Harga                 : Rp" << p.pembayaran.totalHarga << "\n";
     cout << "-----------------------------\n";
 }
@@ -790,7 +791,7 @@ int flattenDataSorting(Pemesanan *copy, string *tanggalKeberangkatan) {
     int total = 0;
     for (int i = 0; i < maxTanggal; i++) {
         for (int j = 0; j < jumlahPemesanan[i]; j++) {
-            copy[total] = semuaPemesanan[i][j];
+            copy[total]                 = semuaPemesanan[i][j];
             tanggalKeberangkatan[total] = daftarTanggal[i];
             total++;
         }
@@ -804,12 +805,12 @@ void bubbleSortByNIK(Pemesanan *copy, string *tanggalKeberangkatan, int total) {
             if (copy[j].penumpang.nik > copy[j + 1].penumpang.nik) {
                 // Tukar data pemesanan
                 Pemesanan tempP = copy[j];
-                copy[j] = copy[j + 1];
-                copy[j + 1] = tempP;
+                copy[j]         = copy[j + 1];
+                copy[j + 1]     = tempP;
 
                 // Tukar tanggal juga
-                string tempTgl = tanggalKeberangkatan[j];
-                tanggalKeberangkatan[j] = tanggalKeberangkatan[j + 1];
+                string tempTgl              = tanggalKeberangkatan[j];
+                tanggalKeberangkatan[j]     = tanggalKeberangkatan[j + 1];
                 tanggalKeberangkatan[j + 1] = tempTgl;
             }
         }
@@ -863,13 +864,13 @@ void selectionSortByNama(Pemesanan *copy, string *tanggal, int total) {
 
         if (indexMin != i) {
             Pemesanan tempPemesanan = copy[i];
-            string tempTanggal = tanggal[i];
+            string tempTanggal      = tanggal[i];
 
-            copy[i] = copy[indexMin];
-            tanggal[i] = tanggal[indexMin];
+            copy[i]     = copy[indexMin];
+            tanggal[i]  = tanggal[indexMin];
 
-            copy[indexMin] = tempPemesanan;
-            tanggal[indexMin] = tempTanggal;
+            copy[indexMin]      = tempPemesanan;
+            tanggal[indexMin]   = tempTanggal;
         }
     }
 }
@@ -928,28 +929,47 @@ void quickSortByNama(Pemesanan *copy, string *tanggal, int left, int right) {
 }
 
 void tampilkanDataSetelahSorting(Pemesanan *dataSorting, string *tanggal, int total) {
+    if (total == 0) {
+        cout << "[!] Tidak ada data pemesanan untuk ditampilkan.\n\n";
+        return;
+    }
+
     cout << "[SEMUA DATA PEMESANAN - SETELAH DIURUTKAN (A-Z)]\n";
     cout << "==================================================\n";
+
     for (int i = 0; i < total; i++) {
-        cout << i + 1 << ". Nama        : " << dataSorting[i].penumpang.nama << endl;
-        cout << "   NIK         : " << dataSorting[i].penumpang.nik << endl;
-        cout << "   Tanggal     : " << tanggal[i] << endl;
-        cout << "   Asal        : " << dataSorting[i].tiket.asalKotaStasiun << endl;
-        cout << "   Tujuan      : " << dataSorting[i].tiket.kotaTujuan << endl;
-        cout << "   Kursi       : " << dataSorting[i].tiket.nomorGerbong + 1 
-                                          << "-" << dataSorting[i].tiket.nomorTempatDuduk + 1 << endl;
-        cout << "   Total Bayar : Rp" << dataSorting[i].pembayaran.totalHarga << endl;
-        cout << "----------------------------------------------------\n";
+        Pemesanan &p = dataSorting[i];
+        cout << i + 1 << ". ====== TIKET KERETA ======" << "\n";
+        cout << "   Tanggal Keberangkatan : " << tanggal[i] << "\n";
+        cout << "   Nama                  : " << p.penumpang.nama << "\n";
+        cout << "   NIK                   : " << p.penumpang.nik << "\n";
+        cout << "   Alamat                : " << p.penumpang.alamat << "\n";
+        cout << "   Umur                  : " << p.penumpang.umur << "\n";
+        cout << "   No HP                 : " << p.penumpang.noHp << "\n";
+        cout << "   Asal Kota Stasiun     : " << p.tiket.asalKotaStasiun << "\n";
+        cout << "   Tujuan                : " << p.tiket.kotaTujuan << "\n";
+        cout << "   Gerbong               : " << p.tiket.nomorGerbong + 1 << "\n";
+        cout << "   Kursi                 : " << p.tiket.nomorTempatDuduk + 1 << "\n";
+        cout << "   Metode Pembayaran     : " << p.pembayaran.metodePembayaran << "\n";
+        
+        if (p.pembayaran.sudahDibayar == true) {
+            cout << "   Status Pembayaran     : Sudah Dibayar\n";
+        } else {
+            cout << "   Status Pembayaran     : Belum Dibayar\n";
+        }
+
+        cout << "   Harga                 : Rp" << p.pembayaran.totalHarga << "\n";
+        cout << "===============================\n";
     }
+
     cout << endl;
 }
-
 
 void tampilkanSeluruhDataPemesanan() {
     cout << "\n========== DAFTAR SELURUH PEMESANAN ==========\n";
 
     for (int t = 0; t < maxTanggal; t++) {
-        if (jumlahPemesanan[t] == 0) continue;
+        if (jumlahPemesanan[t] == 0) { continue; }
 
         cout << "\n     Tanggal Keberangkatan: " << daftarTanggal[t] << endl;
         cout << "=============================================\n";
